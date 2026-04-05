@@ -1,0 +1,62 @@
+# LoopWheeGo — Frontend
+
+React + TypeScript frontend for LoopWheeGo, a walking and cycling route generation and discovery platform. Renders routes on a Mapbox map, supports POI discovery, variant picking, and GPX export.
+
+## Tech Stack
+
+- **React 18** + TypeScript + Vite
+- **Mapbox GL JS** — map rendering and geocoding
+- **shadcn/ui** + Tailwind CSS — UI components
+- **React Query** — API caching
+- **Axios** — HTTP client
+
+## Prerequisites
+
+- Node.js 18+
+- A [Mapbox](https://mapbox.com) public token
+- LoopWheeGo backend running (see backend README)
+
+## Setup
+
+```bash
+npm install
+```
+
+Create a `.env` file in this directory:
+
+```env
+VITE_MAPBOX_TOKEN=pk.your_mapbox_token_here
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+## Development
+
+```bash
+npm run dev
+```
+
+Runs on `http://localhost:5173` by default.
+
+## Build
+
+```bash
+npm run build       # production build → dist/
+npm run preview     # preview production build locally
+```
+
+## Environment Variables
+
+| Variable | Description |
+|---|---|
+| `VITE_MAPBOX_TOKEN` | Mapbox public token (required) |
+| `VITE_API_BASE_URL` | Backend API base URL |
+
+## Features
+
+- **Loop routing** — generate circular routes by target distance
+- **A-to-B routing** — point-to-point with alternative variants
+- **Route variants** — pick from up to 3 generated options
+- **POI discovery** — find landmarks along the active route (lazy-loaded, cached per variant)
+- **Waypoint injection** — reroute through a selected POI
+- **GPX export** — download route with POI waypoints for Strava, Garmin, etc.
+- **Dark / light theme** — persisted via localStorage
