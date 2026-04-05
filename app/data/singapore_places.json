@@ -1,0 +1,178 @@
+[
+  {
+    "id": "botanic-gardens",
+    "name": "Singapore Botanic Gardens",
+    "lat": 1.3138,
+    "lng": 103.8159,
+    "category": "nature",
+    "description": "UNESCO World Heritage Site, 160 years old"
+  },
+  {
+    "id": "ulu-pandan-pcn",
+    "name": "Ulu Pandan Park Connector",
+    "lat": 1.3214,
+    "lng": 103.7719,
+    "category": "park_connector",
+    "description": "10km scenic connector through residential Singapore"
+  },
+  {
+    "id": "macritchie-reservoir",
+    "name": "MacRitchie Reservoir Park",
+    "lat": 1.3418,
+    "lng": 103.8338,
+    "category": "nature_reserve",
+    "description": "Treetop walks and boardwalks around the central catchment"
+  },
+  {
+    "id": "southern-ridges",
+    "name": "Southern Ridges",
+    "lat": 1.2795,
+    "lng": 103.8012,
+    "category": "nature",
+    "description": "Henderson Waves and forest canopy walks linking hill parks"
+  },
+  {
+    "id": "east-coast-park",
+    "name": "East Coast Park",
+    "lat": 1.301,
+    "lng": 103.912,
+    "category": "waterfront",
+    "description": "Coastal park with cycling and beachside dining"
+  },
+  {
+    "id": "marina-bay",
+    "name": "Marina Bay Promenade",
+    "lat": 1.2865,
+    "lng": 103.8545,
+    "category": "waterfront",
+    "description": "Iconic skyline views and Helix Bridge"
+  },
+  {
+    "id": "tiong-bahru",
+    "name": "Tiong Bahru",
+    "lat": 1.2857,
+    "lng": 103.827,
+    "category": "neighbourhood",
+    "description": "Art deco shophouses, cafes, and heritage walk"
+  },
+  {
+    "id": "kampong-glam",
+    "name": "Kampong Glam",
+    "lat": 1.302,
+    "lng": 103.8594,
+    "category": "heritage",
+    "description": "Sultan Mosque, Haji Lane, and Malay royal heritage"
+  },
+  {
+    "id": "chinatown",
+    "name": "Chinatown",
+    "lat": 1.283,
+    "lng": 103.844,
+    "category": "heritage",
+    "description": "Temples, markets, and conserved shophouse streets"
+  },
+  {
+    "id": "little-india",
+    "name": "Little India",
+    "lat": 1.307,
+    "lng": 103.849,
+    "category": "neighbourhood",
+    "description": "Tekka area, colourful streets, and historic temples"
+  },
+  {
+    "id": "joo-chiat",
+    "name": "Joo Chiat / Katong",
+    "lat": 1.313,
+    "lng": 103.902,
+    "category": "heritage",
+    "description": "Peranakan shophouses and East Coast heritage"
+  },
+  {
+    "id": "fort-canning",
+    "name": "Fort Canning Park",
+    "lat": 1.295,
+    "lng": 103.845,
+    "category": "nature",
+    "description": "Historic hill with colonial ruins and green trails"
+  },
+  {
+    "id": "punggol-waterway",
+    "name": "Punggol Waterway Park",
+    "lat": 1.405,
+    "lng": 103.902,
+    "category": "park_connector",
+    "description": "Waterfront park connector in the north-east"
+  },
+  {
+    "id": "bukit-timah",
+    "name": "Bukit Timah Nature Reserve",
+    "lat": 1.352,
+    "lng": 103.776,
+    "category": "nature_reserve",
+    "description": "Tallest hill in Singapore, rainforest trails"
+  },
+  {
+    "id": "rail-corridor-central",
+    "name": "Rail Corridor (Central)",
+    "lat": 1.33,
+    "lng": 103.797,
+    "category": "park_connector",
+    "description": "Green corridor along former KTM railway line"
+  },
+  {
+    "id": "labrador-park",
+    "name": "Labrador Nature Reserve",
+    "lat": 1.267,
+    "lng": 103.802,
+    "category": "waterfront",
+    "description": "Coastal boardwalks and WWII heritage"
+  },
+  {
+    "id": "kallang-river",
+    "name": "Kallang River Park Connector",
+    "lat": 1.315,
+    "lng": 103.868,
+    "category": "park_connector",
+    "description": "Riverside path linking Bishan-Ang Mo Kio to the city"
+  },
+  {
+    "id": "geylang-serai",
+    "name": "Geylang Serai",
+    "lat": 1.318,
+    "lng": 103.897,
+    "category": "heritage",
+    "description": "Malay cultural heart with markets and Ramadan bazaars"
+  },
+  {
+    "id": "clarke-quay",
+    "name": "Clarke Quay / Singapore River",
+    "lat": 1.2905,
+    "lng": 103.8462,
+    "category": "waterfront",
+    "description": "Historic quays and riverside promenade"
+  },
+  {
+    "id": "sentosa-coastal",
+    "name": "Sentosa Coastal Trail",
+    "lat": 1.249,
+    "lng": 103.82,
+    "category": "waterfront",
+    "description": "Island beaches and coastal walks"
+  },
+  {
+    "id": "sembawang-hot-spring",
+    "name": "Sembawang Heritage & Coast",
+    "lat": 1.46,
+    "lng": 103.82,
+    "category": "neighbourhood",
+    "description": "Northern waterfront and black-and-white bungalow history"
+  },
+  {
+    "id": "clementi-woods",
+    "name": "West Coast Park Area",
+    "lat": 1.295,
+    "lng": 103.768,
+    "category": "nature",
+    "description": "Western green belt toward Jurong Lake Gardens"
+  }
+]
