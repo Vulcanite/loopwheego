@@ -1,4 +1,4 @@
-import { RotateCcw, Clock, MapPin } from "lucide-react"
+import { Clock, MapPin } from "lucide-react"
 import type { RouteResponse } from "@/types/route"
 
 interface RouteVariantPickerProps {

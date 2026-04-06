@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query"
 import { Loader2, MapPin, Navigation, Bike, Footprints, RotateCcw, ArrowRight } from "lucide-react"
 import { useState, useCallback } from "react"
 
@@ -78,12 +77,6 @@ export function RouteControls({
   const [durationMin, setDurationMin] = useState(60)
   const [useDuration, setUseDuration] = useState(false)
   const maxKm = transport === "walk" ? MAX_WALK_KM : MAX_CYCLE_KM
-
-  const { data: suggestedPlaces } = useQuery({
-    queryKey: ["suggested-places"],
-    queryFn: api.getSuggestedPlaces,
-    staleTime: 1000 * 60 * 60,
-  })
 
   const handleGPS = useCallback(async () => {
     if (!navigator.geolocation) {
