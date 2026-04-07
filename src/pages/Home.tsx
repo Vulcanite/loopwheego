@@ -7,6 +7,8 @@ import { MapView } from "@/components/map/MapView"
 import { LoadingOverlay } from "@/components/shared/LoadingOverlay"
 import { RouteControls } from "@/components/shared/RouteControls"
 import { RouteVariantPicker } from "@/components/shared/RouteVariantPicker"
+import { BottomSheet, type SheetState } from "@/components/mobile/BottomSheet"
+import { MobileRouteCards } from "@/components/mobile/MobileRouteCards"
 import type { RouteResponse } from "@/types/route"
 import { api, formatAxiosError } from "@/services/api"
 import type { POI } from "@/types/poi"
@@ -14,19 +16,22 @@ import { useToast } from "@/components/ui/use-toast"
 
 export function Home(): JSX.Element {
   const { toast } = useToast()
-  
+
   // Route State
   const [routes, setRoutes] = useState<RouteResponse[]>([])
   const [activeRouteIdx, setActiveRouteIdx] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
-  
+
   // POI & Interaction State
   const [selectedPOI, setSelectedPOI] = useState<string | null>(null)
   const [showPOIs, setShowPOIs] = useState(false)
   const [isDiscovering, setIsDiscovering] = useState(false)
-  
+
   // Cache stores POIs by route index: { 0: [poi1, poi2], 1: [poi3] }
   const [poiCache, setPoiCache] = useState<Record<number, POI[]>>({})
+
+  // Mobile bottom sheet state
+  const [sheetState, setSheetState] = useState<SheetState>("idle")
 
   const activeRoute = routes[activeRouteIdx] ?? null
 
@@ -40,6 +45,8 @@ export function Home(): JSX.Element {
     setSelectedPOI(null)
     setPoiCache({})
     setShowPOIs(false)
+    // On mobile, snap sheet to route cards view after generation
+    setSheetState("routes")
   }
 
   const handleSelectVariant = (idx: number) => {
@@ -52,12 +59,21 @@ export function Home(): JSX.Element {
     setSelectedPOI(prev => prev === id ? null : id)
   }
 
+  // Handle sheet drag-handle tap: toggle between states
+  const handleSheetHandleTap = () => {
+    if (sheetState === "controls") {
+      // If we have routes, snap back to route cards; otherwise close
+      setSheetState(routes.length > 0 ? "routes" : "idle")
+    } else if (sheetState === "routes") {
+      setSheetState("controls")
+    }
+  }
+
   const handleTogglePOIs = async () => {
     if (!activeRoute) return
     const nextState = !showPOIs
     setShowPOIs(nextState)
 
-    // If toggling ON and we don't have this route cached, fetch it
     if (nextState && !poiCache[activeRouteIdx]) {
       setIsDiscovering(true)
       try {
@@ -67,9 +83,7 @@ export function Home(): JSX.Element {
           start_lat: activeRoute.polyline[0][1],
           distance_km: activeRoute.distance_km,
         })
-        
         setPoiCache(prev => ({ ...prev, [activeRouteIdx]: pois }))
-        
         setRoutes(prev => {
           const newRoutes = [...prev]
           newRoutes[activeRouteIdx] = { ...newRoutes[activeRouteIdx], pois }
@@ -82,17 +96,13 @@ export function Home(): JSX.Element {
       } finally {
         setIsDiscovering(false)
       }
-    } 
-    // If it's cached, just re-inject it into the active route
-    else if (nextState && poiCache[activeRouteIdx]) {
+    } else if (nextState && poiCache[activeRouteIdx]) {
       setRoutes(prev => {
         const newRoutes = [...prev]
         newRoutes[activeRouteIdx] = { ...newRoutes[activeRouteIdx], pois: poiCache[activeRouteIdx] }
         return newRoutes
       })
-    } 
-    // Toggled OFF: Strip POIs from active route to hide them, cache remains untouched
-    else if (!nextState) {
+    } else if (!nextState) {
       setRoutes(prev => {
         const newRoutes = [...prev]
         newRoutes[activeRouteIdx] = { ...newRoutes[activeRouteIdx], pois: [] }
@@ -106,12 +116,11 @@ export function Home(): JSX.Element {
     if (!activeRoute) return
     setIsLoading(true)
 
-    // Derive original route parameters from the source string and polyline
     const isLoop = activeRoute.source.includes('trip') || activeRoute.source.includes('loop')
     const isCycle = activeRoute.source.includes('driving') || activeRoute.source.includes('bike')
     const mode = isCycle ? 'cycle' : 'walk'
     const routeType = isLoop ? 'loop' : 'a2b'
-    
+
     const startPt = activeRoute.polyline[0]
     const endPt = activeRoute.polyline[activeRoute.polyline.length - 1]
 
@@ -124,13 +133,12 @@ export function Home(): JSX.Element {
         routeType,
         end_lng: isLoop ? undefined : endPt[0],
         end_lat: isLoop ? undefined : endPt[1],
-        waypoints: [[lng, lat]] // Pass the newly selected POI coordinates
+        waypoints: [[lng, lat]],
       })
-
       setRoutes(result.routes)
       setActiveRouteIdx(0)
       setSelectedPOI(null)
-      setPoiCache({}) // Clear cache since the path physically changed
+      setPoiCache({})
       setShowPOIs(false)
       toast({ title: "Route updated", description: "Your route now passes through this location." })
     } catch (e) {
@@ -165,10 +173,62 @@ export function Home(): JSX.Element {
 
   return (
     <div className="flex-1 flex overflow-hidden font-body">
-      
-      {/* SIDEBAR */}
+
+      {/* ══════════════════════════════════════════
+          MOBILE LAYOUT  (< md)
+      ══════════════════════════════════════════ */}
+      <div className="md:hidden relative flex-1">
+        {/* Map — always full screen on mobile */}
+        <MapView
+          routeData={activeRoute}
+          selectedPOI={selectedPOI}
+          onSelectPOI={handleSelectPOI}
+        />
+
+        <LoadingOverlay visible={isLoading} />
+
+        {/* FAB — shown when sheet is idle */}
+        {sheetState === "idle" && !isLoading && (
+          <button
+            type="button"
+            onClick={() => setSheetState("controls")}
+            className="fab-enter absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-6 py-3.5 rounded-full font-semibold text-sm text-white"
+            style={{
+              background: "var(--red)",
+              boxShadow: "0 4px 28px var(--red-glow)",
+            }}
+          >
+            <MapPin size={16} />
+            Plan a Route
+          </button>
+        )}
+
+        {/* Bottom Sheet */}
+        <BottomSheet state={sheetState} onHandleTap={handleSheetHandleTap}>
+          {sheetState === "routes" ? (
+            <MobileRouteCards
+              routes={routes}
+              activeIdx={activeRouteIdx}
+              onSelect={handleSelectVariant}
+              onExport={() => void handleExport()}
+              onOpenControls={() => setSheetState("controls")}
+            />
+          ) : (
+            <RouteControls
+              onRoutesGenerated={handleRoutesGenerated}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+              hasRoutes={routes.length > 0}
+            />
+          )}
+        </BottomSheet>
+      </div>
+
+      {/* ══════════════════════════════════════════
+          DESKTOP LAYOUT  (≥ md)
+      ══════════════════════════════════════════ */}
       <aside
-        className="w-[380px] shrink-0 flex flex-col overflow-y-auto"
+        className="hidden md:flex w-[380px] shrink-0 flex-col overflow-y-auto"
         style={{ background: "var(--surface)", borderRight: "1px solid var(--sidebar-border)", zIndex: 10 }}
       >
         <RouteControls
@@ -178,7 +238,6 @@ export function Home(): JSX.Element {
           hasRoutes={routes.length > 0}
         />
 
-        {/* Route variant picker */}
         {routes.length > 1 && !isLoading && (
           <div className="animate-fade-up">
             <RouteVariantPicker
@@ -189,7 +248,7 @@ export function Home(): JSX.Element {
           </div>
         )}
 
-        {/* STATS BAR (Always visible if a route exists) */}
+        {/* STATS BAR */}
         {activeRoute && !isLoading && (
           <div className="px-5 py-3 flex items-center gap-4 animate-fade-up" style={{ background: "var(--scrim)", borderTop: "1px solid var(--border)" }}>
             <div className="flex items-center gap-1.5 text-xs" style={{ color: "var(--fg-muted)" }}>
@@ -221,7 +280,7 @@ export function Home(): JSX.Element {
         {/* DISCOVER PLACES TOGGLE */}
         {routes.length > 0 && !isLoading && (
           <div className="px-5 py-4" style={{ borderTop: "1px solid var(--border)" }}>
-            <label 
+            <label
               htmlFor="poi-toggle"
               className="flex items-center justify-between cursor-pointer select-none group"
             >
@@ -234,20 +293,18 @@ export function Home(): JSX.Element {
                 </p>
               </div>
               <div className="theme-switch">
-                <input 
-                  type="checkbox" 
-                  id="poi-toggle" 
-                  checked={showPOIs} 
+                <input
+                  type="checkbox"
+                  id="poi-toggle"
+                  checked={showPOIs}
                   onChange={handleTogglePOIs}
-                  disabled={isDiscovering} 
+                  disabled={isDiscovering}
                 />
-                {/* Notice how the track is self-closing now, and the thumb is below it! */}
                 <div className="theme-switch-track" />
                 <span className="theme-switch-thumb" />
               </div>
             </label>
 
-            {/* Discovery Loading State */}
             {isDiscovering && (
               <div className="text-xs flex items-center gap-2 mt-4" style={{ color: "var(--red)" }}>
                 <span className="animate-spin w-3 h-3 border-2 border-current border-t-transparent rounded-full" />
@@ -255,9 +312,8 @@ export function Home(): JSX.Element {
               </div>
             )}
 
-            {/* Empty State if POIs were loaded but 0 found */}
             {showPOIs && !isDiscovering && poiCache[activeRouteIdx]?.length === 0 && (
-               <p className="text-xs mt-4 italic" style={{ color: "var(--fg-muted)" }}>No notable places found on this specific path.</p>
+              <p className="text-xs mt-4 italic" style={{ color: "var(--fg-muted)" }}>No notable places found on this specific path.</p>
             )}
           </div>
         )}
@@ -269,14 +325,14 @@ export function Home(): JSX.Element {
               routeData={activeRoute}
               selectedPOI={selectedPOI}
               onSelectPOI={handleSelectPOI}
-              onAddWaypoint={handleAddWaypoint} 
+              onAddWaypoint={handleAddWaypoint}
             />
           </div>
         )}
       </aside>
 
-      {/* MAP */}
-      <main className="relative flex-1 overflow-hidden">
+      {/* MAP — desktop only (mobile has its own full-screen map above) */}
+      <main className="hidden md:relative md:flex md:flex-1 md:overflow-hidden">
         <LoadingOverlay visible={isLoading} />
         <MapView
           routeData={activeRoute}
@@ -284,7 +340,7 @@ export function Home(): JSX.Element {
           onSelectPOI={handleSelectPOI}
         />
       </main>
-      
+
     </div>
   )
 }
