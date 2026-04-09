@@ -18,7 +18,7 @@ export default function App(): JSX.Element {
           </div>
           <div>
             <h1 className="text-sm md:text-base font-display font-bold leading-none" style={{ color: "var(--fg)" }}>LoopWheeGo</h1>
-            <p className="text-[10px] md:text-[11px] mt-0.5 tracking-widest uppercase" style={{ color: "var(--fg-faint)" }}>Walk · Explore · Discover</p>
+            <p className="text-[10px] md:text-[11px] mt-0.5 tracking-widest uppercase" style={{ color: "var(--fg-faint)" }}>Walk · Cycle · Discover</p>
           </div>
         </div>
         <div className="flex items-center gap-3 md:gap-4">

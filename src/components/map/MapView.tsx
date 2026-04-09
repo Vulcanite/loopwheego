@@ -11,6 +11,7 @@ interface MapViewProps {
   routeData: RouteResponse | null
   selectedPOI: string | null
   onSelectPOI: (id: string) => void
+  onMapTap?: () => void
 }
 
 const SINGAPORE_BOUNDS: [[number, number], [number, number]] = [
@@ -18,10 +19,11 @@ const SINGAPORE_BOUNDS: [[number, number], [number, number]] = [
   [104.05, 1.48] // Northeast coordinates
 ];
 
-export function MapView({ routeData, selectedPOI, onSelectPOI }: MapViewProps): JSX.Element {
+export function MapView({ routeData, selectedPOI, onSelectPOI, onMapTap }: MapViewProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const [map, setMap] = useState<mapboxgl.Map | null>(null)
+  const [styleEpoch, setStyleEpoch] = useState(0)
   const [initError, setInitError] = useState<string | null>(null)
   const { theme } = useTheme()
 
@@ -62,12 +64,14 @@ export function MapView({ routeData, selectedPOI, onSelectPOI }: MapViewProps): 
 
     mapRef.current = m
     const onResize = (): void => { m.resize() }
+    const onStyleLoad = (): void => { setStyleEpoch((v) => v + 1) }
 
     m.on("load", () => {
       onResize()
       requestAnimationFrame(onResize)
       setMap(m)
     })
+    m.on("style.load", onStyleLoad)
 
     m.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right")
 
@@ -76,6 +80,7 @@ export function MapView({ routeData, selectedPOI, onSelectPOI }: MapViewProps): 
     ro?.observe(containerRef.current)
 
     return () => {
+      m.off("style.load", onStyleLoad)
       ro?.disconnect()
       setMap(null)
       m.remove()
@@ -83,6 +88,15 @@ export function MapView({ routeData, selectedPOI, onSelectPOI }: MapViewProps): 
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    const m = mapRef.current
+    if (!m || !onMapTap) return
+    m.on("click", onMapTap)
+    return () => {
+      m.off("click", onMapTap)
+    }
+  }, [onMapTap])
 
   useEffect(() => {
     if (!map || !routeData?.polyline.length) return
@@ -117,7 +131,7 @@ export function MapView({ routeData, selectedPOI, onSelectPOI }: MapViewProps): 
       <div ref={containerRef} className="absolute inset-0" />
       {map ? (
         <>
-          <RoutePolyline map={map} coordinates={coords} />
+          <RoutePolyline key={`route-${styleEpoch}`} map={map} coordinates={coords} />
           {routeData?.pois.map((poi, i) => (
             <POIMarker key={poi.id} map={map} poi={poi} index={i}
               isSelected={selectedPOI === poi.id} onSelect={handleSelect} />

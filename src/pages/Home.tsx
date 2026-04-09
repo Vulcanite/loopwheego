@@ -69,6 +69,12 @@ export function Home(): JSX.Element {
     }
   }
 
+  const handleMobileMapTap = () => {
+    if (routes.length > 0 && sheetState !== "routes") {
+      setSheetState("routes")
+    }
+  }
+
   const handleTogglePOIs = async () => {
     if (!activeRoute) return
     const nextState = !showPOIs
@@ -150,16 +156,17 @@ export function Home(): JSX.Element {
 
   const handleExport = async (): Promise<void> => {
     if (!activeRoute) return
+    const routeNumber = activeRouteIdx + 1
     try {
       const blob = await api.exportGPX({
         polyline: activeRoute.polyline,
         pois: activeRoute.pois,
-        route_name: "LoopWheeGo Route",
+        route_name: `LoopWheeGo Route ${routeNumber}`,
       })
       const url = URL.createObjectURL(blob)
       const a = document.createElement("a")
       a.href = url
-      a.download = "loopwheego_route.gpx"
+      a.download = `loopwheego_route_${routeNumber}.gpx`
       a.click()
       URL.revokeObjectURL(url)
     } catch (e) {
@@ -183,6 +190,7 @@ export function Home(): JSX.Element {
           routeData={activeRoute}
           selectedPOI={selectedPOI}
           onSelectPOI={handleSelectPOI}
+          onMapTap={handleMobileMapTap}
         />
 
         <LoadingOverlay visible={isLoading} />
@@ -205,22 +213,22 @@ export function Home(): JSX.Element {
 
         {/* Bottom Sheet */}
         <BottomSheet state={sheetState} onHandleTap={handleSheetHandleTap}>
-          {sheetState === "routes" ? (
-            <MobileRouteCards
-              routes={routes}
-              activeIdx={activeRouteIdx}
-              onSelect={handleSelectVariant}
-              onExport={() => void handleExport()}
-              onOpenControls={() => setSheetState("controls")}
-            />
-          ) : (
+          <div className={sheetState === "routes" ? "hidden" : "block"}>
             <RouteControls
               onRoutesGenerated={handleRoutesGenerated}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
               hasRoutes={routes.length > 0}
             />
-          )}
+          </div>
+          <div className={sheetState === "routes" ? "block" : "hidden"}>
+            <MobileRouteCards
+              routes={routes}
+              activeIdx={activeRouteIdx}
+              onSelect={handleSelectVariant}
+              onExport={() => void handleExport()}
+            />
+          </div>
         </BottomSheet>
       </div>
 

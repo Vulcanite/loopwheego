@@ -3,7 +3,9 @@ import type { POI } from "./poi"
 export interface RouteRequest {
   start_lng: number
   start_lat: number
-  distance_km: number
+  distance_km?: number
+  target_duration_minutes?: number
+  appMode?: "explorer" | "fitness"
   mode: string
   routeType?: string;
   end_lng?: number | null;
@@ -17,6 +19,7 @@ export interface RouteResponse {
   duration_minutes: number
   pois: POI[]
   source: string;
+  label?: string
 }
 
 export interface POIDiscoveryRequest {

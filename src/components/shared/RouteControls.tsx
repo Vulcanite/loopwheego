@@ -1,5 +1,5 @@
 import { Loader2, MapPin, Navigation, Bike, Footprints, RotateCcw, ArrowRight } from "lucide-react"
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 
 import { PlaceSearch } from "@/components/shared/PlaceSearch"
 import { Slider } from "@/components/ui/slider"
@@ -21,6 +21,8 @@ type RouteType = "loop" | "a2b"
 const MAX_WALK_KM = 50
 const MAX_CYCLE_KM = 100
 const MAX_WALK_DURATION = 300
+const MAX_CYCLE_DURATION = 360
+const SG_CENTER = { lng: 103.8198, lat: 1.3521, label: "Singapore City Centre" }
 
 function SectionLabel({ children }: { children: React.ReactNode }): JSX.Element {
   return (
@@ -61,13 +63,13 @@ export function RouteControls({
   const token = import.meta.env.VITE_MAPBOX_TOKEN ?? ""
   const disabled = isLoading
 
-  const [appMode, setAppMode] = useState<AppMode>("explorer")
+  const [appMode, setAppMode] = useState<AppMode>("fitness")
   const [transport, setTransport] = useState<TransportMode>("walk")
   const [routeType, setRouteType] = useState<RouteType>("loop")
 
-  const [startLng, setStartLng] = useState<number | null>(103.8198)
-  const [startLat, setStartLat] = useState<number | null>(1.3521)
-  const [startLabel, setStartLabel] = useState("Singapore City Centre")
+  const [startLng, setStartLng] = useState<number | null>(null)
+  const [startLat, setStartLat] = useState<number | null>(null)
+  const [startLabel, setStartLabel] = useState("Detecting current location…")
   const [endLng, setEndLng] = useState<number | null>(null)
   const [endLat, setEndLat] = useState<number | null>(null)
   const [endLabel, setEndLabel] = useState("")
@@ -75,8 +77,33 @@ export function RouteControls({
 
   const [distanceKm, setDistanceKm] = useState(5)
   const [durationMin, setDurationMin] = useState(60)
-  const [useDuration, setUseDuration] = useState(false)
   const maxKm = transport === "walk" ? MAX_WALK_KM : MAX_CYCLE_KM
+  const maxDuration = transport === "walk" ? MAX_WALK_DURATION : MAX_CYCLE_DURATION
+
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setStartLat(SG_CENTER.lat)
+      setStartLng(SG_CENTER.lng)
+      setStartLabel(SG_CENTER.label)
+      return
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords
+        setStartLat(latitude)
+        setStartLng(longitude)
+        setStartLabel(`My Location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`)
+      },
+      (err) => {
+        if (err.code === err.PERMISSION_DENIED) {
+          setStartLat(SG_CENTER.lat)
+          setStartLng(SG_CENTER.lng)
+          setStartLabel(SG_CENTER.label)
+        }
+      },
+      { timeout: 8000 }
+    )
+  }, [])
 
   const handleGPS = useCallback(async () => {
     if (!navigator.geolocation) {
@@ -87,18 +114,18 @@ export function RouteControls({
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords
-        if (latitude < 1.15 || latitude > 1.48 || longitude < 103.6 || longitude > 104.1) {
-          toast({ title: "Outside Singapore", description: "Your location appears outside Singapore.", variant: "destructive" })
-          setGpsLoading(false)
-          return
-        }
         setStartLat(latitude)
         setStartLng(longitude)
         setStartLabel(`My Location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`)
         setGpsLoading(false)
       },
-      () => {
-        toast({ title: "Location denied", description: "Allow location access or search manually.", variant: "destructive" })
+      (err) => {
+        if (err.code === err.PERMISSION_DENIED) {
+          setStartLat(SG_CENTER.lat)
+          setStartLng(SG_CENTER.lng)
+          setStartLabel(SG_CENTER.label)
+        }
+        toast({ title: "Location denied", description: "Using Singapore City Centre as start point.", variant: "destructive" })
         setGpsLoading(false)
       },
       { timeout: 8000 }
@@ -119,7 +146,9 @@ export function RouteControls({
       const result = await api.generateRouteVariants({
         start_lng: startLng,
         start_lat: startLat,
-        distance_km: distanceKm,
+        distance_km: appMode === "fitness" && routeType === "loop" ? distanceKm : undefined,
+        target_duration_minutes: appMode === "explorer" && routeType === "loop" ? durationMin : undefined,
+        appMode,
         mode: transport,
         routeType: routeType,
         end_lng: endLng,
@@ -137,17 +166,21 @@ export function RouteControls({
     <div className="flex flex-col p-5 pb-4 gap-0">
 
       {/* MODE TOGGLE */}
-      <div className="flex gap-1 p-1 rounded-xl mb-5" style={{ background: "var(--scrim)" }}>
-        {(["explorer", "fitness"] as AppMode[]).map((m) => (
+      <div className="flex gap-2 mb-4">
+        {(["fitness", "explorer"] as AppMode[]).map((m) => (
           <button
             key={m}
             type="button"
             disabled={disabled}
             onClick={() => setAppMode(m)}
-            className={`mode-tab disabled:opacity-40 disabled:cursor-not-allowed`}
-            style={appMode === m ? { background: "var(--red)", color: "#fff" } : {}}
+            className={`mode-tab border disabled:opacity-40 disabled:cursor-not-allowed`}
+            style={{
+              background: appMode === m ? "var(--red)" : "transparent",
+              color: appMode === m ? "#fff" : "var(--fg-muted)",
+              borderColor: appMode === m ? "var(--red)" : "var(--border-mid)",
+            }}
           >
-            {m === "explorer" ? "🗺 Explorer" : "⚡ Fitness"}
+            {m === "fitness" ? "⚡ Fitness" : "🗺 Explorer"}
           </button>
         ))}
       </div>
@@ -159,24 +192,28 @@ export function RouteControls({
           <TransportBtn active={transport === "walk"} icon={Footprints} label="Walk" disabled={disabled}
             onClick={() => { setTransport("walk"); setDistanceKm(Math.min(distanceKm, MAX_WALK_KM)) }} />
           <TransportBtn active={transport === "cycle"} icon={Bike} label="Cycle" disabled={disabled}
-            onClick={() => { setTransport("cycle"); setUseDuration(false); setDistanceKm(Math.min(distanceKm, MAX_CYCLE_KM)) }} />
+            onClick={() => { setTransport("cycle"); setDistanceKm(Math.min(distanceKm, MAX_CYCLE_KM)) }} />
         </div>
       </div>
 
       {/* ROUTE TYPE */}
       <div className="mb-5">
         <SectionLabel>Route Type</SectionLabel>
-        <div className="flex gap-1 p-1 rounded-lg" style={{ background: "var(--scrim)" }}>
+        <div className="flex gap-2">
           {([["loop", "Loop", RotateCcw], ["a2b", "A → B", ArrowRight]] as const).map(([val, lbl, Icon]) => (
             <button
               key={val}
               type="button"
               disabled={disabled}
               onClick={() => setRouteType(val)}
-              className={`route-type-btn disabled:opacity-40 disabled:cursor-not-allowed`}
-              style={routeType === val ? { background: "var(--pill-hover)", color: "var(--fg)" } : {}}
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg border text-sm font-medium transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+              style={{
+                background: routeType === val ? "var(--red)" : "transparent",
+                borderColor: routeType === val ? "var(--red)" : "var(--border-mid)",
+                color: routeType === val ? "#fff" : "var(--fg-muted)",
+              }}
             >
-              <Icon size={12} className="inline mr-1.5" />
+              <Icon size={15} />
               {lbl}
             </button>
           ))}
@@ -223,8 +260,8 @@ export function RouteControls({
         </div>
       )}
 
-      {/* DISTANCE */}
-      {routeType === "loop" && (
+      {/* DISTANCE (Fitness only) */}
+      {routeType === "loop" && appMode === "fitness" && (
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
             <SectionLabel>Distance</SectionLabel>
@@ -240,37 +277,22 @@ export function RouteControls({
         </div>
       )}
 
-      {/* DURATION (walk only) */}
-      {routeType === "loop" && transport === "walk" && (
+      {/* DURATION (Explorer only) */}
+      {routeType === "loop" && appMode === "explorer" && (
         <div className="mb-4 animate-fade-up">
           <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <SectionLabel>Duration</SectionLabel>
-              <button
-                type="button"
-                disabled={disabled}
-                onClick={() => setUseDuration(!useDuration)}
-                className="text-[10px] px-2 py-0.5 rounded-full transition-all -mt-2 disabled:opacity-40"
-                style={{ background: useDuration ? "var(--red)" : "var(--toggle-track)", color: useDuration ? "#fff" : "var(--fg-muted)" }}
-              >
-                {useDuration ? "On" : "Off"}
-              </button>
-            </div>
-            {useDuration && (
-              <span className="text-sm font-semibold tabular-nums" style={{ color: "var(--fg)" }}>
-                {durationMin >= 60 ? `${Math.floor(durationMin / 60)}h${durationMin % 60 ? ` ${durationMin % 60}m` : ""}` : `${durationMin}m`}
-              </span>
-            )}
+            <SectionLabel>Duration</SectionLabel>
+            <span className="text-sm font-semibold tabular-nums" style={{ color: "var(--fg)" }}>
+              {durationMin >= 60 ? `${Math.floor(durationMin / 60)}h${durationMin % 60 ? ` ${durationMin % 60}m` : ""}` : `${durationMin}m`}
+            </span>
           </div>
-          {useDuration && (
-            <div className="animate-fade-up">
-              <Slider min={15} max={MAX_WALK_DURATION} step={15} value={[durationMin]} disabled={disabled}
-                onValueChange={(v) => { const val = v[0]; if (val !== undefined) setDurationMin(val) }} />
-              <div className="flex justify-between mt-1 text-[10px]" style={{ color: "var(--fg-faint)" }}>
-                <span>15 min</span><span>5 hr</span>
-              </div>
+          <div className="animate-fade-up">
+            <Slider min={15} max={maxDuration} step={15} value={[durationMin]} disabled={disabled}
+              onValueChange={(v) => { const val = v[0]; if (val !== undefined) setDurationMin(val) }} />
+            <div className="flex justify-between mt-1 text-[10px]" style={{ color: "var(--fg-faint)" }}>
+              <span>15 min</span><span>{Math.floor(maxDuration / 60)} hr</span>
             </div>
-          )}
+          </div>
         </div>
       )}
 

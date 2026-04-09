@@ -7,9 +7,6 @@ interface RouteVariantPickerProps {
   onSelect: (idx: number) => void
 }
 
-const VARIANT_LABELS = ["Route A", "Route B", "Route C"]
-const VARIANT_DESCS = ["Northward loop", "Eastward loop", "Southward loop"]
-
 export function RouteVariantPicker({ routes, activeIdx, onSelect }: RouteVariantPickerProps): JSX.Element {
   return (
     <div
@@ -37,10 +34,7 @@ export function RouteVariantPicker({ routes, activeIdx, onSelect }: RouteVariant
                 </span>
                 <div>
                   <p className="text-sm font-semibold leading-tight" style={{ color: "var(--fg)" }}>
-                    {VARIANT_LABELS[i]}
-                  </p>
-                  <p className="text-[11px]" style={{ color: "var(--fg-faint)" }}>
-                    {VARIANT_DESCS[i] ?? "Alternative loop"}
+                    {r.label ?? `Route ${i + 1}`}
                   </p>
                 </div>
               </div>
