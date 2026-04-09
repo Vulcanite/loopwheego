@@ -9,6 +9,11 @@ interface GeocodeFeature {
   id: string
   place_name: string
   center: [number, number]
+  relevance?: number
+}
+
+interface GeocodeResponse {
+  features?: GeocodeFeature[]
 }
 
 interface PlaceSearchProps {
@@ -38,22 +43,73 @@ export function PlaceSearch({
 
   const runSearch = useCallback(async (): Promise<void> => {
     if (!canSearch) { setResults([]); return }
-    const q = encodeURIComponent(query.trim())
-    
-    // ADDED: proximity= for relevance, types= to catch POIs like "The Creek", and country=SG
-    const url = new URL(`https://api.mapbox.com/geocoding/v5/mapbox.places/${q}.json`)
-    url.searchParams.set("access_token", mapboxToken)
-    url.searchParams.set("bbox", SG_BBOX)
-    url.searchParams.set("proximity", SG_CENTER)
-    url.searchParams.set("types", "address,poi,place")
-    url.searchParams.set("country", "SG")
-    url.searchParams.set("limit", "5")
+    const sanitizeQuery = (value: string): string =>
+      value.replace(/@/g, " ").replace(/[.,]/g, " ").replace(/\s+/g, " ").trim()
+
+    const buildUrl = (rawQuery: string): string => {
+      const q = encodeURIComponent(rawQuery.trim())
+      const url = new URL(`https://api.mapbox.com/geocoding/v5/mapbox.places/${q}.json`)
+      url.searchParams.set("access_token", mapboxToken)
+      url.searchParams.set("bbox", SG_BBOX)
+      url.searchParams.set("proximity", SG_CENTER)
+      url.searchParams.set("types", "poi,address,neighborhood,locality,place")
+      url.searchParams.set("country", "SG")
+      url.searchParams.set("autocomplete", "true")
+      url.searchParams.set("fuzzyMatch", "true")
+      url.searchParams.set("language", "en")
+      url.searchParams.set("limit", "8")
+      return url.toString()
+    }
+
+    const dedupe = (rows: GeocodeFeature[]): GeocodeFeature[] => {
+      const seen = new Set<string>()
+      const out: GeocodeFeature[] = []
+      for (const r of rows) {
+        const key = `${r.id}|${r.place_name.toLowerCase()}`
+        if (seen.has(key)) continue
+        seen.add(key)
+        out.push(r)
+      }
+      return out
+    }
+
+    const normalized = sanitizeQuery(query.trim())
+    if (normalized.length < 2) {
+      setResults([])
+      return
+    }
+    const fallback = normalized.toLowerCase().includes("singapore")
+      ? normalized
+      : `${normalized} singapore`
+
+    const rank = (rows: GeocodeFeature[]): GeocodeFeature[] => {
+      const needle = normalized.toLowerCase()
+      const tokens = needle.split(" ").filter(Boolean)
+      return rows
+        .map((row) => {
+          const name = row.place_name.toLowerCase()
+          let score = Number(row.relevance ?? 0)
+          if (name.includes(needle)) score += 3.0
+          if (tokens.every((t) => name.includes(t))) score += 2.0
+          if (name.startsWith(tokens[0] ?? "")) score += 0.8
+          return { row, score }
+        })
+        .sort((a, b) => b.score - a.score)
+        .map((x) => x.row)
+    }
 
     try {
-      const res = await fetch(url.toString())
-      if (!res.ok) { setResults([]); return }
-      const data = (await res.json()) as { features?: GeocodeFeature[] }
-      setResults(data.features ?? [])
+      const queries = Array.from(new Set([normalized, fallback]))
+      const responses = await Promise.all(
+        queries.map(async (q) => {
+          const res = await fetch(buildUrl(q))
+          if (!res.ok) return [] as GeocodeFeature[]
+          const data = (await res.json()) as GeocodeResponse
+          return data.features ?? []
+        })
+      )
+      const merged = dedupe(responses.flat())
+      setResults(rank(merged))
     } catch {
       setResults([])
     }
@@ -86,22 +142,22 @@ export function PlaceSearch({
         <ul
           className="absolute mt-1 w-full overflow-auto rounded-lg shadow-2xl"
           style={{ 
-            // FIX: Use a hardcoded solid hex if var(--card) is translucent
-            background: "#1a1a1a", // Force solid dark background
+            background: "var(--surface)",
             border: "1px solid var(--border-mid)", 
             maxHeight: "280px",
-            zIndex: 9999, // FIX: Ensure it floats above the "Generate" button
+            zIndex: 9999,
           }}
           role="listbox"
         >
           {results.map((f) => (
-            <li key={f.id} className="border-b border-white/5 last:border-0">
+            <li key={f.id} style={{ borderBottom: "1px solid var(--border)" }}>
               <button
                 type="button"
                 className="w-full px-4 py-3 text-left text-sm transition-colors flex items-start gap-3"
+                style={{ color: "var(--fg-muted)" }}
                 onMouseEnter={(e) => { 
-                  (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)",
-                  (e.currentTarget as HTMLElement).style.color = "#fff"
+                  (e.currentTarget as HTMLElement).style.background = "var(--pill-hover)",
+                  (e.currentTarget as HTMLElement).style.color = "var(--fg)"
                 }}
                 onMouseLeave={(e) => { 
                   (e.currentTarget as HTMLElement).style.background = "transparent",

@@ -166,15 +166,19 @@ export function RouteControls({
     <div className="flex flex-col p-5 pb-4 gap-0">
 
       {/* MODE TOGGLE */}
-      <div className="flex gap-1 p-1 rounded-xl mb-5" style={{ background: "var(--scrim)" }}>
+      <div className="flex gap-2 mb-4">
         {(["fitness", "explorer"] as AppMode[]).map((m) => (
           <button
             key={m}
             type="button"
             disabled={disabled}
             onClick={() => setAppMode(m)}
-            className={`mode-tab disabled:opacity-40 disabled:cursor-not-allowed`}
-            style={appMode === m ? { background: "var(--red)", color: "#fff" } : {}}
+            className={`mode-tab border disabled:opacity-40 disabled:cursor-not-allowed`}
+            style={{
+              background: appMode === m ? "var(--red)" : "transparent",
+              color: appMode === m ? "#fff" : "var(--fg-muted)",
+              borderColor: appMode === m ? "var(--red)" : "var(--border-mid)",
+            }}
           >
             {m === "fitness" ? "⚡ Fitness" : "🗺 Explorer"}
           </button>
@@ -195,17 +199,21 @@ export function RouteControls({
       {/* ROUTE TYPE */}
       <div className="mb-5">
         <SectionLabel>Route Type</SectionLabel>
-        <div className="flex gap-1 p-1 rounded-lg" style={{ background: "var(--scrim)" }}>
+        <div className="flex gap-2">
           {([["loop", "Loop", RotateCcw], ["a2b", "A → B", ArrowRight]] as const).map(([val, lbl, Icon]) => (
             <button
               key={val}
               type="button"
               disabled={disabled}
               onClick={() => setRouteType(val)}
-              className={`route-type-btn disabled:opacity-40 disabled:cursor-not-allowed`}
-              style={routeType === val ? { background: "var(--pill-hover)", color: "var(--fg)" } : {}}
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg border text-sm font-medium transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+              style={{
+                background: routeType === val ? "var(--red)" : "transparent",
+                borderColor: routeType === val ? "var(--red)" : "var(--border-mid)",
+                color: routeType === val ? "#fff" : "var(--fg-muted)",
+              }}
             >
-              <Icon size={12} className="inline mr-1.5" />
+              <Icon size={15} />
               {lbl}
             </button>
           ))}

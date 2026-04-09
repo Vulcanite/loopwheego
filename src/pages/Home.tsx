@@ -156,16 +156,17 @@ export function Home(): JSX.Element {
 
   const handleExport = async (): Promise<void> => {
     if (!activeRoute) return
+    const routeNumber = activeRouteIdx + 1
     try {
       const blob = await api.exportGPX({
         polyline: activeRoute.polyline,
         pois: activeRoute.pois,
-        route_name: "LoopWheeGo Route",
+        route_name: `LoopWheeGo Route ${routeNumber}`,
       })
       const url = URL.createObjectURL(blob)
       const a = document.createElement("a")
       a.href = url
-      a.download = "loopwheego_route.gpx"
+      a.download = `loopwheego_route_${routeNumber}.gpx`
       a.click()
       URL.revokeObjectURL(url)
     } catch (e) {

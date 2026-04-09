@@ -19,6 +19,7 @@ export interface RouteResponse {
   duration_minutes: number
   pois: POI[]
   source: string;
+  label?: string
 }
 
 export interface POIDiscoveryRequest {

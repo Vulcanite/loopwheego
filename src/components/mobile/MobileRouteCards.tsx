@@ -9,8 +9,6 @@ interface MobileRouteCardsProps {
   onExport: () => void
 }
 
-const VARIANT_LABELS = ["Route A", "Route B", "Route C"]
-
 const SWIPE_THRESHOLD = 40
 
 export function MobileRouteCards({
@@ -54,7 +52,7 @@ export function MobileRouteCards({
             {String.fromCharCode(65 + activeIdx)}
           </span>
           <p className="text-sm font-semibold" style={{ color: "var(--fg)" }}>
-            {VARIANT_LABELS[activeIdx] ?? "Route"}
+            {active.label ?? `Route ${activeIdx + 1}`}
           </p>
           <span
             className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
