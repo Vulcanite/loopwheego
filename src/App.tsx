@@ -1,8 +1,11 @@
 // App.tsx
+import { useState } from "react"
 import { Home } from "@/pages/Home"
 import { ThemeSwitch } from "@/components/shared/ThemeSwitch"
 
 export default function App(): JSX.Element {
+  const [aboutOpen, setAboutOpen] = useState(false)
+
   return (
     /* CHANGE: h-screen instead of min-h-screen, add flex-col and overflow-hidden */
     <div className="h-screen flex flex-col overflow-hidden font-body" style={{ background: "var(--bg)" }}>
@@ -23,15 +26,53 @@ export default function App(): JSX.Element {
         </div>
         <div className="flex items-center gap-3 md:gap-4">
           <ThemeSwitch />
-          <div className="hidden md:flex items-center gap-1.5 text-xs" style={{ color: "var(--fg-faint)" }}>
-            <span className="w-2 h-2 rounded-full inline-block animate-pulse" style={{ background: "var(--green)" }} />
-            Singapore
-          </div>
+          <button
+            type="button"
+            onClick={() => setAboutOpen(true)}
+            className="text-xs md:text-sm px-2.5 py-1.5 rounded-md transition-colors"
+            style={{ color: "var(--fg-muted)" }}
+          >
+            Story
+          </button>
         </div>
       </header>
       
       {/* Home must be flex-1 to fill the remaining height */}
       <Home />
+
+      {aboutOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          style={{ background: "rgba(0,0,0,0.45)" }}
+          onClick={() => setAboutOpen(false)}
+        >
+          <div
+            className="w-full max-w-sm rounded-xl p-5 border text-center"
+            style={{ background: "var(--surface)", borderColor: "var(--border-mid)" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-sm leading-relaxed" style={{ color: "var(--fg)" }}>
+              LoopWheeGo turns Singapore into a route playground for walkers and cyclists.
+            </p>
+            <p className="text-xs mt-2" style={{ color: "var(--fg-faint)" }}>
+              Designed by{" "}
+              <a
+                href="https://www.linkedin.com/in/amish-thekke-parambil/"
+                target="_blank"
+                rel="noreferrer"
+                className="underline underline-offset-2"
+                style={{ color: "var(--red)" }}
+              >
+                an explorer
+              </a>
+              .
+            </p>
+            <p className="text-xs mt-2" style={{ color: "var(--fg-faint)" }}>
+              Built to make everyday movement feel like a small adventure.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

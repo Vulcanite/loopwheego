@@ -23,6 +23,21 @@ const MAX_CYCLE_KM = 100
 const MAX_WALK_DURATION = 300
 const MAX_CYCLE_DURATION = 360
 const SG_CENTER = { lng: 103.8198, lat: 1.3521, label: "Singapore City Centre" }
+const SG_BOUNDS = {
+  minLng: 103.60,
+  maxLng: 104.05,
+  minLat: 1.13,
+  maxLat: 1.48,
+}
+
+function isWithinSingaporeBounds(lat: number, lng: number): boolean {
+  return (
+    lng >= SG_BOUNDS.minLng &&
+    lng <= SG_BOUNDS.maxLng &&
+    lat >= SG_BOUNDS.minLat &&
+    lat <= SG_BOUNDS.maxLat
+  )
+}
 
 function SectionLabel({ children }: { children: React.ReactNode }): JSX.Element {
   return (
@@ -74,6 +89,8 @@ export function RouteControls({
   const [endLat, setEndLat] = useState<number | null>(null)
   const [endLabel, setEndLabel] = useState("")
   const [gpsLoading, setGpsLoading] = useState(false)
+  const [outsideSingapore, setOutsideSingapore] = useState(false)
+  const [showRegionModal, setShowRegionModal] = useState(false)
 
   const [distanceKm, setDistanceKm] = useState(5)
   const [durationMin, setDurationMin] = useState(60)
@@ -90,9 +107,18 @@ export function RouteControls({
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords
-        setStartLat(latitude)
-        setStartLng(longitude)
-        setStartLabel(`My Location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`)
+        if (isWithinSingaporeBounds(latitude, longitude)) {
+          setStartLat(latitude)
+          setStartLng(longitude)
+          setStartLabel(`My Location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`)
+          setOutsideSingapore(false)
+          return
+        }
+        setOutsideSingapore(true)
+        setShowRegionModal(true)
+        setStartLat(SG_CENTER.lat)
+        setStartLng(SG_CENTER.lng)
+        setStartLabel(SG_CENTER.label)
       },
       (err) => {
         if (err.code === err.PERMISSION_DENIED) {
@@ -110,13 +136,24 @@ export function RouteControls({
       toast({ title: "GPS unavailable", description: "Your browser doesn't support geolocation.", variant: "destructive" })
       return
     }
+    if (outsideSingapore) return
     setGpsLoading(true)
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords
+        if (!isWithinSingaporeBounds(latitude, longitude)) {
+          setOutsideSingapore(true)
+          setShowRegionModal(true)
+          setStartLat(SG_CENTER.lat)
+          setStartLng(SG_CENTER.lng)
+          setStartLabel(SG_CENTER.label)
+          setGpsLoading(false)
+          return
+        }
         setStartLat(latitude)
         setStartLng(longitude)
         setStartLabel(`My Location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`)
+        setOutsideSingapore(false)
         setGpsLoading(false)
       },
       (err) => {
@@ -130,7 +167,7 @@ export function RouteControls({
       },
       { timeout: 8000 }
     )
-  }, [toast])
+  }, [outsideSingapore, toast])
 
   const handleGenerate = async (): Promise<void> => {
     if (startLng == null || startLat == null) {
@@ -224,16 +261,18 @@ export function RouteControls({
       <div className="mb-3">
         <div className="flex items-center justify-between mb-1.5">
           <SectionLabel>Start Point</SectionLabel>
-          <button
-            type="button"
-            onClick={() => void handleGPS()}
-            disabled={gpsLoading || disabled}
-            className="flex items-center gap-1 text-[11px] transition-colors disabled:opacity-40"
-            style={{ color: "var(--red)" }}
-          >
-            {gpsLoading ? <Loader2 size={11} className="animate-spin" /> : <Navigation size={11} />}
-            Use GPS
-          </button>
+          {!outsideSingapore && (
+            <button
+              type="button"
+              onClick={() => void handleGPS()}
+              disabled={gpsLoading || disabled}
+              className="flex items-center gap-1 text-[11px] transition-colors disabled:opacity-40"
+              style={{ color: "var(--red)" }}
+            >
+              {gpsLoading ? <Loader2 size={11} className="animate-spin" /> : <Navigation size={11} />}
+              Use GPS
+            </button>
+          )}
         </div>
         <PlaceSearch
           mapboxToken={token}
@@ -312,6 +351,28 @@ export function RouteControls({
           : <><MapPin size={16} />{hasRoutes ? "Regenerate Routes" : "Generate Routes"}</>
         }
       </button>
+
+      {showRegionModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          style={{ background: "rgba(0,0,0,0.45)" }}
+          onClick={() => setShowRegionModal(false)}
+        >
+          <div
+            className="w-full max-w-sm rounded-xl p-5 border text-center"
+            style={{ background: "var(--surface)", borderColor: "var(--border-mid)" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-sm leading-relaxed" style={{ color: "var(--fg)" }}>
+              LoopWheeGo currently supports Singapore only.
+            </p>
+            <p className="text-xs mt-2" style={{ color: "var(--fg-faint)" }}>
+              LoopWheeGo is our launchpad in Singapore, where we are tuning every route for real walkers and riders.
+              We will be bringing it to other regions soon.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
