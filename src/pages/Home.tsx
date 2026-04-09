@@ -69,6 +69,12 @@ export function Home(): JSX.Element {
     }
   }
 
+  const handleMobileMapTap = () => {
+    if (routes.length > 0 && sheetState !== "routes") {
+      setSheetState("routes")
+    }
+  }
+
   const handleTogglePOIs = async () => {
     if (!activeRoute) return
     const nextState = !showPOIs
@@ -183,6 +189,7 @@ export function Home(): JSX.Element {
           routeData={activeRoute}
           selectedPOI={selectedPOI}
           onSelectPOI={handleSelectPOI}
+          onMapTap={handleMobileMapTap}
         />
 
         <LoadingOverlay visible={isLoading} />
@@ -205,22 +212,22 @@ export function Home(): JSX.Element {
 
         {/* Bottom Sheet */}
         <BottomSheet state={sheetState} onHandleTap={handleSheetHandleTap}>
-          {sheetState === "routes" ? (
-            <MobileRouteCards
-              routes={routes}
-              activeIdx={activeRouteIdx}
-              onSelect={handleSelectVariant}
-              onExport={() => void handleExport()}
-              onOpenControls={() => setSheetState("controls")}
-            />
-          ) : (
+          <div className={sheetState === "routes" ? "hidden" : "block"}>
             <RouteControls
               onRoutesGenerated={handleRoutesGenerated}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
               hasRoutes={routes.length > 0}
             />
-          )}
+          </div>
+          <div className={sheetState === "routes" ? "block" : "hidden"}>
+            <MobileRouteCards
+              routes={routes}
+              activeIdx={activeRouteIdx}
+              onSelect={handleSelectVariant}
+              onExport={() => void handleExport()}
+            />
+          </div>
         </BottomSheet>
       </div>
 

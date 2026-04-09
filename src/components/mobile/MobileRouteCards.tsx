@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { ChevronLeft, ChevronRight, MapPin, Clock, Download } from "lucide-react"
+import { ChevronLeft, ChevronRight, MapPin, Clock, Download, Bike, Footprints } from "lucide-react"
 import type { RouteResponse } from "@/types/route"
 
 interface MobileRouteCardsProps {
@@ -7,7 +7,6 @@ interface MobileRouteCardsProps {
   activeIdx: number
   onSelect: (idx: number) => void
   onExport: () => void
-  onOpenControls: () => void
 }
 
 const VARIANT_LABELS = ["Route A", "Route B", "Route C"]
@@ -19,7 +18,6 @@ export function MobileRouteCards({
   activeIdx,
   onSelect,
   onExport,
-  onOpenControls,
 }: MobileRouteCardsProps): JSX.Element {
   const touchStartX = useRef<number | null>(null)
 
@@ -38,6 +36,7 @@ export function MobileRouteCards({
 
   const active = routes[activeIdx]
   if (!active) return <></>
+  const isCycle = active.source.includes("driving") || active.source.includes("bike") || active.source.includes("cycle")
 
   return (
     <div
@@ -57,6 +56,13 @@ export function MobileRouteCards({
           <p className="text-sm font-semibold" style={{ color: "var(--fg)" }}>
             {VARIANT_LABELS[activeIdx] ?? "Route"}
           </p>
+          <span
+            className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+            style={{ background: "var(--pill-bg)", color: "var(--fg-muted)" }}
+          >
+            {isCycle ? <Bike size={10} /> : <Footprints size={10} />}
+            {isCycle ? "Cycle" : "Walk"}
+          </span>
         </div>
 
         {/* Prev / dots / next */}
@@ -134,14 +140,6 @@ export function MobileRouteCards({
             style={{ background: "var(--pill-bg)", color: "var(--fg-muted)" }}
           >
             <Download size={11} /> GPX
-          </button>
-          {/* Re-plan */}
-          <button
-            onClick={onOpenControls}
-            className="text-xs px-3 py-1.5 rounded-lg transition-colors"
-            style={{ background: "var(--pill-bg)", color: "var(--fg-muted)" }}
-          >
-            Re-plan
           </button>
         </div>
       </div>
