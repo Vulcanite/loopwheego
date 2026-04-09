@@ -1,13 +1,17 @@
 from pydantic import BaseModel, ConfigDict
-from typing import List, Optional, Tuple
+from typing import List, Literal, Optional, Tuple
 from app.models.poi import POI
+
+AppMode = Literal["explorer", "fitness"]
 
 
 class RouteRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     start_lng: float
     start_lat: float
-    distance_km: float
+    distance_km: Optional[float] = None
+    target_duration_minutes: Optional[int] = None
+    appMode: AppMode = "fitness"
     mode: str = "walk"
     routeType: Optional[str] = "loop"
     end_lng: Optional[float] = None

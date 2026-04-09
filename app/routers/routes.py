@@ -22,6 +22,8 @@ _llm_singleton = LLMService()
 
 ENABLE_POIS = os.getenv("ENABLE_POIS", "false").lower() == "true"
 ENABLE_LLM_NARRATION = os.getenv("ENABLE_LLM_NARRATION", "false").lower() == "true"
+WALK_SPEED_KMH = 4.5
+CYCLE_SPEED_KMH = 10.0
 
 
 def get_llm_service() -> LLMService:
@@ -140,6 +142,17 @@ async def generate_route_variants(
         # 1. Branching based on Route Type
         route_type = getattr(body, "routeType", "loop")
         mode = getattr(body, "mode", "walk")
+        app_mode = getattr(body, "appMode", "fitness")
+
+        target_distance_km = body.distance_km
+        if route_type != "a2b":
+            if app_mode == "explorer":
+                if body.target_duration_minutes is None:
+                    raise HTTPException(status_code=400, detail="Explorer routes require target_duration_minutes.")
+                speed = CYCLE_SPEED_KMH if mode == "cycle" else WALK_SPEED_KMH
+                target_distance_km = max((speed * body.target_duration_minutes) / 60.0, 1.0)
+            elif target_distance_km is None:
+                raise HTTPException(status_code=400, detail="Fitness routes require distance_km.")
 
         if route_type == "a2b":
             # For A to B, we need end coordinates
@@ -154,7 +167,7 @@ async def generate_route_variants(
         else:
             # Default to Loop generation
             routes = await route_generator.generate_loop_variants(
-                body.start_lng, body.start_lat, body.distance_km, count=3, mode=mode, waypoints=body.waypoints
+                body.start_lng, body.start_lat, float(target_distance_km), count=3, mode=mode, waypoints=body.waypoints
             )
             
     except Exception as exc:
