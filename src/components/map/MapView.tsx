@@ -12,6 +12,7 @@ interface MapViewProps {
   selectedPOI: string | null
   onSelectPOI: (id: string) => void
   onMapTap?: () => void
+  fitPadding?: { top: number; right: number; bottom: number; left: number }
 }
 
 const SINGAPORE_BOUNDS: [[number, number], [number, number]] = [
@@ -19,7 +20,13 @@ const SINGAPORE_BOUNDS: [[number, number], [number, number]] = [
   [104.05, 1.48] // Northeast coordinates
 ];
 
-export function MapView({ routeData, selectedPOI, onSelectPOI, onMapTap }: MapViewProps): JSX.Element {
+export function MapView({
+  routeData,
+  selectedPOI,
+  onSelectPOI,
+  onMapTap,
+  fitPadding,
+}: MapViewProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const [map, setMap] = useState<mapboxgl.Map | null>(null)
@@ -103,8 +110,8 @@ export function MapView({ routeData, selectedPOI, onSelectPOI, onMapTap }: MapVi
     const coords = routeData.polyline
     const b = new mapboxgl.LngLatBounds(coords[0], coords[0])
     coords.forEach(([lng, lat]) => { b.extend([lng, lat]) })
-    map.fitBounds(b, { padding: 80, duration: 900 })
-  }, [map, routeData])
+    map.fitBounds(b, { padding: fitPadding ?? 80, duration: 900 })
+  }, [fitPadding, map, routeData])
 
   useEffect(() => {
     if (!map || !routeData || !selectedPOI) return

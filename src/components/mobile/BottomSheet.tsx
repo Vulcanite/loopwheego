@@ -20,6 +20,7 @@ export function BottomSheet({ state, onHandleTap, children }: BottomSheetProps):
       className="fixed bottom-0 left-0 right-0 z-30 flex flex-col rounded-t-2xl"
       style={{
         height: "85dvh",
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
         background: "var(--surface)",
         borderTop: "1px solid var(--border-mid)",
         boxShadow: "0 -8px 40px rgba(0,0,0,0.35)",

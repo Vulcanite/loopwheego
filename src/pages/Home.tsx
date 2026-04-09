@@ -34,6 +34,11 @@ export function Home(): JSX.Element {
   const [sheetState, setSheetState] = useState<SheetState>("idle")
 
   const activeRoute = routes[activeRouteIdx] ?? null
+  const mobileFitPadding = sheetState === "controls"
+    ? { top: 92, right: 28, bottom: 380, left: 28 }
+    : sheetState === "routes"
+      ? { top: 92, right: 28, bottom: 250, left: 28 }
+      : { top: 92, right: 28, bottom: 120, left: 28 }
 
   // ─────────────────────────────────────────────────────────────
   // Handlers
@@ -191,6 +196,7 @@ export function Home(): JSX.Element {
           selectedPOI={selectedPOI}
           onSelectPOI={handleSelectPOI}
           onMapTap={handleMobileMapTap}
+          fitPadding={mobileFitPadding}
         />
 
         <LoadingOverlay visible={isLoading} />
@@ -200,8 +206,9 @@ export function Home(): JSX.Element {
           <button
             type="button"
             onClick={() => setSheetState("controls")}
-            className="fab-enter absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-6 py-3.5 rounded-full font-semibold text-sm text-white"
+            className="fab-enter absolute left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-6 py-3.5 rounded-full font-semibold text-sm text-white"
             style={{
+              bottom: "calc(env(safe-area-inset-bottom, 0px) + 16px)",
               background: "var(--red)",
               boxShadow: "0 4px 28px var(--red-glow)",
             }}
