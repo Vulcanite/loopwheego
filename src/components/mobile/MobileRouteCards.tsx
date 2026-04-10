@@ -1,12 +1,12 @@
 import { useRef } from "react"
-import { ChevronLeft, ChevronRight, MapPin, Clock, Download, Bike, Footprints } from "lucide-react"
+import { ChevronLeft, ChevronRight, MapPin, Clock, Navigation, Bike, Footprints } from "lucide-react"
 import type { RouteResponse } from "@/types/route"
 
 interface MobileRouteCardsProps {
   routes: RouteResponse[]
   activeIdx: number
   onSelect: (idx: number) => void
-  onExport: () => void
+  onOpenInGoogleMaps: () => void
 }
 
 const SWIPE_THRESHOLD = 40
@@ -15,7 +15,7 @@ export function MobileRouteCards({
   routes,
   activeIdx,
   onSelect,
-  onExport,
+  onOpenInGoogleMaps,
 }: MobileRouteCardsProps): JSX.Element {
   const touchStartX = useRef<number | null>(null)
 
@@ -131,13 +131,13 @@ export function MobileRouteCards({
         </div>
 
         <div className="ml-auto flex flex-col gap-2">
-          {/* Export GPX */}
+          {/* Open in Google Maps */}
           <button
-            onClick={onExport}
+            onClick={onOpenInGoogleMaps}
             className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg transition-colors"
             style={{ background: "var(--pill-bg)", color: "var(--fg-muted)" }}
           >
-            <Download size={11} /> GPX
+            <Navigation size={11} /> Google Maps
           </button>
         </div>
       </div>
