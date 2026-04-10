@@ -254,7 +254,7 @@ export function Home(): JSX.Element {
         />
 
         {routes.length > 1 && !isLoading && (
-          <div className="animate-fade-up">
+          <div className="relative z-10 animate-fade-up">
             <RouteVariantPicker
               routes={routes}
               activeIdx={activeRouteIdx}

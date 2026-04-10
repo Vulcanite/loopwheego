@@ -20,6 +20,7 @@ type RouteType = "loop" | "a2b"
 
 const MAX_WALK_KM = 50
 const MAX_CYCLE_KM = 100
+const MIN_DISTANCE_KM = 3
 const MAX_WALK_DURATION = 300
 const MAX_CYCLE_DURATION = 360
 const SG_CENTER = { lng: 103.8198, lat: 1.3521, label: "Singapore City Centre" }
@@ -92,7 +93,7 @@ export function RouteControls({
   const [outsideSingapore, setOutsideSingapore] = useState(false)
   const [showRegionModal, setShowRegionModal] = useState(false)
 
-  const [distanceKm, setDistanceKm] = useState(5)
+  const [distanceKm, setDistanceKm] = useState(MIN_DISTANCE_KM)
   const [durationMin, setDurationMin] = useState(60)
   const maxKm = transport === "walk" ? MAX_WALK_KM : MAX_CYCLE_KM
   const maxDuration = transport === "walk" ? MAX_WALK_DURATION : MAX_CYCLE_DURATION
@@ -200,7 +201,7 @@ export function RouteControls({
   }
 
   return (
-    <div className="flex flex-col p-5 pb-4 gap-0">
+    <div className="relative z-20 flex flex-col p-5 pb-4 gap-0">
 
       {/* MODE TOGGLE */}
       <div className="flex gap-2 mb-4">
@@ -227,9 +228,9 @@ export function RouteControls({
         <SectionLabel>Transport</SectionLabel>
         <div className="flex gap-2">
           <TransportBtn active={transport === "walk"} icon={Footprints} label="Walk" disabled={disabled}
-            onClick={() => { setTransport("walk"); setDistanceKm(Math.min(distanceKm, MAX_WALK_KM)) }} />
+            onClick={() => { setTransport("walk"); setDistanceKm(Math.max(MIN_DISTANCE_KM, Math.min(distanceKm, MAX_WALK_KM))) }} />
           <TransportBtn active={transport === "cycle"} icon={Bike} label="Cycle" disabled={disabled}
-            onClick={() => { setTransport("cycle"); setDistanceKm(Math.min(distanceKm, MAX_CYCLE_KM)) }} />
+            onClick={() => { setTransport("cycle"); setDistanceKm(Math.max(MIN_DISTANCE_KM, Math.min(distanceKm, MAX_CYCLE_KM))) }} />
         </div>
       </div>
 
@@ -308,10 +309,10 @@ export function RouteControls({
               {distanceKm.toFixed(1)} km
             </span>
           </div>
-          <Slider min={5} max={maxKm} step={0.5} value={[distanceKm]} disabled={disabled}
+          <Slider min={MIN_DISTANCE_KM} max={maxKm} step={0.5} value={[distanceKm]} disabled={disabled}
             onValueChange={(v) => { const val = v[0]; if (val !== undefined) setDistanceKm(val) }} />
           <div className="flex justify-between mt-1 text-[10px]" style={{ color: "var(--fg-faint)" }}>
-            <span>1 km</span><span>{maxKm} km</span>
+            <span>{MIN_DISTANCE_KM} km</span><span>{maxKm} km</span>
           </div>
         </div>
       )}

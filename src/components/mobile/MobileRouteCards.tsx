@@ -143,7 +143,7 @@ export function MobileRouteCards({
       </div>
 
       {routes.length > 1 && (
-        <p className="text-center text-[10px] mt-2" style={{ color: "var(--fg-faint)" }}>
+        <p className="text-center text-[11px] mt-2" style={{ color: "var(--fg)" }}>
           Swipe left / right to switch routes
         </p>
       )}

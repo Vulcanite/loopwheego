@@ -121,7 +121,7 @@ export function PlaceSearch({
   }, [runSearch])
 
   return (
-    <div className="relative">
+    <div className="relative z-40">
       <input
         value={query}
         onChange={(e) => { onQueryChange(e.target.value); setOpen(true) }}
@@ -146,6 +146,9 @@ export function PlaceSearch({
             border: "1px solid var(--border-mid)", 
             maxHeight: "280px",
             zIndex: 9999,
+            opacity: 1,
+            backdropFilter: "none",
+            WebkitBackdropFilter: "none",
           }}
           role="listbox"
         >
