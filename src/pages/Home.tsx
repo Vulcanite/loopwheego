@@ -162,16 +162,31 @@ export function Home(): JSX.Element {
   const handleExport = async (): Promise<void> => {
     if (!activeRoute) return
     const routeNumber = activeRouteIdx + 1
+    const filename = `loopwheego_route_${routeNumber}.gpx`
     try {
       const blob = await api.exportGPX({
         polyline: activeRoute.polyline,
         pois: activeRoute.pois,
         route_name: `LoopWheeGo Route ${routeNumber}`,
       })
+      const file = new File([blob], filename, { type: "application/gpx+xml" })
+      // On mobile (iOS 15+, Android Chrome) use the native share sheet so the
+      // user can open the GPX directly in Komoot, AllTrails, OsmAnd, etc.
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: filename })
+          return
+        } catch (shareErr) {
+          // User cancelled the share sheet — don't treat as an error
+          if ((shareErr as DOMException).name === "AbortError") return
+          // Any other share failure → fall through to download
+        }
+      }
+      // Desktop / unsupported browser: plain download
       const url = URL.createObjectURL(blob)
       const a = document.createElement("a")
       a.href = url
-      a.download = `loopwheego_route_${routeNumber}.gpx`
+      a.download = filename
       a.click()
       URL.revokeObjectURL(url)
     } catch (e) {
@@ -179,50 +194,6 @@ export function Home(): JSX.Element {
     }
   }
 
-  const handleOpenInGoogleMaps = (): void => {
-    if (!activeRoute || activeRoute.polyline.length < 2) {
-      toast({ title: "No route to open", description: "Generate a route first.", variant: "destructive" })
-      return
-    }
-
-    const toLatLng = (pt: [number, number]): string => `${pt[1]},${pt[0]}`
-    const polyline = activeRoute.polyline
-    const start = polyline[0]
-    const end = polyline[polyline.length - 1]
-    const isCycle = activeRoute.source.includes("driving") || activeRoute.source.includes("bike") || activeRoute.source.includes("cycle")
-    const travelmode = isCycle ? "bicycling" : "walking"
-    const loopLike = Math.abs(start[0] - end[0]) < 0.00001 && Math.abs(start[1] - end[1]) < 0.00001
-
-    const sampleIntermediateWaypoints = (points: [number, number][], maxWaypoints: number): [number, number][] => {
-      if (points.length <= 2) return []
-      const inner = points.slice(1, -1)
-      if (inner.length <= maxWaypoints) return inner
-      const picked: [number, number][] = []
-      const used = new Set<number>()
-      for (let i = 1; i <= maxWaypoints; i += 1) {
-        const idx = Math.round((i * (inner.length - 1)) / (maxWaypoints + 1))
-        if (used.has(idx)) continue
-        used.add(idx)
-        picked.push(inner[idx] as [number, number])
-      }
-      return picked
-    }
-
-    const waypoints = sampleIntermediateWaypoints(polyline, 8)
-    const mapsUrl = new URL("https://www.google.com/maps/dir/")
-    mapsUrl.searchParams.set("api", "1")
-    mapsUrl.searchParams.set("origin", toLatLng(start))
-    mapsUrl.searchParams.set("destination", toLatLng(loopLike ? start : end))
-    mapsUrl.searchParams.set("travelmode", travelmode)
-    if (waypoints.length > 0) {
-      mapsUrl.searchParams.set("waypoints", waypoints.map(toLatLng).join("|"))
-    }
-
-    const opened = window.open(mapsUrl.toString(), "_blank", "noopener,noreferrer")
-    if (!opened) {
-      window.location.href = mapsUrl.toString()
-    }
-  }
 
   // ─────────────────────────────────────────────────────────────
   // Render
@@ -278,7 +249,7 @@ export function Home(): JSX.Element {
               routes={routes}
               activeIdx={activeRouteIdx}
               onSelect={handleSelectVariant}
-              onOpenInGoogleMaps={handleOpenInGoogleMaps}
+
             />
           </div>
         </BottomSheet>
