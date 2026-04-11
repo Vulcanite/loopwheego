@@ -9,6 +9,7 @@ import { RouteControls } from "@/components/shared/RouteControls"
 import { RouteVariantPicker } from "@/components/shared/RouteVariantPicker"
 import { BottomSheet, type SheetState } from "@/components/mobile/BottomSheet"
 import { MobileRouteCards } from "@/components/mobile/MobileRouteCards"
+import { GPXShareSheet } from "@/components/mobile/GPXShareSheet"
 import type { RouteResponse } from "@/types/route"
 import { api, formatAxiosError } from "@/services/api"
 import type { POI } from "@/types/poi"
@@ -32,6 +33,9 @@ export function Home(): JSX.Element {
 
   // Mobile bottom sheet state
   const [sheetState, setSheetState] = useState<SheetState>("idle")
+
+  // GPX share sheet state (mobile)
+  const [gpxShareData, setGpxShareData] = useState<{ blob: Blob; filename: string } | null>(null)
 
   const activeRoute = routes[activeRouteIdx] ?? null
   const mobileFitPadding = sheetState === "controls"
@@ -169,20 +173,13 @@ export function Home(): JSX.Element {
         pois: activeRoute.pois,
         route_name: `LoopWheeGo Route ${routeNumber}`,
       })
-      const file = new File([blob], filename, { type: "application/gpx+xml" })
-      // On mobile (iOS 15+, Android Chrome) use the native share sheet so the
-      // user can open the GPX directly in Komoot, AllTrails, OsmAnd, etc.
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        try {
-          await navigator.share({ files: [file], title: filename })
-          return
-        } catch (shareErr) {
-          // User cancelled the share sheet — don't treat as an error
-          if ((shareErr as DOMException).name === "AbortError") return
-          // Any other share failure → fall through to download
-        }
+      // On mobile show our custom app picker — the iOS system share sheet doesn't
+      // reliably surface GPX-compatible apps even when they're installed.
+      if (window.innerWidth < 768) {
+        setGpxShareData({ blob, filename })
+        return
       }
-      // Desktop / unsupported browser: plain download
+      // Desktop: plain download
       const url = URL.createObjectURL(blob)
       const a = document.createElement("a")
       a.href = url
@@ -371,6 +368,15 @@ export function Home(): JSX.Element {
           onSelectPOI={handleSelectPOI}
         />
       </main>
+
+      {/* GPX app picker — mobile only */}
+      {gpxShareData && (
+        <GPXShareSheet
+          blob={gpxShareData.blob}
+          filename={gpxShareData.filename}
+          onClose={() => setGpxShareData(null)}
+        />
+      )}
 
     </div>
   )
