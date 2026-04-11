@@ -9,7 +9,6 @@ import { RouteControls } from "@/components/shared/RouteControls"
 import { RouteVariantPicker } from "@/components/shared/RouteVariantPicker"
 import { BottomSheet, type SheetState } from "@/components/mobile/BottomSheet"
 import { MobileRouteCards } from "@/components/mobile/MobileRouteCards"
-import { GPXShareSheet } from "@/components/mobile/GPXShareSheet"
 import type { RouteResponse } from "@/types/route"
 import { api, formatAxiosError } from "@/services/api"
 import type { POI } from "@/types/poi"
@@ -34,8 +33,6 @@ export function Home(): JSX.Element {
   // Mobile bottom sheet state
   const [sheetState, setSheetState] = useState<SheetState>("idle")
 
-  // GPX share sheet state (mobile)
-  const [gpxShareData, setGpxShareData] = useState<{ blob: Blob; filename: string } | null>(null)
 
   const activeRoute = routes[activeRouteIdx] ?? null
   const mobileFitPadding = sheetState === "controls"
@@ -173,13 +170,19 @@ export function Home(): JSX.Element {
         pois: activeRoute.pois,
         route_name: `LoopWheeGo Route ${routeNumber}`,
       })
-      // On mobile show our custom app picker — the iOS system share sheet doesn't
-      // reliably surface GPX-compatible apps even when they're installed.
-      if (window.innerWidth < 768) {
-        setGpxShareData({ blob, filename })
-        return
+      // No MIME type — iOS infers the UTI from the .gpx extension, which causes
+      // it to surface all installed GPX-compatible apps in the share sheet.
+      const file = new File([blob], filename)
+      if (navigator.canShare?.({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: filename })
+          return
+        } catch (e) {
+          if ((e as DOMException).name === "AbortError") return
+          // share failed — fall through to plain download
+        }
       }
-      // Desktop: plain download
+      // Desktop / unsupported: plain download
       const url = URL.createObjectURL(blob)
       const a = document.createElement("a")
       a.href = url
@@ -369,14 +372,6 @@ export function Home(): JSX.Element {
         />
       </main>
 
-      {/* GPX app picker — mobile only */}
-      {gpxShareData && (
-        <GPXShareSheet
-          blob={gpxShareData.blob}
-          filename={gpxShareData.filename}
-          onClose={() => setGpxShareData(null)}
-        />
-      )}
 
     </div>
   )
