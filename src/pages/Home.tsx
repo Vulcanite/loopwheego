@@ -249,7 +249,7 @@ export function Home(): JSX.Element {
               routes={routes}
               activeIdx={activeRouteIdx}
               onSelect={handleSelectVariant}
-
+              onExport={() => void handleExport()}
             />
           </div>
         </BottomSheet>

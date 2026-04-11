@@ -1,11 +1,12 @@
 import { useRef } from "react"
-import { ChevronLeft, ChevronRight, MapPin, Clock, Bike, Footprints } from "lucide-react"
+import { ChevronLeft, ChevronRight, MapPin, Clock, Bike, Footprints, Share2 } from "lucide-react"
 import type { RouteResponse } from "@/types/route"
 
 interface MobileRouteCardsProps {
   routes: RouteResponse[]
   activeIdx: number
   onSelect: (idx: number) => void
+  onExport: () => void
 }
 
 const SWIPE_THRESHOLD = 40
@@ -14,6 +15,7 @@ export function MobileRouteCards({
   routes,
   activeIdx,
   onSelect,
+  onExport,
 }: MobileRouteCardsProps): JSX.Element {
   const touchStartX = useRef<number | null>(null)
 
@@ -127,6 +129,15 @@ export function MobileRouteCards({
             <Clock size={9} /> min
           </span>
         </div>
+
+        <button
+          onClick={onExport}
+          className="ml-auto flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-colors"
+          style={{ background: "var(--pill-bg)", color: "var(--fg-muted)" }}
+        >
+          <Share2 size={16} />
+          <span className="text-[10px] uppercase tracking-widest">GPX</span>
+        </button>
       </div>
 
       {routes.length > 1 && (
