@@ -7,7 +7,7 @@ load_dotenv()
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import places, routes
+from app.routers import geocode, places, routes
 
 def _parse_origins() -> list[str]:
     raw = os.getenv("CORS_ORIGINS", "http://localhost:5173")
@@ -26,6 +26,7 @@ app.add_middleware(
 
 app.include_router(routes.router, prefix="/routes", tags=["routes"])
 app.include_router(places.router, prefix="/places", tags=["places"])
+app.include_router(geocode.router, prefix="/geocode", tags=["geocode"])
 
 
 @app.get("/health")

@@ -13,6 +13,11 @@ from app.models.route import GPXRequest, MultiRouteResponse, POIDiscoveryRequest
 from app.models.poi import POI
 
 from app.services import overpass
+from app.services.external_endpoints import (
+    get_nominatim_base_urls,
+    mark_base_url_unhealthy,
+    should_fallback_on_error,
+)
 from app.services.llm import LLMService
 from app.services import route_generator
 
@@ -34,24 +39,31 @@ def get_llm_service() -> LLMService:
 
 
 async def _reverse_geocode_name(lng: float, lat: float) -> str:
-    try:
-        async with httpx.AsyncClient(timeout=8.0) as client:
-            r = await client.get(
-                "https://nominatim.openstreetmap.org/reverse",
-                params={
-                    "lat": lat,
-                    "lon": lng,
-                    "format": "json",
-                },
-                headers={"User-Agent": "LoopWheeGo/1.0"},
-            )
-            r.raise_for_status()
-            data = r.json()
-            name = data.get("display_name")
-            if isinstance(name, str) and name.strip():
-                return name.strip()[:240]
-    except (httpx.HTTPError, KeyError, TypeError, ValueError):
-        pass
+    async with httpx.AsyncClient(timeout=8.0) as client:
+        for base_url in get_nominatim_base_urls():
+            try:
+                r = await client.get(
+                    f"{base_url}/reverse",
+                    params={
+                        "lat": lat,
+                        "lon": lng,
+                        "format": "json",
+                    },
+                    headers={
+                        "Accept": "application/json",
+                        "User-Agent": "LoopWheeGo/1.0",
+                    },
+                )
+                r.raise_for_status()
+                data = r.json()
+                name = data.get("display_name")
+                if isinstance(name, str) and name.strip():
+                    return name.strip()[:240]
+            except (httpx.HTTPError, KeyError, TypeError, ValueError) as exc:
+                if should_fallback_on_error(exc):
+                    mark_base_url_unhealthy(base_url)
+                    continue
+                break
     return "your starting point"
 
 

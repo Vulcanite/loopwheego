@@ -30,6 +30,12 @@ from typing import Any
 
 import httpx
 
+from app.services.external_endpoints import (
+    get_osrm_candidates,
+    mark_base_url_unhealthy,
+    should_fallback_on_error,
+)
+
 ROUTE_TIMEOUT_S = float(os.getenv("ROUTE_TIMEOUT_S", "30"))
 
 _MIN_LOOP_KM = 0.8
@@ -410,6 +416,29 @@ def _score_loop(
 
 _osrm_semaphore = asyncio.Semaphore(5)
 
+
+async def _request_osrm_json(
+    client: httpx.AsyncClient,
+    path_builder,
+    mode: str,
+) -> dict[str, Any] | None:
+    for base_url, profile in get_osrm_candidates(mode):
+        url = path_builder(base_url, profile)
+        try:
+            response = await client.get(url)
+            response.raise_for_status()
+            data = response.json()
+            if isinstance(data, dict) and data.get("code") == "Ok":
+                data["_resolved_profile"] = profile
+                data["_resolved_base_url"] = base_url
+                return data
+        except Exception as exc:
+            if should_fallback_on_error(exc):
+                mark_base_url_unhealthy(base_url)
+                continue
+            break
+    return None
+
 async def _build_one_candidate(
     client: httpx.AsyncClient,
     start_lng: float,
@@ -424,33 +453,25 @@ async def _build_one_candidate(
     # OSRM /trip automatically closes the loop back to the start
     # coords = f"{start_lng},{start_lat};{a['lng']},{a['lat']};{b['lng']},{b['lat']}"
     
-    # Dynamically select the engine and profile based on the toggle
-    if mode.lower() == "cycle":
-        base_url = os.getenv("OSRM_BIKE_URL", "http://localhost:5001")
-        profile = "driving" # OSRM default for vehicles
-    else:
-        base_url = os.getenv("OSRM_FOOT_URL", "http://localhost:5000")
-        profile = "foot"
-
     coord_list = [f"{start_lng},{start_lat}"]
     if waypoints:
         coord_list.extend([f"{w[0]},{w[1]}" for w in waypoints])
     coord_list.extend([f"{a['lng']},{a['lat']}", f"{b['lng']},{b['lat']}"])
     coords = ";".join(coord_list)
 
-    url = (
-        f"{base_url.rstrip('/')}/trip/v1/{profile}/{coords}"
-        "?roundtrip=true&source=first&destination=last"
-        "&geometries=geojson&overview=full&steps=false"
-    )
-
     async with _osrm_semaphore:
         try:
-            response = await client.get(url)
-            response.raise_for_status()
-            data = response.json()
+            data = await _request_osrm_json(
+                client,
+                lambda base_url, profile: (
+                    f"{base_url.rstrip('/')}/trip/v1/{profile}/{coords}"
+                    "?roundtrip=true&source=first&destination=last"
+                    "&geometries=geojson&overview=full&steps=false"
+                ),
+                mode,
+            )
 
-            if data.get("code") != "Ok" or not data.get("trips"):
+            if not data or not data.get("trips"):
                 return None
 
             trip = data["trips"][0]
@@ -480,7 +501,7 @@ async def _build_one_candidate(
                 "polyline": polyline,
                 "distance_km": round(total_distance, 2),
                 "duration_minutes": total_duration,
-                "source": f"osrm_{profile}_trip_loop",
+                "source": f"osrm_{data['_resolved_profile']}_trip_loop",
                 "_score": score,
                 "_anchors": [a["name"], b["name"]],
             }
@@ -541,14 +562,6 @@ async def generate_a2b(
     mode: str = "walk",
     waypoints: list[tuple[float, float]] | None = None,
 ) -> list[dict[str, Any]]:
-    # Profile selection based on mode
-    if mode.lower() == "cycle":
-        base_url = os.getenv("OSRM_BIKE_URL", "http://localhost:5001")
-        profile = "driving" 
-    else:
-        base_url = os.getenv("OSRM_FOOT_URL", "http://localhost:5000")
-        profile = "foot"
-
     # We request alternatives=true to give the user options
     coord_list = [f"{start_lng},{start_lat}"]
     if waypoints:
@@ -556,18 +569,18 @@ async def generate_a2b(
     coord_list.append(f"{end_lng},{end_lat}")
     coords_str = ";".join(coord_list)
 
-    url = (
-        f"{base_url.rstrip('/')}/route/v1/{profile}/{coords_str}"
-        "?geometries=geojson&overview=full&steps=false&alternatives=true"
-    )
-
     async with httpx.AsyncClient(timeout=ROUTE_TIMEOUT_S) as client:
         try:
-            response = await client.get(url)
-            response.raise_for_status()
-            data = response.json()
+            data = await _request_osrm_json(
+                client,
+                lambda base_url, profile: (
+                    f"{base_url.rstrip('/')}/route/v1/{profile}/{coords_str}"
+                    "?geometries=geojson&overview=full&steps=false&alternatives=true"
+                ),
+                mode,
+            )
 
-            if data.get("code") != "Ok" or not data.get("routes"):
+            if not data or not data.get("routes"):
                 return []
 
             out = []
@@ -580,7 +593,7 @@ async def generate_a2b(
                     "polyline": polyline,
                     "distance_km": round(dist_km, 2),
                     "duration_minutes": dur_min,
-                    "source": f"osrm_{profile}_a2b",
+                    "source": f"osrm_{data['_resolved_profile']}_a2b",
                 })
             return out
         except Exception:
