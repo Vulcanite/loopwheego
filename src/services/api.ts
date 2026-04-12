@@ -51,4 +51,13 @@ export async function discoverPOIs(request: POIDiscoveryRequest): Promise<POI[]>
   return data
 }
 
-export const api = { generateRouteVariants, getSuggestedPlaces, exportGPX, discoverPOIs }
+export async function searchPlaces(query: string, signal?: AbortSignal): Promise<unknown[]> {
+  const { data } = await client.get<unknown[]>("/geocode/search", {
+    params: { q: query },
+    timeout: 10_000,
+    signal,
+  })
+  return data
+}
+
+export const api = { generateRouteVariants, getSuggestedPlaces, exportGPX, discoverPOIs, searchPlaces }

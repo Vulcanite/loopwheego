@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import type { GeoJSONSource, Map } from "mapbox-gl"
+import type { GeoJSONSource, Map } from "maplibre-gl"
 
 interface RoutePolylineProps {
   map: Map
@@ -125,7 +125,7 @@ export function RoutePolyline({ map, coordinates }: RoutePolylineProps): null {
         layout: {
           "text-field": ["get", "label"],
           "text-size": 11,
-          "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Regular"],
+          "text-font": ["Noto Sans Regular", "Arial Unicode MS Regular"],
           "text-offset": [0, -1.7],
           "text-anchor": "top",
           "text-allow-overlap": true,

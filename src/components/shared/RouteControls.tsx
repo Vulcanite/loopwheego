@@ -76,7 +76,6 @@ export function RouteControls({
   hasRoutes,
 }: RouteControlsProps): JSX.Element {
   const { toast } = useToast()
-  const token = import.meta.env.VITE_MAPBOX_TOKEN ?? ""
   const disabled = isLoading
 
   const [appMode, setAppMode] = useState<AppMode>("fitness")
@@ -276,7 +275,6 @@ export function RouteControls({
           )}
         </div>
         <PlaceSearch
-          mapboxToken={token}
           query={startLabel}
           onQueryChange={setStartLabel}
           disabled={disabled}
@@ -290,7 +288,6 @@ export function RouteControls({
         <div className="mb-4 animate-fade-up">
           <SectionLabel>End Point</SectionLabel>
           <PlaceSearch
-            mapboxToken={token}
             query={endLabel}
             onQueryChange={setEndLabel}
             disabled={disabled}

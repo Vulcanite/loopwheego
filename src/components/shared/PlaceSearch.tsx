@@ -1,23 +1,28 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { api } from "@/services/api"
 
-// Optimized Singapore bounding box
-const SG_BBOX = "103.60,1.13,104.05,1.48"
-// Central point for proximity weight (near Orchard/Botanic)
-const SG_CENTER = "103.8198,1.3521"
-
-interface GeocodeFeature {
-  id: string
-  place_name: string
-  center: [number, number]
-  relevance?: number
-}
-
-interface GeocodeResponse {
-  features?: GeocodeFeature[]
+interface NominatimResult {
+  place_id: number
+  display_name: string
+  lat: string
+  lon: string
+  name?: string
+  type?: string
+  importance?: number
+  address?: {
+    postcode?: string
+    road?: string
+    house_number?: string
+    neighbourhood?: string
+    suburb?: string
+    city?: string
+    town?: string
+    village?: string
+    country?: string
+  }
 }
 
 interface PlaceSearchProps {
-  mapboxToken: string
   query: string
   onQueryChange: (q: string) => void
   onPlaceSelected: (lng: number, lat: number, label: string) => void
@@ -26,107 +31,161 @@ interface PlaceSearchProps {
 }
 
 export function PlaceSearch({
-  mapboxToken,
   query,
   onQueryChange,
   onPlaceSelected,
-  placeholder = "Search address or place…",
+  placeholder = "Search address, place, or postcode…",
   disabled = false,
 }: PlaceSearchProps): JSX.Element {
-  const [results, setResults] = useState<GeocodeFeature[]>([])
+  const [results, setResults] = useState<NominatimResult[]>([])
   const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const abortRef = useRef<AbortController | null>(null)
+  const requestIdRef = useRef(0)
+  const blurTimeoutRef = useRef<number | null>(null)
 
   const canSearch = useMemo(
-    () => !disabled && mapboxToken.length > 0 && query.trim().length >= 2,
-    [disabled, mapboxToken, query]
+    () => !disabled && query.trim().length >= 2,
+    [disabled, query]
   )
 
+  const normalizeQuery = (raw: string): string =>
+    raw
+      .replace(/@/g, " ")
+      .replace(/[.,]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+
+  const clearBlurTimeout = (): void => {
+    if (blurTimeoutRef.current !== null) {
+      window.clearTimeout(blurTimeoutRef.current)
+      blurTimeoutRef.current = null
+    }
+  }
+
+  const cleanLabel = (label: string): string => {
+    return label.replace(/,\s*Singapore$/i, "")
+  }
+
+  const dedupe = (rows: NominatimResult[]): NominatimResult[] => {
+    const seen = new Set<string>()
+    const out: NominatimResult[] = []
+
+    for (const row of rows) {
+      const key = `${row.lat},${row.lon},${row.display_name}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      out.push(row)
+    }
+
+    return out
+  }
+
+  const sortResults = (rows: NominatimResult[], normalized: string): NominatimResult[] => {
+    const q = normalized.toLowerCase()
+
+    return [...rows].sort((a, b) => {
+      const aName = a.display_name.toLowerCase()
+      const bName = b.display_name.toLowerCase()
+
+      const aExactPostcode = a.address?.postcode === normalized ? 1 : 0
+      const bExactPostcode = b.address?.postcode === normalized ? 1 : 0
+      if (aExactPostcode !== bExactPostcode) return bExactPostcode - aExactPostcode
+
+      const aStarts = aName.startsWith(q) ? 1 : 0
+      const bStarts = bName.startsWith(q) ? 1 : 0
+      if (aStarts !== bStarts) return bStarts - aStarts
+
+      const aIncludes = aName.includes(q) ? 1 : 0
+      const bIncludes = bName.includes(q) ? 1 : 0
+      if (aIncludes !== bIncludes) return bIncludes - aIncludes
+
+      return (b.importance ?? 0) - (a.importance ?? 0)
+    })
+  }
+
   const runSearch = useCallback(async (): Promise<void> => {
-    if (!canSearch) { setResults([]); return }
-    const sanitizeQuery = (value: string): string =>
-      value.replace(/@/g, " ").replace(/[.,]/g, " ").replace(/\s+/g, " ").trim()
-
-    const buildUrl = (rawQuery: string): string => {
-      const q = encodeURIComponent(rawQuery.trim())
-      const url = new URL(`https://api.mapbox.com/geocoding/v5/mapbox.places/${q}.json`)
-      url.searchParams.set("access_token", mapboxToken)
-      url.searchParams.set("bbox", SG_BBOX)
-      url.searchParams.set("proximity", SG_CENTER)
-      url.searchParams.set("types", "poi,address,neighborhood,locality,place")
-      url.searchParams.set("country", "SG")
-      url.searchParams.set("autocomplete", "true")
-      url.searchParams.set("fuzzyMatch", "true")
-      url.searchParams.set("language", "en")
-      url.searchParams.set("limit", "8")
-      return url.toString()
-    }
-
-    const dedupe = (rows: GeocodeFeature[]): GeocodeFeature[] => {
-      const seen = new Set<string>()
-      const out: GeocodeFeature[] = []
-      for (const r of rows) {
-        const key = `${r.id}|${r.place_name.toLowerCase()}`
-        if (seen.has(key)) continue
-        seen.add(key)
-        out.push(r)
-      }
-      return out
-    }
-
-    const normalized = sanitizeQuery(query.trim())
-    if (normalized.length < 2) {
+    if (!canSearch) {
+      abortRef.current?.abort()
+      setLoading(false)
       setResults([])
       return
     }
-    const fallback = normalized.toLowerCase().includes("singapore")
-      ? normalized
-      : `${normalized} singapore`
 
-    const rank = (rows: GeocodeFeature[]): GeocodeFeature[] => {
-      const needle = normalized.toLowerCase()
-      const tokens = needle.split(" ").filter(Boolean)
-      return rows
-        .map((row) => {
-          const name = row.place_name.toLowerCase()
-          let score = Number(row.relevance ?? 0)
-          if (name.includes(needle)) score += 3.0
-          if (tokens.every((t) => name.includes(t))) score += 2.0
-          if (name.startsWith(tokens[0] ?? "")) score += 0.8
-          return { row, score }
-        })
-        .sort((a, b) => b.score - a.score)
-        .map((x) => x.row)
+    const normalized = normalizeQuery(query)
+    if (normalized.length < 2) {
+      abortRef.current?.abort()
+      setLoading(false)
+      setResults([])
+      return
     }
+
+    abortRef.current?.abort()
+    const controller = new AbortController()
+    abortRef.current = controller
+    const currentRequestId = ++requestIdRef.current
+
+    setLoading(true)
 
     try {
-      const queries = Array.from(new Set([normalized, fallback]))
-      const responses = await Promise.all(
-        queries.map(async (q) => {
-          const res = await fetch(buildUrl(q))
-          if (!res.ok) return [] as GeocodeFeature[]
-          const data = (await res.json()) as GeocodeResponse
-          return data.features ?? []
-        })
-      )
-      const merged = dedupe(responses.flat())
-      setResults(rank(merged))
-    } catch {
-      setResults([])
+      const data = await api.searchPlaces(normalized, controller.signal) as NominatimResult[]
+
+      if (currentRequestId === requestIdRef.current) {
+        const cleaned = dedupe(data ?? [])
+        const sorted = sortResults(cleaned, normalized)
+        setResults(sorted)
+        setLoading(false)
+      }
+    } catch (error) {
+      if ((error as Error).name === "AbortError") return
+
+      if (currentRequestId === requestIdRef.current) {
+        setResults([])
+        setLoading(false)
+      }
     }
-  }, [canSearch, mapboxToken, query])
+  }, [canSearch, query])
 
   useEffect(() => {
-    const t = window.setTimeout(() => { void runSearch() }, 350)
-    return () => window.clearTimeout(t)
+    const t = window.setTimeout(() => {
+      void runSearch()
+    }, 350)
+
+    return () => {
+      window.clearTimeout(t)
+    }
   }, [runSearch])
+
+  useEffect(() => {
+    return () => {
+      abortRef.current?.abort()
+      clearBlurTimeout()
+    }
+  }, [])
+
+  const showDropdown = open && !disabled && (loading || results.length > 0)
 
   return (
     <div className="relative z-40">
       <input
         value={query}
-        onChange={(e) => { onQueryChange(e.target.value); setOpen(true) }}
-        onFocus={() => { if (!disabled) setOpen(true) }}
-        onBlur={() => setTimeout(() => setOpen(false), 200)} // Increased delay for click registration
+        onChange={(e) => {
+          onQueryChange(e.target.value)
+          setOpen(true)
+        }}
+        onFocus={() => {
+          if (!disabled) {
+            clearBlurTimeout()
+            setOpen(true)
+          }
+        }}
+        onBlur={() => {
+          clearBlurTimeout()
+          blurTimeoutRef.current = window.setTimeout(() => {
+            setOpen(false)
+          }, 120)
+        }}
         placeholder={placeholder}
         disabled={disabled}
         autoComplete="off"
@@ -136,14 +195,17 @@ export function PlaceSearch({
           border: "1px solid var(--border-mid)",
           color: "var(--fg)",
         }}
+        aria-expanded={showDropdown}
+        aria-autocomplete="list"
+        aria-haspopup="listbox"
       />
 
-      {open && results.length > 0 && !disabled ? (
+      {showDropdown ? (
         <ul
           className="absolute mt-1 w-full overflow-auto rounded-lg shadow-2xl"
-          style={{ 
+          style={{
             background: "var(--surface)",
-            border: "1px solid var(--border-mid)", 
+            border: "1px solid var(--border-mid)",
             maxHeight: "280px",
             zIndex: 9999,
             opacity: 1,
@@ -152,32 +214,55 @@ export function PlaceSearch({
           }}
           role="listbox"
         >
-          {results.map((f) => (
-            <li key={f.id} style={{ borderBottom: "1px solid var(--border)" }}>
-              <button
-                type="button"
-                className="w-full px-4 py-3 text-left text-sm transition-colors flex items-start gap-3"
+          {loading ? (
+            <li>
+              <div
+                className="px-4 py-3 text-sm"
                 style={{ color: "var(--fg-muted)" }}
-                onMouseEnter={(e) => { 
-                  (e.currentTarget as HTMLElement).style.background = "var(--pill-hover)",
-                  (e.currentTarget as HTMLElement).style.color = "var(--fg)"
-                }}
-                onMouseLeave={(e) => { 
-                  (e.currentTarget as HTMLElement).style.background = "transparent",
-                  (e.currentTarget as HTMLElement).style.color = "var(--fg-muted)"
-                }}
-                onMouseDown={() => {
-                  const [lng, lat] = f.center
-                  onPlaceSelected(lng, lat, f.place_name)
-                  onQueryChange(f.place_name)
-                  setOpen(false)
-                }}
               >
-                <span style={{ color: "var(--red)" }} className="mt-0.5">↗</span>
-                <span className="leading-snug">{f.place_name}</span>
-              </button>
+                Searching...
+              </div>
             </li>
-          ))}
+          ) : (
+            results.map((item) => {
+              const lng = Number(item.lon)
+              const lat = Number(item.lat)
+              const label = cleanLabel(item.display_name)
+
+              return (
+                <li
+                  key={`${item.place_id}-${item.lat}-${item.lon}`}
+                  style={{ borderBottom: "1px solid var(--border)" }}
+                >
+                  <button
+                    type="button"
+                    className="w-full px-4 py-3 text-left text-sm transition-colors flex items-start gap-3"
+                    style={{ color: "var(--fg-muted)" }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "var(--pill-hover)"
+                      e.currentTarget.style.color = "var(--fg)"
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "transparent"
+                      e.currentTarget.style.color = "var(--fg-muted)"
+                    }}
+                    onMouseDown={(e) => {
+                      e.preventDefault()
+                      clearBlurTimeout()
+                      onPlaceSelected(lng, lat, label)
+                      onQueryChange(label)
+                      setOpen(false)
+                    }}
+                  >
+                    <span style={{ color: "var(--red)" }} className="mt-0.5">
+                      ↗
+                    </span>
+                    <span className="leading-snug">{label}</span>
+                  </button>
+                </li>
+              )
+            })
+          )}
         </ul>
       ) : null}
     </div>

@@ -1,5 +1,5 @@
-import mapboxgl from "mapbox-gl"
-import "mapbox-gl/dist/mapbox-gl.css"
+import maplibregl from "maplibre-gl"
+import "maplibre-gl/dist/maplibre-gl.css"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import { POIMarker } from "@/components/map/POIMarker"
@@ -20,6 +20,26 @@ const SINGAPORE_BOUNDS: [[number, number], [number, number]] = [
   [104.05, 1.48] // Northeast coordinates
 ];
 
+const MAPTILER_KEY = (import.meta.env.VITE_MAPTILER_KEY ?? "").trim()
+
+function getStyleUrl(theme: "dark" | "light"): string {
+  const mapId = theme === "dark" ? "dataviz-dark" : "streets-v2"
+  return `https://api.maptiler.com/maps/${mapId}/style.json?key=${MAPTILER_KEY}`
+}
+
+function flatten3DBuildingLayers(map: maplibregl.Map): void {
+  const style = map.getStyle()
+  const layers = style.layers ?? []
+  for (const layer of layers) {
+    if (layer.type !== "fill-extrusion") continue
+    if (map.getLayer(layer.id)) {
+      map.setPaintProperty(layer.id, "fill-extrusion-height", 0)
+      map.setPaintProperty(layer.id, "fill-extrusion-base", 0)
+      map.setPaintProperty(layer.id, "fill-extrusion-opacity", 0.85)
+    }
+  }
+}
+
 export function MapView({
   routeData,
   selectedPOI,
@@ -28,8 +48,8 @@ export function MapView({
   fitPadding,
 }: MapViewProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const mapRef = useRef<mapboxgl.Map | null>(null)
-  const [map, setMap] = useState<mapboxgl.Map | null>(null)
+  const mapRef = useRef<maplibregl.Map | null>(null)
+  const [map, setMap] = useState<maplibregl.Map | null>(null)
   const [styleEpoch, setStyleEpoch] = useState(0)
   const [initError, setInitError] = useState<string | null>(null)
   const { theme } = useTheme()
@@ -39,30 +59,20 @@ export function MapView({
   // Swap map style when theme changes
   useEffect(() => {
     if (!mapRef.current) return
-    const style = theme === "dark"
-      ? "mapbox://styles/mapbox/dark-v11"
-      : "mapbox://styles/mapbox/streets-v12"
-    mapRef.current.setStyle(style)
+    mapRef.current.setStyle(getStyleUrl(theme))
   }, [theme])
 
   useEffect(() => {
-    const raw = import.meta.env.VITE_MAPBOX_TOKEN
-    const token = typeof raw === "string" ? raw.trim() : ""
-    if (!token) {
-      setInitError("Mapbox token missing — set VITE_MAPBOX_TOKEN in your .env file.")
+    if (!MAPTILER_KEY) {
+      setInitError("MapTiler key missing. Set VITE_MAPTILER_KEY in your frontend env.")
       return
     }
     setInitError(null)
-    mapboxgl.accessToken = token
     if (!containerRef.current) return
 
-    const style = theme === "dark"
-      ? "mapbox://styles/mapbox/dark-v11"
-      : "mapbox://styles/mapbox/streets-v12"
-
-    const m = new mapboxgl.Map({
+    const m = new maplibregl.Map({
       container: containerRef.current,
-      style,
+      style: getStyleUrl(theme),
       center: [103.8198, 1.3521],
       maxBounds: SINGAPORE_BOUNDS,
       zoom: 11.5,
@@ -71,16 +81,20 @@ export function MapView({
 
     mapRef.current = m
     const onResize = (): void => { m.resize() }
-    const onStyleLoad = (): void => { setStyleEpoch((v) => v + 1) }
+    const onStyleLoad = (): void => {
+      flatten3DBuildingLayers(m)
+      setStyleEpoch((v) => v + 1)
+    }
 
     m.on("load", () => {
       onResize()
       requestAnimationFrame(onResize)
+      flatten3DBuildingLayers(m)
       setMap(m)
     })
     m.on("style.load", onStyleLoad)
 
-    m.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right")
+    m.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right")
 
     const ro = typeof ResizeObserver !== "undefined" && containerRef.current
       ? new ResizeObserver(() => { onResize() }) : null
@@ -108,7 +122,7 @@ export function MapView({
   useEffect(() => {
     if (!map || !routeData?.polyline.length) return
     const coords = routeData.polyline
-    const b = new mapboxgl.LngLatBounds(coords[0], coords[0])
+    const b = new maplibregl.LngLatBounds(coords[0], coords[0])
     coords.forEach(([lng, lat]) => { b.extend([lng, lat]) })
     map.fitBounds(b, { padding: fitPadding ?? 80, duration: 900 })
   }, [fitPadding, map, routeData])

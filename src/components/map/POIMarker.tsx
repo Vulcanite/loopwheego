@@ -1,9 +1,9 @@
 import { useEffect } from "react"
-import mapboxgl from "mapbox-gl"
+import maplibregl from "maplibre-gl"
 import type { POI } from "@/types/poi"
 
 interface POIMarkerProps {
-  map: mapboxgl.Map
+  map: maplibregl.Map
   poi: POI
   index: number
   isSelected: boolean
@@ -46,7 +46,7 @@ export function POIMarker({ map, poi, index, isSelected, onSelect }: POIMarkerPr
     
     el.style.background = isSelected ? "#c0271e" : getCatColor(poi.category);
 
-    const marker = new mapboxgl.Marker({ element: el })
+    const marker = new maplibregl.Marker({ element: el })
       .setLngLat([poi.lng, poi.lat])
       .addTo(map)
 
