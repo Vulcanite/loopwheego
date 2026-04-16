@@ -26,6 +26,9 @@ class RouteResponse(BaseModel):
     duration_minutes: int
     pois: List[POI]
     source: str = "unknown"
+    elevation_gain_m: Optional[float] = None  # None if elevation API unavailable
+    effort_label: Optional[str] = None        # "Easy" / "Moderate" / "Hard"
+    label: Optional[str] = None               # display alias = effort_label (frontend contract)
 
 
 class MultiRouteResponse(BaseModel):
