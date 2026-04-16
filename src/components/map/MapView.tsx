@@ -9,6 +9,7 @@ import type { RouteResponse } from "@/types/route"
 
 interface MapViewProps {
   routeData: RouteResponse | null
+  plannedStops: [number, number][]
   selectedPOI: string | null
   onSelectPOI: (id: string) => void
   onMapTap?: () => void
@@ -42,6 +43,7 @@ function flatten3DBuildingLayers(map: maplibregl.Map): void {
 
 export function MapView({
   routeData,
+  plannedStops,
   selectedPOI,
   onSelectPOI,
   onMapTap,
@@ -152,7 +154,7 @@ export function MapView({
       <div ref={containerRef} className="absolute inset-0" />
       {map ? (
         <>
-          <RoutePolyline key={`route-${styleEpoch}`} map={map} coordinates={coords} />
+          <RoutePolyline key={`route-${styleEpoch}`} map={map} coordinates={coords} plannedStops={plannedStops} />
           {routeData?.pois.map((poi, i) => (
             <POIMarker key={poi.id} map={map} poi={poi} index={i}
               isSelected={selectedPOI === poi.id} onSelect={handleSelect} />

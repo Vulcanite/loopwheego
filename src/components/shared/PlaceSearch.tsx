@@ -57,6 +57,19 @@ export function PlaceSearch({
       .replace(/\s+/g, " ")
       .trim()
 
+  const isSyntheticDisplayQuery = (raw: string, normalized: string): boolean => {
+    const rawLower = raw.trim().toLowerCase()
+    const normalizedLower = normalized.toLowerCase().replace(/…/g, "")
+
+    return (
+      rawLower.startsWith("detecting current location") ||
+      rawLower.startsWith("my location") ||
+      normalizedLower.startsWith("detecting current location") ||
+      normalizedLower.startsWith("my location") ||
+      normalizedLower === "singapore city centre"
+    )
+  }
+
   const clearBlurTimeout = (): void => {
     if (blurTimeoutRef.current !== null) {
       window.clearTimeout(blurTimeoutRef.current)
@@ -115,6 +128,12 @@ export function PlaceSearch({
 
     const normalized = normalizeQuery(query)
     if (normalized.length < 2) {
+      abortRef.current?.abort()
+      setLoading(false)
+      setResults([])
+      return
+    }
+    if (isSyntheticDisplayQuery(query, normalized)) {
       abortRef.current?.abort()
       setLoading(false)
       setResults([])
@@ -250,7 +269,6 @@ export function PlaceSearch({
                       e.preventDefault()
                       clearBlurTimeout()
                       onPlaceSelected(lng, lat, label)
-                      onQueryChange(label)
                       setOpen(false)
                     }}
                   >

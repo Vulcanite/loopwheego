@@ -130,6 +130,20 @@ export function MobileRouteCards({
           </span>
         </div>
 
+        {active.elevation_gain_m != null && (
+          <>
+            <div className="w-px h-9 shrink-0" style={{ background: "var(--border-mid)" }} />
+            <div className="flex flex-col items-start">
+              <span className="text-2xl font-bold tabular-nums leading-none" style={{ color: "var(--fg)" }}>
+                {Math.round(active.elevation_gain_m)}
+              </span>
+              <span className="flex items-center gap-1 text-[10px] uppercase tracking-widest mt-0.5" style={{ color: "var(--fg-faint)" }}>
+                ↑ m gain
+              </span>
+            </div>
+          </>
+        )}
+
         <button
           onClick={onExport}
           className="ml-auto flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-colors"

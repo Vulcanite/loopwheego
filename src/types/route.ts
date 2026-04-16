@@ -18,8 +18,10 @@ export interface RouteResponse {
   distance_km: number
   duration_minutes: number
   pois: POI[]
-  source: string;
-  label?: string
+  source: string
+  label?: string           // backend-computed = effort_label
+  effort_label?: string    // "Easy" / "Moderate" / "Hard"
+  elevation_gain_m?: number // absent if elevation API was down
 }
 
 export interface POIDiscoveryRequest {

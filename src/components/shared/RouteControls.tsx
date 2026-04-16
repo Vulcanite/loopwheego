@@ -1,4 +1,4 @@
-import { Loader2, MapPin, Navigation, Bike, Footprints, RotateCcw, ArrowRight } from "lucide-react"
+import { Loader2, MapPin, Navigation, Bike, Footprints, RotateCcw, ArrowRight, Plus, X } from "lucide-react"
 import { useState, useCallback, useEffect } from "react"
 
 import { PlaceSearch } from "@/components/shared/PlaceSearch"
@@ -9,6 +9,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 interface RouteControlsProps {
   onRoutesGenerated: (routes: RouteResponse[]) => void
+  onLoopStopsPlanned: (stops: [number, number][]) => void
   isLoading: boolean
   setIsLoading: (v: boolean) => void
   hasRoutes: boolean
@@ -17,6 +18,11 @@ interface RouteControlsProps {
 type AppMode = "fitness" | "explorer"
 type TransportMode = "walk" | "cycle"
 type RouteType = "loop" | "a2b"
+type StopDraft = {
+  query: string
+  lng: number | null
+  lat: number | null
+}
 
 const MAX_WALK_KM = 50
 const MAX_CYCLE_KM = 100
@@ -71,6 +77,7 @@ function TransportBtn({ active, icon: Icon, label, onClick, disabled }: {
 
 export function RouteControls({
   onRoutesGenerated,
+  onLoopStopsPlanned,
   isLoading,
   setIsLoading,
   hasRoutes,
@@ -94,6 +101,7 @@ export function RouteControls({
 
   const [distanceKm, setDistanceKm] = useState(MIN_DISTANCE_KM)
   const [durationMin, setDurationMin] = useState(60)
+  const [stops, setStops] = useState<StopDraft[]>([])
   const maxKm = transport === "walk" ? MAX_WALK_KM : MAX_CYCLE_KM
   const maxDuration = transport === "walk" ? MAX_WALK_DURATION : MAX_CYCLE_DURATION
 
@@ -178,8 +186,15 @@ export function RouteControls({
       toast({ title: "Choose an end point", description: "For A→B routes, set a destination.", variant: "destructive" })
       return
     }
+    if (routeType === "loop" && stops.some((stop) => stop.lng == null || stop.lat == null)) {
+      toast({ title: "Finish your stops", description: "Select each stop from search results or remove unfinished stops.", variant: "destructive" })
+      return
+    }
     setIsLoading(true)
     try {
+      const selectedStops = routeType === "loop" && stops.length > 0
+        ? stops.map((stop) => [stop.lng as number, stop.lat as number] as [number, number])
+        : []
       const result = await api.generateRouteVariants({
         start_lng: startLng,
         start_lat: startLat,
@@ -190,13 +205,44 @@ export function RouteControls({
         routeType: routeType,
         end_lng: endLng,
         end_lat: endLat,
+        waypoints: selectedStops.length > 0 ? selectedStops : undefined,
       })
+      onLoopStopsPlanned(routeType === "loop" ? selectedStops : [])
       onRoutesGenerated(result.routes)
     } catch (e) {
       toast({ title: "Could not generate route", description: formatAxiosError(e), variant: "destructive" })
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleAddStop = (): void => {
+    if (stops.length >= 3) return
+    setStops((prev) => [...prev, { query: "", lng: null, lat: null }])
+  }
+
+  const handleRemoveStop = (idx: number): void => {
+    setStops((prev) => prev.filter((_, currentIdx) => currentIdx !== idx))
+  }
+
+  const handleStopQueryChange = (idx: number, query: string): void => {
+    setStops((prev) =>
+      prev.map((stop, currentIdx) =>
+        currentIdx === idx
+          ? { query, lng: null, lat: null }
+          : stop
+      )
+    )
+  }
+
+  const handleStopSelected = (idx: number, lng: number, lat: number, label: string): void => {
+    setStops((prev) =>
+      prev.map((stop, currentIdx) =>
+        currentIdx === idx
+          ? { query: label, lng, lat }
+          : stop
+      )
+    )
   }
 
   return (
@@ -294,6 +340,59 @@ export function RouteControls({
             onPlaceSelected={(lng, lat, label) => { setEndLng(lng); setEndLat(lat); setEndLabel(label) }}
             placeholder="Search destination…"
           />
+        </div>
+      )}
+
+      {routeType === "loop" && (
+        <div className="mb-4 animate-fade-up">
+          <div className="flex items-center justify-between mb-2">
+            <SectionLabel>Stops</SectionLabel>
+            <button
+              type="button"
+              onClick={handleAddStop}
+              disabled={disabled || stops.length >= 3}
+              className="flex items-center gap-1 text-[11px] transition-colors disabled:opacity-40"
+              style={{ color: "var(--red)" }}
+            >
+              <Plus size={11} />
+              Add Stop
+            </button>
+          </div>
+
+          {stops.length === 0 ? (
+            <p className="text-xs leading-relaxed" style={{ color: "var(--fg-faint)" }}>
+              Add up to 3 stops before generating a loop route.
+            </p>
+          ) : (
+            <div className="flex flex-col gap-2.5">
+              {stops.map((stop, idx) => (
+                <div key={idx} className="rounded-xl p-3" style={{ background: "var(--card)", border: "1px solid var(--border-mid)" }}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[11px] uppercase tracking-widest font-semibold" style={{ color: "var(--fg-faint)" }}>
+                      Stop {idx + 1}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveStop(idx)}
+                      disabled={disabled}
+                      className="flex items-center gap-1 text-[11px] transition-colors disabled:opacity-40"
+                      style={{ color: "var(--fg-muted)" }}
+                    >
+                      <X size={11} />
+                      Remove
+                    </button>
+                  </div>
+                  <PlaceSearch
+                    query={stop.query}
+                    onQueryChange={(query) => handleStopQueryChange(idx, query)}
+                    onPlaceSelected={(lng, lat, label) => handleStopSelected(idx, lng, lat, label)}
+                    placeholder="Search stop..."
+                    disabled={disabled}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 

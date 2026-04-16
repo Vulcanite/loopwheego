@@ -36,6 +36,11 @@ export function RouteVariantPicker({ routes, activeIdx, onSelect }: RouteVariant
                   <p className="text-sm font-semibold leading-tight" style={{ color: "var(--fg)" }}>
                     {r.label ?? `Route ${i + 1}`}
                   </p>
+                  {r.elevation_gain_m != null && (
+                    <p className="text-[10px] mt-0.5" style={{ color: "var(--fg-faint)" }}>
+                      ↑ {Math.round(r.elevation_gain_m)}m gain
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="flex items-center gap-3 text-[11px]" style={{ color: "var(--fg-muted)" }}>

@@ -4,9 +4,10 @@ import type { GeoJSONSource, Map } from "maplibre-gl"
 interface RoutePolylineProps {
   map: Map
   coordinates: [number, number][]
+  plannedStops: [number, number][]
 }
 
-export function RoutePolyline({ map, coordinates }: RoutePolylineProps): null {
+export function RoutePolyline({ map, coordinates, plannedStops }: RoutePolylineProps): null {
   useEffect(() => {
     const sourceId = "walking-route"
     const layerId = "walking-route-line"
@@ -53,6 +54,13 @@ export function RoutePolyline({ map, coordinates }: RoutePolylineProps): null {
         geometry: { type: "Point", coordinates: endCoord },
       })
     }
+    plannedStops.forEach((stop, idx) => {
+      waypointFeatures.push({
+        type: "Feature",
+        properties: { kind: "stop", label: `Stop ${idx + 1}` },
+        geometry: { type: "Point", coordinates: stop },
+      })
+    })
     const waypointsGeojson: GeoJSON.FeatureCollection<GeoJSON.Point> = {
       type: "FeatureCollection",
       features: waypointFeatures,
@@ -109,6 +117,8 @@ export function RoutePolyline({ map, coordinates }: RoutePolylineProps): null {
           "circle-color": [
             "match",
             ["get", "kind"],
+            "stop",
+            "#f59e0b",
             "end",
             "#2563eb",
             "#e63329",
@@ -139,7 +149,7 @@ export function RoutePolyline({ map, coordinates }: RoutePolylineProps): null {
     }
 
     return () => { remove() }
-  }, [map, coordinates])
+  }, [map, coordinates, plannedStops])
 
   return null
 }

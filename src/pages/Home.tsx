@@ -16,6 +16,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 export function Home(): JSX.Element {
   const { toast } = useToast()
+  const [plannedStops, setPlannedStops] = useState<[number, number][]>([])
 
   // Route State
   const [routes, setRoutes] = useState<RouteResponse[]>([])
@@ -209,6 +210,7 @@ export function Home(): JSX.Element {
         {/* Map — always full screen on mobile */}
         <MapView
           routeData={activeRoute}
+          plannedStops={plannedStops}
           selectedPOI={selectedPOI}
           onSelectPOI={handleSelectPOI}
           onMapTap={handleMobileMapTap}
@@ -239,6 +241,7 @@ export function Home(): JSX.Element {
           <div className={sheetState === "routes" ? "hidden" : "block"}>
             <RouteControls
               onRoutesGenerated={handleRoutesGenerated}
+              onLoopStopsPlanned={setPlannedStops}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
               hasRoutes={routes.length > 0}
@@ -264,6 +267,7 @@ export function Home(): JSX.Element {
       >
         <RouteControls
           onRoutesGenerated={handleRoutesGenerated}
+          onLoopStopsPlanned={setPlannedStops}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
           hasRoutes={routes.length > 0}
@@ -367,6 +371,7 @@ export function Home(): JSX.Element {
         <LoadingOverlay visible={isLoading} />
         <MapView
           routeData={activeRoute}
+          plannedStops={plannedStops}
           selectedPOI={selectedPOI}
           onSelectPOI={handleSelectPOI}
         />
