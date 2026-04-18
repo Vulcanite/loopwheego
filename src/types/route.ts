@@ -11,6 +11,7 @@ export interface RouteRequest {
   end_lng?: number | null;
   end_lat?: number | null;
   waypoints?: [number, number][];
+  poi_categories?: string[];
 }
 
 export interface RouteResponse {
@@ -20,7 +21,7 @@ export interface RouteResponse {
   pois: POI[]
   source: string
   label?: string           // backend-computed = effort_label
-  effort_label?: string    // "Easy" / "Moderate" / "Hard"
+  effort_label?: string    // "Easier" / "Balanced" / "Tougher"
   elevation_gain_m?: number // absent if elevation API was down
 }
 

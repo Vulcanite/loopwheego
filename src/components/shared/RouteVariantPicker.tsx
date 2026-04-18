@@ -4,17 +4,18 @@ import type { RouteResponse } from "@/types/route"
 interface RouteVariantPickerProps {
   routes: RouteResponse[]
   activeIdx: number
+  appMode: "fitness" | "explorer"
   onSelect: (idx: number) => void
 }
 
-export function RouteVariantPicker({ routes, activeIdx, onSelect }: RouteVariantPickerProps): JSX.Element {
+export function RouteVariantPicker({ routes, activeIdx, appMode, onSelect }: RouteVariantPickerProps): JSX.Element {
   return (
     <div
       className="px-4 pt-3 pb-4"
       style={{ borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}
     >
       <p className="text-[11px] uppercase tracking-widest mb-2.5 font-semibold" style={{ color: "var(--fg-faint)" }}>
-        Choose a Route
+        {routes.length === 1 ? "Selected Route" : "Choose a Route"}
       </p>
       <div className="flex flex-col gap-2">
         {routes.map((r, i) => (
@@ -34,9 +35,13 @@ export function RouteVariantPicker({ routes, activeIdx, onSelect }: RouteVariant
                 </span>
                 <div>
                   <p className="text-sm font-semibold leading-tight" style={{ color: "var(--fg)" }}>
-                    {r.label ?? `Route ${i + 1}`}
+                    {appMode === "explorer" ? `Route ${i + 1}` : (r.label ?? `Route ${i + 1}`)}
                   </p>
-                  {r.elevation_gain_m != null && (
+                  {appMode === "explorer" ? (
+                    <p className="text-[10px] mt-0.5" style={{ color: "var(--fg-faint)" }}>
+                      {r.pois.length} POIs nearby
+                    </p>
+                  ) : r.elevation_gain_m != null && (
                     <p className="text-[10px] mt-0.5" style={{ color: "var(--fg-faint)" }}>
                       ↑ {Math.round(r.elevation_gain_m)}m gain
                     </p>
@@ -52,6 +57,12 @@ export function RouteVariantPicker({ routes, activeIdx, onSelect }: RouteVariant
                   <Clock size={10} />
                   {r.duration_minutes} min
                 </span>
+                {appMode === "explorer" && (
+                  <span className="flex items-center gap-1">
+                    <MapPin size={10} />
+                    {r.pois.length} POIs
+                  </span>
+                )}
               </div>
             </div>
           </button>

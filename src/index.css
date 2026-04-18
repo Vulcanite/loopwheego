@@ -29,6 +29,14 @@
   --overlay:      rgba(13,15,20,0.72);
   --scrim:        rgba(0,0,0,0.28);
   --sidebar-border: rgba(255,255,255,0.06);
+  --map-float-bg: rgba(15,23,42,0.78);
+  --map-float-panel-bg: rgba(15,23,42,0.9);
+  --map-float-border: rgba(255,255,255,0.08);
+  --map-float-chip: rgba(255,255,255,0.08);
+  --map-float-fg: rgba(255,255,255,0.92);
+  --map-float-muted: rgba(255,255,255,0.55);
+  --map-float-subtle: rgba(255,255,255,0.5);
+  --map-float-option-bg: rgba(255,255,255,0.04);
 }
 
 [data-theme="light"] {
@@ -52,6 +60,14 @@
   --overlay:      rgba(242,243,246,0.80);
   --scrim:        rgba(255,255,255,0.20);
   --sidebar-border: rgba(0,0,0,0.07);
+  --map-float-bg: rgba(255,255,255,0.92);
+  --map-float-panel-bg: rgba(255,255,255,0.97);
+  --map-float-border: rgba(17,19,24,0.12);
+  --map-float-chip: rgba(17,19,24,0.06);
+  --map-float-fg: rgba(17,19,24,0.92);
+  --map-float-muted: rgba(17,19,24,0.58);
+  --map-float-subtle: rgba(17,19,24,0.48);
+  --map-float-option-bg: rgba(17,19,24,0.04);
 
   --background:           220 14% 95%;
   --foreground:           224 14% 8%;

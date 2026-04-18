@@ -1,15 +1,20 @@
-import { Loader2, MapPin, Navigation, Bike, Footprints, RotateCcw, ArrowRight, Plus, X } from "lucide-react"
-import { useState, useCallback, useEffect } from "react"
+import { Loader2, MapPin, Navigation, Bike, Footprints, RotateCcw, ArrowRight, Plus, X, ChevronDown } from "lucide-react"
+import { useState, useCallback, useEffect, useMemo, useRef } from "react"
 
 import { PlaceSearch } from "@/components/shared/PlaceSearch"
 import { Slider } from "@/components/ui/slider"
 import { api, formatAxiosError } from "@/services/api"
-import type { RouteResponse } from "@/types/route"
+import type { RouteRequest, RouteResponse } from "@/types/route"
 import { useToast } from "@/components/ui/use-toast"
+import { formatPOICategory } from "@/lib/poiPresentation"
 
 interface RouteControlsProps {
-  onRoutesGenerated: (routes: RouteResponse[]) => void
+  onRoutesGenerated: (routes: RouteResponse[], appMode: AppMode, session: RouteControlsSession) => void
   onLoopStopsPlanned: (stops: [number, number][]) => void
+  onAppModeChange?: (mode: AppMode) => void
+  onExplorerCategoriesChange?: (categories: string[]) => void
+  onStartLocationChange?: (location: [number, number]) => void
+  availableExplorerCategories?: string[]
   isLoading: boolean
   setIsLoading: (v: boolean) => void
   hasRoutes: boolean
@@ -23,6 +28,9 @@ type StopDraft = {
   lng: number | null
   lat: number | null
 }
+type RouteControlsSession = Pick<RouteRequest, "mode" | "routeType" | "distance_km" | "target_duration_minutes" | "poi_categories" | "waypoints"> & {
+  appMode: AppMode
+}
 
 const MAX_WALK_KM = 50
 const MAX_CYCLE_KM = 100
@@ -30,6 +38,18 @@ const MIN_DISTANCE_KM = 3
 const MAX_WALK_DURATION = 300
 const MAX_CYCLE_DURATION = 360
 const SG_CENTER = { lng: 103.8198, lat: 1.3521, label: "Singapore City Centre" }
+const EXPLORER_CATEGORY_OPTIONS = [
+  "parks",
+  "nature",
+  "waterfront",
+  "monuments",
+  "heritage",
+  "museums",
+  "viewpoints",
+  "hawker_centres",
+  "cafes",
+  "arts",
+]
 const SG_BOUNDS = {
   minLng: 103.60,
   maxLng: 104.05,
@@ -78,6 +98,10 @@ function TransportBtn({ active, icon: Icon, label, onClick, disabled }: {
 export function RouteControls({
   onRoutesGenerated,
   onLoopStopsPlanned,
+  onAppModeChange,
+  onExplorerCategoriesChange,
+  onStartLocationChange,
+  availableExplorerCategories,
   isLoading,
   setIsLoading,
   hasRoutes,
@@ -102,6 +126,15 @@ export function RouteControls({
   const [distanceKm, setDistanceKm] = useState(MIN_DISTANCE_KM)
   const [durationMin, setDurationMin] = useState(60)
   const [stops, setStops] = useState<StopDraft[]>([])
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [isCategoryPickerOpen, setIsCategoryPickerOpen] = useState(false)
+  const categoryPickerRef = useRef<HTMLDivElement | null>(null)
+  const availableCategories = useMemo(
+    () => (availableExplorerCategories && availableExplorerCategories.length > 0
+      ? availableExplorerCategories
+      : EXPLORER_CATEGORY_OPTIONS),
+    [availableExplorerCategories]
+  )
   const maxKm = transport === "walk" ? MAX_WALK_KM : MAX_CYCLE_KM
   const maxDuration = transport === "walk" ? MAX_WALK_DURATION : MAX_CYCLE_DURATION
 
@@ -110,6 +143,7 @@ export function RouteControls({
       setStartLat(SG_CENTER.lat)
       setStartLng(SG_CENTER.lng)
       setStartLabel(SG_CENTER.label)
+      onStartLocationChange?.([SG_CENTER.lng, SG_CENTER.lat])
       return
     }
     navigator.geolocation.getCurrentPosition(
@@ -120,6 +154,7 @@ export function RouteControls({
           setStartLng(longitude)
           setStartLabel(`My Location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`)
           setOutsideSingapore(false)
+          onStartLocationChange?.([longitude, latitude])
           return
         }
         setOutsideSingapore(true)
@@ -127,17 +162,49 @@ export function RouteControls({
         setStartLat(SG_CENTER.lat)
         setStartLng(SG_CENTER.lng)
         setStartLabel(SG_CENTER.label)
+        onStartLocationChange?.([SG_CENTER.lng, SG_CENTER.lat])
       },
       (err) => {
         if (err.code === err.PERMISSION_DENIED) {
           setStartLat(SG_CENTER.lat)
           setStartLng(SG_CENTER.lng)
           setStartLabel(SG_CENTER.label)
+          onStartLocationChange?.([SG_CENTER.lng, SG_CENTER.lat])
         }
       },
       { timeout: 8000 }
     )
-  }, [])
+  }, [onStartLocationChange])
+
+  useEffect(() => {
+    if (appMode !== "explorer") return
+    onExplorerCategoriesChange?.(selectedCategories)
+  }, [appMode, onExplorerCategoriesChange, selectedCategories])
+
+  useEffect(() => {
+    if (!isCategoryPickerOpen) return
+
+    const handlePointerDown = (event: MouseEvent): void => {
+      if (!categoryPickerRef.current?.contains(event.target as Node)) {
+        setIsCategoryPickerOpen(false)
+      }
+    }
+
+    const handleEscape = (event: KeyboardEvent): void => {
+      if (event.key === "Escape") setIsCategoryPickerOpen(false)
+    }
+
+    document.addEventListener("mousedown", handlePointerDown)
+    document.addEventListener("keydown", handleEscape)
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown)
+      document.removeEventListener("keydown", handleEscape)
+    }
+  }, [isCategoryPickerOpen])
+
+  useEffect(() => {
+    setSelectedCategories((prev) => prev.filter((category) => availableCategories.includes(category)))
+  }, [availableCategories])
 
   const handleGPS = useCallback(async () => {
     if (!navigator.geolocation) {
@@ -155,6 +222,7 @@ export function RouteControls({
           setStartLat(SG_CENTER.lat)
           setStartLng(SG_CENTER.lng)
           setStartLabel(SG_CENTER.label)
+          onStartLocationChange?.([SG_CENTER.lng, SG_CENTER.lat])
           setGpsLoading(false)
           return
         }
@@ -162,6 +230,7 @@ export function RouteControls({
         setStartLng(longitude)
         setStartLabel(`My Location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`)
         setOutsideSingapore(false)
+        onStartLocationChange?.([longitude, latitude])
         setGpsLoading(false)
       },
       (err) => {
@@ -169,13 +238,14 @@ export function RouteControls({
           setStartLat(SG_CENTER.lat)
           setStartLng(SG_CENTER.lng)
           setStartLabel(SG_CENTER.label)
+          onStartLocationChange?.([SG_CENTER.lng, SG_CENTER.lat])
         }
         toast({ title: "Location denied", description: "Using Singapore City Centre as start point.", variant: "destructive" })
         setGpsLoading(false)
       },
       { timeout: 8000 }
     )
-  }, [outsideSingapore, toast])
+  }, [onStartLocationChange, outsideSingapore, toast])
 
   const handleGenerate = async (): Promise<void> => {
     if (startLng == null || startLat == null) {
@@ -190,30 +260,55 @@ export function RouteControls({
       toast({ title: "Finish your stops", description: "Select each stop from search results or remove unfinished stops.", variant: "destructive" })
       return
     }
+    if (appMode === "explorer" && selectedCategories.length === 0) {
+      toast({ title: "Choose categories", description: "Select at least one Explorer category.", variant: "destructive" })
+      return
+    }
     setIsLoading(true)
     try {
       const selectedStops = routeType === "loop" && stops.length > 0
         ? stops.map((stop) => [stop.lng as number, stop.lat as number] as [number, number])
         : []
+      const explorerCategories = appMode === "explorer"
+        ? selectedCategories
+        : undefined
+      const session: RouteControlsSession = {
+        appMode,
+        mode: transport,
+        routeType,
+        distance_km: appMode === "fitness" && routeType === "loop" ? distanceKm : undefined,
+        target_duration_minutes: appMode === "explorer" ? durationMin : undefined,
+        poi_categories: explorerCategories,
+        waypoints: selectedStops.length > 0 ? selectedStops : undefined,
+      }
       const result = await api.generateRouteVariants({
         start_lng: startLng,
         start_lat: startLat,
-        distance_km: appMode === "fitness" && routeType === "loop" ? distanceKm : undefined,
-        target_duration_minutes: appMode === "explorer" && routeType === "loop" ? durationMin : undefined,
-        appMode,
-        mode: transport,
-        routeType: routeType,
+        distance_km: session.distance_km,
+        target_duration_minutes: session.target_duration_minutes,
+        appMode: session.appMode,
+        mode: session.mode,
+        routeType: session.routeType,
         end_lng: endLng,
         end_lat: endLat,
-        waypoints: selectedStops.length > 0 ? selectedStops : undefined,
+        waypoints: session.waypoints,
+        poi_categories: session.poi_categories,
       })
       onLoopStopsPlanned(routeType === "loop" ? selectedStops : [])
-      onRoutesGenerated(result.routes)
+      onRoutesGenerated(result.routes, appMode, session)
     } catch (e) {
       toast({ title: "Could not generate route", description: formatAxiosError(e), variant: "destructive" })
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const toggleCategory = (category: string): void => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((value) => value !== category)
+        : [...prev, category]
+    )
   }
 
   const handleAddStop = (): void => {
@@ -255,7 +350,13 @@ export function RouteControls({
             key={m}
             type="button"
             disabled={disabled}
-            onClick={() => setAppMode(m)}
+            onClick={() => {
+              if (m === appMode) return
+              setAppMode(m)
+              setStops([])
+              if (m !== "explorer") setIsCategoryPickerOpen(false)
+              onAppModeChange?.(m)
+            }}
             className={`mode-tab border disabled:opacity-40 disabled:cursor-not-allowed`}
             style={{
               background: appMode === m ? "var(--red)" : "transparent",
@@ -278,6 +379,101 @@ export function RouteControls({
             onClick={() => { setTransport("cycle"); setDistanceKm(Math.max(MIN_DISTANCE_KM, Math.min(distanceKm, MAX_CYCLE_KM))) }} />
         </div>
       </div>
+
+      {appMode === "explorer" && (
+        <div className="mb-4 animate-fade-up">
+          <div className="flex items-center justify-between mb-2">
+            <SectionLabel>Categories</SectionLabel>
+            <span className="text-[11px]" style={{ color: "var(--fg-faint)" }}>
+              {selectedCategories.length > 0 ? `${selectedCategories.length} selected` : "None selected"}
+            </span>
+          </div>
+          <div className="relative" ref={categoryPickerRef}>
+            <button
+              type="button"
+              disabled={disabled}
+              onClick={() => setIsCategoryPickerOpen((prev) => !prev)}
+              className="w-full rounded-xl border px-3 py-3 text-left transition-all disabled:opacity-40"
+              style={{ borderColor: "var(--border-mid)", background: "var(--card)", color: "var(--fg)" }}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex min-w-0 flex-1 flex-wrap gap-2">
+                  {selectedCategories.length > 0 ? (
+                    selectedCategories.map((category) => (
+                      <span
+                        key={category}
+                        className="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium"
+                        style={{ background: "rgba(230,51,41,0.12)", color: "var(--fg)" }}
+                      >
+                        {formatPOICategory(category)}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-sm" style={{ color: "var(--fg-faint)" }}>
+                      Select categories
+                    </span>
+                  )}
+                </div>
+                <ChevronDown
+                  size={16}
+                  style={{
+                    color: "var(--fg-faint)",
+                    transform: isCategoryPickerOpen ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "transform 160ms ease",
+                  }}
+                />
+              </div>
+            </button>
+
+            {isCategoryPickerOpen && (
+              <div
+                className="absolute left-0 right-0 top-[calc(100%+8px)] z-30 rounded-2xl border p-3 shadow-2xl"
+                style={{ borderColor: "var(--border-mid)", background: "var(--surface)" }}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-[11px] uppercase tracking-widest font-semibold" style={{ color: "var(--fg-faint)" }}>
+                    Explorer Categories
+                  </p>
+                  {selectedCategories.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedCategories([])}
+                      className="text-[11px] transition-colors"
+                      style={{ color: "var(--red)" }}
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {availableCategories.map((category) => {
+                    const active = selectedCategories.includes(category)
+                    return (
+                      <button
+                        key={category}
+                        type="button"
+                        disabled={disabled}
+                        onClick={() => toggleCategory(category)}
+                        className="rounded-full border px-3 py-1.5 text-xs font-medium transition-all disabled:opacity-40"
+                        style={{
+                          background: active ? "var(--red)" : "transparent",
+                          borderColor: active ? "var(--red)" : "var(--border-mid)",
+                          color: active ? "#fff" : "var(--fg-muted)",
+                        }}
+                      >
+                        {formatPOICategory(category)}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+          <p className="text-[11px] mt-2" style={{ color: "var(--fg-faint)" }}>
+            Explorer categories are opt-in. Select one or more before generating a route.
+          </p>
+        </div>
+      )}
 
       {/* ROUTE TYPE */}
       <div className="mb-5">
@@ -324,7 +520,12 @@ export function RouteControls({
           query={startLabel}
           onQueryChange={setStartLabel}
           disabled={disabled}
-          onPlaceSelected={(lng, lat, label) => { setStartLng(lng); setStartLat(lat); setStartLabel(label) }}
+          onPlaceSelected={(lng, lat, label) => {
+            setStartLng(lng)
+            setStartLat(lat)
+            setStartLabel(label)
+            onStartLocationChange?.([lng, lat])
+          }}
           placeholder="Search address or place…"
         />
       </div>
@@ -414,7 +615,7 @@ export function RouteControls({
       )}
 
       {/* DURATION (Explorer only) */}
-      {routeType === "loop" && appMode === "explorer" && (
+      {appMode === "explorer" && (
         <div className="mb-4 animate-fade-up">
           <div className="flex items-center justify-between mb-2">
             <SectionLabel>Duration</SectionLabel>

@@ -5,6 +5,7 @@ import type { RouteResponse } from "@/types/route"
 interface MobileRouteCardsProps {
   routes: RouteResponse[]
   activeIdx: number
+  appMode: "fitness" | "explorer"
   onSelect: (idx: number) => void
   onExport: () => void
 }
@@ -14,6 +15,7 @@ const SWIPE_THRESHOLD = 40
 export function MobileRouteCards({
   routes,
   activeIdx,
+  appMode,
   onSelect,
   onExport,
 }: MobileRouteCardsProps): JSX.Element {
@@ -52,7 +54,7 @@ export function MobileRouteCards({
             {String.fromCharCode(65 + activeIdx)}
           </span>
           <p className="text-sm font-semibold" style={{ color: "var(--fg)" }}>
-            {active.label ?? `Route ${activeIdx + 1}`}
+            {appMode === "explorer" ? `Route ${activeIdx + 1}` : (active.label ?? `Route ${activeIdx + 1}`)}
           </p>
           <span
             className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
@@ -130,7 +132,19 @@ export function MobileRouteCards({
           </span>
         </div>
 
-        {active.elevation_gain_m != null && (
+        {appMode === "explorer" ? (
+          <>
+            <div className="w-px h-9 shrink-0" style={{ background: "var(--border-mid)" }} />
+            <div className="flex flex-col items-start">
+              <span className="text-2xl font-bold tabular-nums leading-none" style={{ color: "var(--fg)" }}>
+                {active.pois.length}
+              </span>
+              <span className="flex items-center gap-1 text-[10px] uppercase tracking-widest mt-0.5" style={{ color: "var(--fg-faint)" }}>
+                <MapPin size={9} /> pois
+              </span>
+            </div>
+          </>
+        ) : active.elevation_gain_m != null && (
           <>
             <div className="w-px h-9 shrink-0" style={{ background: "var(--border-mid)" }} />
             <div className="flex flex-col items-start">

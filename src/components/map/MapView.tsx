@@ -2,14 +2,25 @@ import maplibregl from "maplibre-gl"
 import "maplibre-gl/dist/maplibre-gl.css"
 import { useCallback, useEffect, useRef, useState } from "react"
 
+import { ExplorerPreviewMarker } from "@/components/map/ExplorerPreviewMarker"
 import { POIMarker } from "@/components/map/POIMarker"
 import { RoutePolyline } from "@/components/map/RoutePolyline"
 import { useTheme } from "@/context/ThemeContext"
+import type { POI } from "@/types/poi"
 import type { RouteResponse } from "@/types/route"
 
 interface MapViewProps {
   routeData: RouteResponse | null
   plannedStops: [number, number][]
+  explorerPreviewPOIs?: POI[]
+  focusLocation?: [number, number] | null
+  onViewportChange?: (viewport: {
+    west: number
+    south: number
+    east: number
+    north: number
+    zoom: number
+  }) => void
   selectedPOI: string | null
   onSelectPOI: (id: string) => void
   onMapTap?: () => void
@@ -44,6 +55,9 @@ function flatten3DBuildingLayers(map: maplibregl.Map): void {
 export function MapView({
   routeData,
   plannedStops,
+  explorerPreviewPOIs = [],
+  focusLocation = null,
+  onViewportChange,
   selectedPOI,
   onSelectPOI,
   onMapTap,
@@ -93,6 +107,14 @@ export function MapView({
       requestAnimationFrame(onResize)
       flatten3DBuildingLayers(m)
       setMap(m)
+      const bounds = m.getBounds()
+      onViewportChange?.({
+        west: bounds.getWest(),
+        south: bounds.getSouth(),
+        east: bounds.getEast(),
+        north: bounds.getNorth(),
+        zoom: m.getZoom(),
+      })
     })
     m.on("style.load", onStyleLoad)
 
@@ -114,6 +136,29 @@ export function MapView({
 
   useEffect(() => {
     const m = mapRef.current
+    if (!m || !onViewportChange) return
+
+    const emitViewport = (): void => {
+      const bounds = m.getBounds()
+      onViewportChange({
+        west: bounds.getWest(),
+        south: bounds.getSouth(),
+        east: bounds.getEast(),
+        north: bounds.getNorth(),
+        zoom: m.getZoom(),
+      })
+    }
+
+    m.on("moveend", emitViewport)
+    m.on("zoomend", emitViewport)
+    return () => {
+      m.off("moveend", emitViewport)
+      m.off("zoomend", emitViewport)
+    }
+  }, [onViewportChange])
+
+  useEffect(() => {
+    const m = mapRef.current
     if (!m || !onMapTap) return
     m.on("click", onMapTap)
     return () => {
@@ -128,6 +173,15 @@ export function MapView({
     coords.forEach(([lng, lat]) => { b.extend([lng, lat]) })
     map.fitBounds(b, { padding: fitPadding ?? 80, duration: 900 })
   }, [fitPadding, map, routeData])
+
+  useEffect(() => {
+    if (!map || routeData || !focusLocation) return
+    map.flyTo({
+      center: focusLocation,
+      zoom: Math.max(map.getZoom(), 13.5),
+      duration: 700,
+    })
+  }, [focusLocation, map, routeData])
 
   useEffect(() => {
     if (!map || !routeData || !selectedPOI) return
@@ -155,6 +209,9 @@ export function MapView({
       {map ? (
         <>
           <RoutePolyline key={`route-${styleEpoch}`} map={map} coordinates={coords} plannedStops={plannedStops} />
+          {!routeData && explorerPreviewPOIs.map((poi) => (
+            <ExplorerPreviewMarker key={`preview-${poi.id}`} map={map} poi={poi} />
+          ))}
           {routeData?.pois.map((poi, i) => (
             <POIMarker key={poi.id} map={map} poi={poi} index={i}
               isSelected={selectedPOI === poi.id} onSelect={handleSelect} />

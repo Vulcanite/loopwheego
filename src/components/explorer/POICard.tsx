@@ -1,6 +1,7 @@
 // app/components/explorer/POICard.tsx
 import { Plus } from "lucide-react"
 import type { POI } from "@/types/poi"
+import { formatPOICategory, getPOICategoryColor } from "@/lib/poiPresentation"
 
 interface POICardProps {
   poi: POI
@@ -10,30 +11,8 @@ interface POICardProps {
   onAddWaypoint?: (lng: number, lat: number) => void // NEW
 }
 
-const CATEGORY_COLORS: Record<string, string> = {
-  "tourism:attraction": "#f59e0b",
-  "tourism:museum": "#8b5cf6",
-  "tourism:viewpoint": "#06b6d4",
-  "historic": "#f97316",
-  "leisure:park": "#22c55e",
-  "amenity:cafe": "#ec4899",
-  "natural:peak": "#3b82f6",
-  "poi": "#6b7280",
-}
-
-function getCatColor(cat: string): string {
-  for (const [key, color] of Object.entries(CATEGORY_COLORS)) {
-    if (cat.includes(key)) return color
-  }
-  return "#6b7280"
-}
-
-function formatCategory(cat: string): string {
-  return cat.replace(/^(tourism:|historic:|leisure:|amenity:|natural:)/, "").replace(/_/g, " ")
-}
-
 export function POICard({ poi, index, isSelected, onSelect, onAddWaypoint }: POICardProps): JSX.Element {
-  const color = getCatColor(poi.category)
+  const color = getPOICategoryColor(poi.category)
 
   return (
     <div
@@ -67,7 +46,7 @@ export function POICard({ poi, index, isSelected, onSelect, onAddWaypoint }: POI
               className="shrink-0 text-[10px] px-2 py-0.5 rounded-full font-medium"
               style={{ background: `${color}20`, color }}
             >
-              {formatCategory(poi.category)}
+              {formatPOICategory(poi.category)}
             </span>
           </div>
           {poi.narration && (
