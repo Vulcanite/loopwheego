@@ -3,6 +3,7 @@ import "maplibre-gl/dist/maplibre-gl.css"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import { ExplorerPreviewMarker } from "@/components/map/ExplorerPreviewMarker"
+import { FocusLocationMarker } from "@/components/map/FocusLocationMarker"
 import { POIMarker } from "@/components/map/POIMarker"
 import { RoutePolyline } from "@/components/map/RoutePolyline"
 import { useTheme } from "@/context/ThemeContext"
@@ -209,6 +210,7 @@ export function MapView({
       {map ? (
         <>
           <RoutePolyline key={`route-${styleEpoch}`} map={map} coordinates={coords} plannedStops={plannedStops} />
+          {focusLocation ? <FocusLocationMarker key={`focus-${focusLocation[0]}-${focusLocation[1]}`} map={map} location={focusLocation} /> : null}
           {!routeData && explorerPreviewPOIs.map((poi) => (
             <ExplorerPreviewMarker key={`preview-${poi.id}`} map={map} poi={poi} />
           ))}

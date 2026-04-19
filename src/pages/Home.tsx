@@ -11,9 +11,8 @@ import { BottomSheet, type SheetState } from "@/components/mobile/BottomSheet"
 import { MobileRouteCards } from "@/components/mobile/MobileRouteCards"
 import type { RouteResponse } from "@/types/route"
 import { api, formatAxiosError } from "@/services/api"
-import type { POI } from "@/types/poi"
 import { useToast } from "@/components/ui/use-toast"
-import type { RouteRequest } from "@/types/route"
+import type { POI } from "@/types/poi"
 import type { SuggestedPlace } from "@/types/place"
 import { formatPOICategory } from "@/lib/poiPresentation"
 
@@ -41,17 +40,6 @@ const EXPLORER_CATEGORY_OPTIONS = [
   "arts",
 ]
 
-function dedupeWaypoints(waypoints: [number, number][]): [number, number][] {
-  const seen = new Set<string>()
-
-  return waypoints.filter(([lng, lat]) => {
-    const key = `${lng.toFixed(6)},${lat.toFixed(6)}`
-    if (seen.has(key)) return false
-    seen.add(key)
-    return true
-  })
-}
-
 export function Home(): JSX.Element {
   const { toast } = useToast()
   const isMountedRef = useRef(false)
@@ -75,15 +63,9 @@ export function Home(): JSX.Element {
   const [activeRouteIdx, setActiveRouteIdx] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [activeAppMode, setActiveAppMode] = useState<AppMode>("fitness")
-  const [routeSession, setRouteSession] = useState<RouteSession | null>(null)
 
   // POI & Interaction State
   const [selectedPOI, setSelectedPOI] = useState<string | null>(null)
-  const [showPOIs, setShowPOIs] = useState(false)
-  const [isDiscovering, setIsDiscovering] = useState(false)
-
-  // Cache stores POIs by route index: { 0: [poi1, poi2], 1: [poi3] }
-  const [poiCache, setPoiCache] = useState<Record<number, POI[]>>({})
 
   // Mobile bottom sheet state
   const [sheetState, setSheetState] = useState<SheetState>("idle")
@@ -216,9 +198,6 @@ export function Home(): JSX.Element {
     setActiveRouteIdx(0)
     setSelectedPOI(null)
     setPlannedStops([])
-    setPoiCache({})
-    setShowPOIs(false)
-    setRouteSession(null)
     setActiveAppMode(nextMode)
     setIsExplorerBrowseOpen(false)
     setExplorerViewport(null)
@@ -228,17 +207,9 @@ export function Home(): JSX.Element {
   const handleRoutesGenerated = (newRoutes: RouteResponse[], appMode: AppMode, session?: RouteSession) => {
     setRoutes(newRoutes)
     setActiveAppMode(appMode)
-    if (session) setRouteSession(session)
     setPlannedStops(session?.waypoints ?? [])
     setActiveRouteIdx(0)
     setSelectedPOI(null)
-    if (appMode === "explorer") {
-      setPoiCache(Object.fromEntries(newRoutes.map((route, idx) => [idx, route.pois])))
-      setShowPOIs(true)
-    } else {
-      setPoiCache({})
-      setShowPOIs(false)
-    }
     // On mobile, snap sheet to route cards view after generation
     setSheetState("routes")
   }
@@ -267,7 +238,6 @@ export function Home(): JSX.Element {
   const handleSelectVariant = (idx: number) => {
     setActiveRouteIdx(idx)
     setSelectedPOI(null)
-    setShowPOIs(activeAppMode === "explorer")
   }
 
   const handleSelectPOI = (id: string) => {
@@ -287,114 +257,6 @@ export function Home(): JSX.Element {
   const handleMobileMapTap = () => {
     if (routes.length > 0 && sheetState !== "routes") {
       setSheetState("routes")
-    }
-  }
-
-  const handleTogglePOIs = async () => {
-    if (activeAppMode === "explorer") return
-    if (!activeRoute) return
-    const nextState = !showPOIs
-    setShowPOIs(nextState)
-
-    if (nextState && !poiCache[activeRouteIdx]) {
-      setIsDiscovering(true)
-      try {
-        const pois = await api.discoverPOIs({
-          polyline: activeRoute.polyline,
-          start_lng: activeRoute.polyline[0][0],
-          start_lat: activeRoute.polyline[0][1],
-          distance_km: activeRoute.distance_km,
-        })
-        setPoiCache(prev => ({ ...prev, [activeRouteIdx]: pois }))
-        setRoutes(prev => {
-          const newRoutes = [...prev]
-          newRoutes[activeRouteIdx] = { ...newRoutes[activeRouteIdx], pois }
-          return newRoutes
-        })
-      } catch (err) {
-        console.error("Failed to fetch POIs", err)
-        setShowPOIs(false)
-        toast({ title: "Discovery Failed", description: "Could not fetch local places.", variant: "destructive" })
-      } finally {
-        setIsDiscovering(false)
-      }
-    } else if (nextState && poiCache[activeRouteIdx]) {
-      setRoutes(prev => {
-        const newRoutes = [...prev]
-        newRoutes[activeRouteIdx] = { ...newRoutes[activeRouteIdx], pois: poiCache[activeRouteIdx] }
-        return newRoutes
-      })
-    } else if (!nextState) {
-      setRoutes(prev => {
-        const newRoutes = [...prev]
-        newRoutes[activeRouteIdx] = { ...newRoutes[activeRouteIdx], pois: [] }
-        return newRoutes
-      })
-      setSelectedPOI(null)
-    }
-  }
-
-  const handleAddWaypoint = async (lng: number, lat: number) => {
-    if (!activeRoute) return
-    setIsLoading(true)
-
-    const isLoop = activeRoute.source.includes('trip') || activeRoute.source.includes('loop')
-    const isCycle = activeRoute.source.includes('driving') || activeRoute.source.includes('bike')
-    const mode = isCycle ? 'cycle' : 'walk'
-    const routeType = isLoop ? 'loop' : 'a2b'
-
-    const startPt = activeRoute.polyline[0]
-    const endPt = activeRoute.polyline[activeRoute.polyline.length - 1]
-    const nextWaypoints = dedupeWaypoints([...(routeSession?.waypoints ?? plannedStops), [lng, lat]])
-    const nextSession: RouteSession = {
-      appMode: routeSession?.appMode ?? activeAppMode,
-      mode: routeSession?.mode ?? mode,
-      routeType: routeSession?.routeType ?? routeType,
-      distance_km: routeSession?.distance_km ?? activeRoute.distance_km,
-      target_duration_minutes: routeSession?.target_duration_minutes,
-      poi_categories: routeSession?.poi_categories,
-      waypoints: nextWaypoints,
-    }
-
-    console.info("explorer_add_to_route", {
-      poi: [lng, lat],
-      previous_waypoints: routeSession?.waypoints ?? plannedStops,
-      next_waypoints: nextWaypoints,
-      mode: nextSession.mode,
-      route_type: nextSession.routeType,
-    })
-
-    try {
-      const request: RouteRequest = {
-        start_lng: startPt[0],
-        start_lat: startPt[1],
-        distance_km: nextSession.distance_km,
-        target_duration_minutes: nextSession.target_duration_minutes,
-        appMode: nextSession.appMode,
-        mode: nextSession.mode,
-        routeType: nextSession.routeType,
-        end_lng: isLoop ? undefined : endPt[0],
-        end_lat: isLoop ? undefined : endPt[1],
-        waypoints: nextWaypoints,
-        poi_categories: nextSession.poi_categories,
-      }
-      const result = await api.generateRouteVariants(request)
-      const updatedRoute = result.routes[0]
-      if (!updatedRoute) {
-        throw new Error("No rerouted route returned")
-      }
-      setRoutes([updatedRoute])
-      setActiveRouteIdx(0)
-      setSelectedPOI(null)
-      setPlannedStops(nextWaypoints)
-      setRouteSession(nextSession)
-      setPoiCache(activeAppMode === "explorer" ? { 0: updatedRoute.pois } : {})
-      setShowPOIs(activeAppMode === "explorer")
-      toast({ title: "Route updated", description: "Your route now passes through this location." })
-    } catch (e) {
-      toast({ title: "Rerouting failed", description: "Could not map a path through that location.", variant: "destructive" })
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -610,7 +472,7 @@ export function Home(): JSX.Element {
             <div className="w-px h-3" style={{ background: "var(--border-mid)" }} />
             <div className="text-xs" style={{ color: "var(--fg-muted)" }}>
               <span className="font-semibold" style={{ color: "var(--fg)" }}>
-                {activeAppMode === "explorer" ? activeRoute.pois.length : (poiCache[activeRouteIdx]?.length || 0)}
+                {activeAppMode === "explorer" ? activeRoute.pois.length : plannedStops.length}
               </span> {activeAppMode === "explorer" ? "POIs" : "stops"}
             </div>
             <button
@@ -626,55 +488,13 @@ export function Home(): JSX.Element {
           </div>
         )}
 
-        {/* DISCOVER PLACES TOGGLE */}
-        {routes.length > 0 && !isLoading && activeAppMode !== "explorer" && (
-          <div className="px-5 py-4" style={{ borderTop: "1px solid var(--border)" }}>
-            <label
-              htmlFor="poi-toggle"
-              className="flex items-center justify-between cursor-pointer select-none group"
-            >
-              <div>
-                <p className="text-[11px] uppercase tracking-widest font-semibold transition-colors group-hover:text-white" style={{ color: "var(--fg-faint)" }}>
-                  Discover Places
-                </p>
-                <p className="text-[10px] mt-0.5" style={{ color: "var(--fg-muted)" }}>
-                  Find narrated landmarks along this path
-                </p>
-              </div>
-              <div className="theme-switch">
-                <input
-                  type="checkbox"
-                  id="poi-toggle"
-                  checked={showPOIs}
-                  onChange={handleTogglePOIs}
-                  disabled={isDiscovering}
-                />
-                <div className="theme-switch-track" />
-                <span className="theme-switch-thumb" />
-              </div>
-            </label>
-
-            {isDiscovering && (
-              <div className="text-xs flex items-center gap-2 mt-4" style={{ color: "var(--red)" }}>
-                <span className="animate-spin w-3 h-3 border-2 border-current border-t-transparent rounded-full" />
-                Consulting local AI guide... (approx 10s)
-              </div>
-            )}
-
-            {showPOIs && !isDiscovering && poiCache[activeRouteIdx]?.length === 0 && (
-              <p className="text-xs mt-4 italic" style={{ color: "var(--fg-muted)" }}>No notable places found on this specific path.</p>
-            )}
-          </div>
-        )}
-
         {/* POI NARRATION PANEL */}
-        {activeRoute && activeRoute.pois.length > 0 && showPOIs && !isLoading && !isDiscovering && (
+        {activeRoute && activeRoute.pois.length > 0 && activeAppMode === "explorer" && !isLoading && (
           <div className="animate-fade-up">
             <NarrationPanel
               routeData={activeRoute}
               selectedPOI={selectedPOI}
               onSelectPOI={handleSelectPOI}
-              onAddWaypoint={activeAppMode === "fitness" ? handleAddWaypoint : undefined}
             />
           </div>
         )}
