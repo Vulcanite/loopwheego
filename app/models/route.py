@@ -17,6 +17,7 @@ class RouteRequest(BaseModel):
     end_lng: Optional[float] = None
     end_lat: Optional[float] = None
     waypoints: Optional[List[Tuple[float, float]]] = None
+    poi_categories: Optional[List[str]] = None
 
 
 class RouteResponse(BaseModel):
@@ -27,7 +28,7 @@ class RouteResponse(BaseModel):
     pois: List[POI]
     source: str = "unknown"
     elevation_gain_m: Optional[float] = None  # None if elevation API unavailable
-    effort_label: Optional[str] = None        # "Easy" / "Moderate" / "Hard"
+    effort_label: Optional[str] = None        # "Easier" / "Balanced" / "Tougher"
     label: Optional[str] = None               # display alias = effort_label (frontend contract)
 
 

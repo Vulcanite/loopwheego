@@ -30,6 +30,8 @@ CLIENT_TIMEOUT_S = ROUTE_TIMEOUT_S + 15
 TEST_LAT = 1.3138
 TEST_LNG = 103.8159
 TEST_DISTANCE_KM = 5.0
+TEST_EXPLORER_DURATION_MIN = 90
+TEST_EXPLORER_CATEGORIES = ["monuments", "heritage", "museums"]
 
 BOLD   = "\033[1m"
 RED    = "\033[91m"
@@ -81,7 +83,7 @@ async def test_osrm_engines(client):
 
     engines = [
         ("Walking Engine", OSRM_FOOT_URL, "foot"),
-        ("Cycling Engine", OSRM_BIKE_URL, "driving"),
+        ("Cycling Engine", OSRM_BIKE_URL, "bicycle"),
     ]
 
     all_ok = True
@@ -213,72 +215,101 @@ async def test_llm(client):
 
 
 async def test_generate(client):
-    section("6. POST /routes/generate-variants (TESTING CYCLE MODE)")
+    section("6. POST /routes/generate-variants (SCENARIO MATRIX)")
     info(f"Using client timeout: {CLIENT_TIMEOUT_S:.0f}s  (ROUTE_TIMEOUT_S={ROUTE_TIMEOUT_S:.0f}s from .env)")
-    payload = {"start_lng": TEST_LNG, "start_lat": TEST_LAT, "distance_km": TEST_DISTANCE_KM, "mode": "cycle"}
-    info(f"Payload: {json.dumps(payload)}")
-    t0 = time.monotonic()
-    try:
-        r = await client.post(f"{BASE_URL}/routes/generate-variants", json=payload,
-                              timeout=CLIENT_TIMEOUT_S)
-        elapsed = time.monotonic() - t0
-        if r.status_code == 200:
-            routes = r.json().get("routes", [])
-            ok(f"Generated in {elapsed:.1f}s — {len(routes)} variants")
-            for i, route in enumerate(routes):
-                info(f"  Route {chr(65+i)}: {route.get('distance_km', 0):.2f} km  "
-                     f"{route.get('duration_minutes', 0)} min  "
-                     f"{len(route.get('polyline', []))} pts  [{route.get('source', '?')}]")
-            return True
-        fail(f"HTTP {r.status_code} after {elapsed:.1f}s")
-        try:
-            fail(f"Detail: {r.json().get('detail', r.text[:300])}")
-        except Exception:
-            fail(r.text[:300])
-        return False
-    except httpx.TimeoutException:
-        elapsed = time.monotonic() - t0
-        fail(f"Timed out after {elapsed:.1f}s (client limit={CLIENT_TIMEOUT_S:.0f}s)")
-        info(f"ROUTE_TIMEOUT_S in .env is {ROUTE_TIMEOUT_S:.0f}s — server may still be waiting on OSRM/LLM")
-        return False
-    except Exception as e:
-        elapsed = time.monotonic() - t0
-        fail(f"Error after {elapsed:.1f}s: {e}")
-        return False
+    scenarios = [
+        (
+            "Fitness Cycle Loop",
+            {
+                "start_lng": TEST_LNG,
+                "start_lat": TEST_LAT,
+                "distance_km": TEST_DISTANCE_KM,
+                "mode": "cycle",
+                "appMode": "fitness",
+                "routeType": "loop",
+            },
+        ),
+        (
+            "Fitness Walk Loop",
+            {
+                "start_lng": TEST_LNG,
+                "start_lat": TEST_LAT,
+                "distance_km": TEST_DISTANCE_KM,
+                "mode": "walk",
+                "appMode": "fitness",
+                "routeType": "loop",
+            },
+        ),
+        (
+            "Explorer Cycle Loop",
+            {
+                "start_lng": TEST_LNG,
+                "start_lat": TEST_LAT,
+                "target_duration_minutes": TEST_EXPLORER_DURATION_MIN,
+                "mode": "cycle",
+                "appMode": "explorer",
+                "routeType": "loop",
+                "poi_categories": TEST_EXPLORER_CATEGORIES,
+            },
+        ),
+        (
+            "Explorer Walk Loop",
+            {
+                "start_lng": TEST_LNG,
+                "start_lat": TEST_LAT,
+                "target_duration_minutes": TEST_EXPLORER_DURATION_MIN,
+                "mode": "walk",
+                "appMode": "explorer",
+                "routeType": "loop",
+                "poi_categories": TEST_EXPLORER_CATEGORIES,
+            },
+        ),
+    ]
 
-
-async def test_variants(client):
-    section("7. POST /routes/generate-variants (TESTING WALK MODE)")
-    info(f"Using client timeout: {CLIENT_TIMEOUT_S:.0f}s  (ROUTE_TIMEOUT_S={ROUTE_TIMEOUT_S:.0f}s from .env)")
-    payload = {"start_lng": TEST_LNG, "start_lat": TEST_LAT, "distance_km": TEST_DISTANCE_KM, "mode": "walk"}
-    t0 = time.monotonic()
-    try:
-        r = await client.post(f"{BASE_URL}/routes/generate-variants", json=payload,
-                              timeout=CLIENT_TIMEOUT_S)
-        elapsed = time.monotonic() - t0
-        if r.status_code == 200:
-            routes = r.json().get("routes", [])
-            ok(f"Generated in {elapsed:.1f}s — {len(routes)} variants")
-            for i, route in enumerate(routes):
-                src = route.get("source", "?")
-                info(f"  Route {chr(65+i)}: {route.get('distance_km',0):.2f} km  "
-                     f"{route.get('duration_minutes',0)} min  "
-                     f"{len(route.get('polyline',[]))} pts  [{src}]")
-            return True
-        fail(f"HTTP {r.status_code} after {elapsed:.1f}s")
+    all_ok = True
+    for idx, (name, payload) in enumerate(scenarios, start=1):
+        info(f"[{idx}/{len(scenarios)}] {name}")
+        info(f"Payload: {json.dumps(payload)}")
+        t0 = time.monotonic()
         try:
-            fail(r.json().get("detail", r.text[:300]))
-        except Exception:
-            fail(r.text[:300])
-        return False
-    except httpx.TimeoutException:
-        elapsed = time.monotonic() - t0
-        fail(f"Timed out after {elapsed:.1f}s (client limit={CLIENT_TIMEOUT_S:.0f}s)")
-        return False
-    except Exception as e:
-        elapsed = time.monotonic() - t0
-        fail(f"Error after {elapsed:.1f}s: {e}")
-        return False
+            r = await client.post(
+                f"{BASE_URL}/routes/generate-variants",
+                json=payload,
+                timeout=CLIENT_TIMEOUT_S,
+            )
+            elapsed = time.monotonic() - t0
+            if r.status_code == 200:
+                routes = r.json().get("routes", [])
+                ok(f"{name}: generated in {elapsed:.1f}s — {len(routes)} variants")
+                for route_idx, route in enumerate(routes):
+                    label = route.get("label") or route.get("effort_label") or "-"
+                    poi_count = len(route.get("pois", []))
+                    info(
+                        f"  Route {chr(65 + route_idx)}: "
+                        f"{route.get('distance_km', 0):.2f} km  "
+                        f"{route.get('duration_minutes', 0)} min  "
+                        f"{len(route.get('polyline', []))} pts  "
+                        f"POIs={poi_count}  "
+                        f"label={label}  "
+                        f"[{route.get('source', '?')}]"
+                    )
+            else:
+                all_ok = False
+                fail(f"{name}: HTTP {r.status_code} after {elapsed:.1f}s")
+                try:
+                    fail(f"Detail: {r.json().get('detail', r.text[:300])}")
+                except Exception:
+                    fail(r.text[:300])
+        except httpx.TimeoutException:
+            all_ok = False
+            elapsed = time.monotonic() - t0
+            fail(f"{name}: timed out after {elapsed:.1f}s (client limit={CLIENT_TIMEOUT_S:.0f}s)")
+        except Exception as e:
+            all_ok = False
+            elapsed = time.monotonic() - t0
+            fail(f"{name}: error after {elapsed:.1f}s: {e}")
+
+    return all_ok
 
 
 async def main():
@@ -299,17 +330,16 @@ async def main():
         await test_overpass(client)
         await test_places(client)
         await test_llm(client)
-        gen_ok  = await test_generate(client)
-        var_ok  = await test_variants(client)
+        scenarios_ok = await test_generate(client)
 
     section("Summary")
     if not osrm_ok:
         warn("One or more local OSRM containers are unreachable!")
         warn("Check if your Docker containers are running:  docker ps")
-    if gen_ok and var_ok:
+    if scenarios_ok:
         ok("Multi-modal route generation working end-to-end ✓")
     else:
-        fail("Route generation failing — review errors above (sections 6 & 7)")
+        fail("Route generation failing — review errors above (section 6)")
     print()
 
 if __name__ == "__main__":

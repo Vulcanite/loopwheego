@@ -77,6 +77,18 @@ Copy and edit `.env` before running (auto-created with defaults by `setup.sh` if
 | `POST` | `/routes/export/gpx` | Export route + POIs as GPX |
 | `GET` | `/places/suggested` | List suggested places for the region |
 
+## Refreshing Cached Explorer Places
+
+The curated Explorer cache lives at `app/data/singapore_places_cached.json`.
+Rebuild it from Overpass with:
+
+```bash
+python3 scripts/update_cached_places.py
+```
+
+The script normalizes raw OSM data into Explorer-facing categories and is
+intended to be run periodically to refresh the cached place list.
+
 ## Running Tests
 
 Requires the server and OSRM containers to be running:

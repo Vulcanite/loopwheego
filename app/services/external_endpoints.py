@@ -56,7 +56,7 @@ def get_osrm_candidates(mode: str) -> list[tuple[str, str]]:
     normalized = mode.lower()
     if normalized == "cycle":
         configured_base = os.getenv("OSRM_BIKE_URL", PUBLIC_OSRM_BASE_URL).rstrip("/")
-        configured_profile = "driving"
+        configured_profile = "bicycle"
         public_profile = "cycling"
     else:
         configured_base = os.getenv("OSRM_FOOT_URL", PUBLIC_OSRM_BASE_URL).rstrip("/")

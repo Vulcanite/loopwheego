@@ -93,7 +93,7 @@ start_osrm_container() {
 }
 
 start_osrm_container "osrm-foot" 5000 "${FOOT_DATA}" "foot"
-start_osrm_container "osrm-bike" 5001 "${BIKE_DATA}" "driving"
+start_osrm_container "osrm-bike" 5001 "${BIKE_DATA}" "bicycle"
 
 # ─────────────────────────────────────────────────────────────
 # 3. Ollama

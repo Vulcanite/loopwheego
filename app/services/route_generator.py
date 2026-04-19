@@ -30,6 +30,7 @@ from typing import Any
 
 import httpx
 
+from app.services import cached_places
 from app.services.external_endpoints import (
     get_osrm_candidates,
     mark_base_url_unhealthy,
@@ -100,6 +101,26 @@ def _merge_polylines(polylines: list[list[list[float]]]) -> list[list[float]]:
     return out
 
 
+def _max_segment_km(polyline: list[list[float]]) -> float:
+    if len(polyline) < 2:
+        return 0.0
+    return max(
+        _haversine_km(
+            float(polyline[idx][1]),
+            float(polyline[idx][0]),
+            float(polyline[idx + 1][1]),
+            float(polyline[idx + 1][0]),
+        )
+        for idx in range(len(polyline) - 1)
+    )
+
+
+def _max_segment_threshold_km(mode: str, target_distance_km: float) -> float:
+    if mode == "cycle":
+        return max(1.6, min(4.0, target_distance_km * 0.05))
+    return max(0.9, min(2.2, target_distance_km * 0.04))
+
+
 def _segment_key(
     a: list[float], b: list[float], places: int = 5
 ) -> tuple[tuple[float, float], tuple[float, float]]:
@@ -132,31 +153,7 @@ def _overlap_ratio(polyline: list[list[float]]) -> float:
 # ─────────────────────────────────────────────────────────────
 
 def _load_seed_places() -> list[dict[str, Any]]:
-    here = Path(__file__).resolve()
-    data_path = here.parent.parent / "data" / "singapore_places.json"
-    with open(data_path, encoding="utf-8") as f:
-        data = json.load(f)
-
-    if not isinstance(data, list):
-        return []
-
-    out: list[dict[str, Any]] = []
-    for item in data:
-        if not isinstance(item, dict):
-            continue
-        try:
-            out.append(
-                {
-                    "id": str(item["id"]),
-                    "name": str(item["name"]),
-                    "lat": float(item["lat"]),
-                    "lng": float(item["lng"]),
-                    "category": str(item.get("category", "place")),
-                }
-            )
-        except (KeyError, TypeError, ValueError):
-            continue
-    return out
+    return cached_places.load_cached_places()
 
 
 def _seed_place_anchors(
@@ -432,6 +429,13 @@ async def _request_osrm_json(
                 data["_resolved_profile"] = profile
                 data["_resolved_base_url"] = base_url
                 return data
+            if isinstance(data, dict):
+                print(
+                    "osrm_request_non_ok: "
+                    f"mode={mode} profile={profile} "
+                    f"base_url={base_url} code={data.get('code')} "
+                    f"message={data.get('message')}"
+                )
         except Exception as exc:
             if should_fallback_on_error(exc):
                 mark_base_url_unhealthy(base_url)
@@ -447,16 +451,11 @@ async def _build_one_candidate(
     b: dict[str, Any],
     target_distance_km: float,
     mode: str = "walk",
-    waypoints: list[tuple[float, float]] | None = None
+    waypoints: list[tuple[float, float]] | None = None,
 ) -> dict[str, Any] | None:
-    
-    # OSRM /trip automatically closes the loop back to the start
-    # coords = f"{start_lng},{start_lat};{a['lng']},{a['lat']};{b['lng']},{b['lat']}"
-    
-    coord_list = [f"{start_lng},{start_lat}"]
+    coord_list = [f"{start_lng},{start_lat}", f"{a['lng']},{a['lat']}", f"{b['lng']},{b['lat']}"]
     if waypoints:
         coord_list.extend([f"{w[0]},{w[1]}" for w in waypoints])
-    coord_list.extend([f"{a['lng']},{a['lat']}", f"{b['lng']},{b['lat']}"])
     coords = ";".join(coord_list)
 
     async with _osrm_semaphore:
@@ -486,6 +485,16 @@ async def _build_one_candidate(
             coords_out = trip.get("geometry", {}).get("coordinates", [])
             polyline = [[float(c[0]), float(c[1])] for c in coords_out]
             total_duration = int(round(float(trip["duration"]) / 60.0))
+            max_segment_km = _max_segment_km(polyline)
+            max_segment_threshold_km = _max_segment_threshold_km(mode, target_distance_km)
+            if max_segment_km > max_segment_threshold_km:
+                print(
+                    "loop_candidate_rejected: suspicious_jump "
+                    f"mode={mode} distance_km={total_distance:.2f} "
+                    f"max_segment_km={max_segment_km:.2f} "
+                    f"threshold_km={max_segment_threshold_km:.2f}"
+                )
+                return None
 
             score = _score_loop(
                 polyline=polyline,
@@ -509,6 +518,105 @@ async def _build_one_candidate(
             return None
 
 
+async def _build_waypoint_loop_candidate(
+    client: httpx.AsyncClient,
+    start_lng: float,
+    start_lat: float,
+    target_distance_km: float,
+    mode: str = "walk",
+    waypoints: list[tuple[float, float]] | None = None,
+) -> dict[str, Any] | None:
+    if not waypoints:
+        return None
+
+    coord_list = [f"{start_lng},{start_lat}"]
+    coord_list.extend([f"{w[0]},{w[1]}" for w in waypoints])
+    coord_list.append(f"{start_lng},{start_lat}")
+    coords = ";".join(coord_list)
+    waypoint_corridor_km = 0.12
+
+    async with _osrm_semaphore:
+        try:
+            data = await _request_osrm_json(
+                client,
+                lambda base_url, profile: (
+                    f"{base_url.rstrip('/')}/route/v1/{profile}/{coords}"
+                    "?continue_straight=false"
+                    "&geometries=geojson&overview=full&steps=false"
+                ),
+                mode,
+            )
+
+            if not data or not data.get("routes"):
+                print("loop_waypoint_attempt: no OSRM route result")
+                return None
+
+            route = data["routes"][0]
+            total_distance = float(route["distance"]) / 1000.0
+            coords_out = route.get("geometry", {}).get("coordinates", [])
+            polyline = [[float(c[0]), float(c[1])] for c in coords_out]
+            total_duration = int(round(float(route["duration"]) / 60.0))
+            max_segment_km = _max_segment_km(polyline)
+            max_segment_threshold_km = _max_segment_threshold_km(mode, target_distance_km)
+            if max_segment_km > max_segment_threshold_km:
+                print(
+                    "loop_waypoint_attempt: rejected suspicious_jump "
+                    f"distance_km={total_distance:.2f} "
+                    f"max_segment_km={max_segment_km:.2f} "
+                    f"threshold_km={max_segment_threshold_km:.2f}"
+                )
+                return None
+
+            missed_waypoints: list[str] = []
+            for waypoint_lng, waypoint_lat in waypoints:
+                dist_km = cached_places.distance_to_polyline_km(
+                    {"lat": float(waypoint_lat), "lng": float(waypoint_lng)},
+                    polyline,
+                )
+                if dist_km > waypoint_corridor_km:
+                    missed_waypoints.append(f"{waypoint_lng:.5f},{waypoint_lat:.5f}({dist_km:.2f}km)")
+
+            if missed_waypoints:
+                print(
+                    "loop_waypoint_attempt: rejected missed_waypoints "
+                    f"missed={missed_waypoints}"
+                )
+                return None
+
+            if total_distance < 0.70 * target_distance_km:
+                print(
+                    "loop_waypoint_attempt: rejected too_short "
+                    f"distance_km={total_distance:.2f} "
+                    f"target_km={target_distance_km:.2f}"
+                )
+                return None
+            if total_distance > 1.35 * target_distance_km:
+                print(
+                    "loop_waypoint_attempt: rejected too_long "
+                    f"distance_km={total_distance:.2f} "
+                    f"target_km={target_distance_km:.2f}"
+                )
+                return None
+
+            print(
+                "loop_waypoint_attempt: success "
+                f"distance_km={total_distance:.2f} "
+                f"target_km={target_distance_km:.2f} "
+                f"waypoints={len(waypoints)}"
+            )
+
+            return {
+                "polyline": polyline,
+                "distance_km": round(total_distance, 2),
+                "duration_minutes": total_duration,
+                "source": f"osrm_{data['_resolved_profile']}_route_waypoint_loop",
+                "_score": abs(total_distance - target_distance_km),
+            }
+        except Exception as exc:
+            print(f"loop_waypoint_attempt: failed error={exc!r}")
+            return None
+
+
 # ─────────────────────────────────────────────────────────────
 # Public API
 # ─────────────────────────────────────────────────────────────
@@ -525,34 +633,42 @@ async def generate_loop_variants(
     anchors = _generate_candidate_anchors(start_lat, start_lng, target)
     pairs = _candidate_anchor_pairs(start_lat, start_lng, anchors, target)
 
-    if not pairs:
-        return [_fallback_triangle_loop(start_lat, start_lng, target)]
+    print(
+        "generate_loop_variants: "
+        f"target_km={target:.2f} mode={mode} waypoints={0 if not waypoints else len(waypoints)} "
+        f"anchors={len(anchors)} pairs={len(pairs)}"
+    )
 
     async with httpx.AsyncClient(timeout=ROUTE_TIMEOUT_S) as client:
-        tasks = [
+        pair_tasks = [
             _build_one_candidate(client, start_lng, start_lat, a, b, target, mode, waypoints)
             for a, b in pairs
         ]
-        results = await asyncio.gather(*tasks, return_exceptions=False)
+        if waypoints:
+            pair_tasks.append(
+                _build_waypoint_loop_candidate(client, start_lng, start_lat, target, mode, waypoints)
+            )
+        results = await asyncio.gather(*pair_tasks, return_exceptions=False)
 
-    valid = [r for r in results if r is not None]
-    if not valid:
-        return [_fallback_triangle_loop(start_lat, start_lng, target)]
+    valid_pairs = [r for r in results if r is not None]
+    valid_pairs.sort(key=lambda x: float(x.get("_score", 9999)))
 
-    valid.sort(key=lambda x: float(x["_score"]))
+    def _fmt(r: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "polyline": r["polyline"],
+            "distance_km": r["distance_km"],
+            "duration_minutes": r["duration_minutes"],
+            "source": r["source"],
+        }
 
-    out: list[dict[str, Any]] = []
-    for item in valid[: max(1, count)]:
-        out.append(
-            {
-                "polyline": item["polyline"],
-                "distance_km": item["distance_km"],
-                "duration_minutes": item["duration_minutes"],
-                "source": item["source"],
-            }
-        )
+    if valid_pairs:
+        return [_fmt(r) for r in valid_pairs[: max(1, count)]]
 
-    return out
+    if waypoints:
+        print("generate_loop_variants: no waypoint-respecting loop found")
+    else:
+        print("generate_loop_variants: all candidate loops rejected, returning no routes")
+    return []
 
 async def generate_a2b(
     start_lng: float,
@@ -588,6 +704,16 @@ async def generate_a2b(
                 polyline = [[float(c[0]), float(c[1])] for c in r["geometry"]["coordinates"]]
                 dist_km = float(r["distance"]) / 1000.0
                 dur_min = int(round(float(r["duration"]) / 60.0))
+                max_segment_km = _max_segment_km(polyline)
+                max_segment_threshold_km = _max_segment_threshold_km(mode, dist_km)
+                if max_segment_km > max_segment_threshold_km:
+                    print(
+                        "a2b_candidate_rejected: suspicious_jump "
+                        f"mode={mode} distance_km={dist_km:.2f} "
+                        f"max_segment_km={max_segment_km:.2f} "
+                        f"threshold_km={max_segment_threshold_km:.2f}"
+                    )
+                    continue
 
                 out.append({
                     "polyline": polyline,

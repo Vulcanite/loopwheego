@@ -18,26 +18,82 @@ import httpx
 
 ELEVATION_API_URL = os.getenv("ELEVATION_API_URL", "http://localhost:2999/v1/srtm30m")
 ELEVATION_TIMEOUT_S = float(os.getenv("ELEVATION_TIMEOUT_S", "5.0"))
-MAX_ELEVATION_SAMPLES = int(os.getenv("MAX_ELEVATION_SAMPLES", "60"))
+ELEVATION_SAMPLE_SPACING_M = float(os.getenv("ELEVATION_SAMPLE_SPACING_M", "50"))
+ELEVATION_BATCH_SIZE = int(os.getenv("ELEVATION_BATCH_SIZE", "80"))
+ELEVATION_GAIN_THRESHOLD_M = float(os.getenv("ELEVATION_GAIN_THRESHOLD_M", "1.5"))
 
 logger = logging.getLogger(__name__)
 
 
-def _subsample_polyline(
+def _haversine_m(
+    lng1: float,
+    lat1: float,
+    lng2: float,
+    lat2: float,
+) -> float:
+    from math import asin, cos, radians, sin, sqrt
+
+    radius_m = 6_371_000.0
+    lat1_rad = radians(lat1)
+    lat2_rad = radians(lat2)
+    dlat = radians(lat2 - lat1)
+    dlng = radians(lng2 - lng1)
+    a = sin(dlat / 2) ** 2 + cos(lat1_rad) * cos(lat2_rad) * sin(dlng / 2) ** 2
+    return 2 * radius_m * asin(min(1.0, sqrt(a)))
+
+
+def _resample_polyline(
     polyline: list,
-    max_points: int,
+    spacing_m: float,
 ) -> list[tuple[float, float]]:
-    """Evenly subsample polyline to at most max_points coords."""
-    if len(polyline) <= max_points:
-        return [(float(pt[0]), float(pt[1])) for pt in polyline]
-    step = len(polyline) // max_points
-    return [(float(polyline[i][0]), float(polyline[i][1])) for i in range(0, len(polyline), step)]
+    """Resample a [lng, lat] polyline at a fixed distance interval."""
+    if not polyline:
+        return []
+
+    coords = [(float(pt[0]), float(pt[1])) for pt in polyline]
+    if len(coords) == 1 or spacing_m <= 0:
+        return coords
+
+    out: list[tuple[float, float]] = [coords[0]]
+    distance_since_last = 0.0
+    current_start = coords[0]
+
+    for current_end in coords[1:]:
+        start_lng, start_lat = current_start
+        end_lng, end_lat = current_end
+        segment_len_m = _haversine_m(start_lng, start_lat, end_lng, end_lat)
+
+        if segment_len_m <= 0.01:
+            current_start = current_end
+            continue
+
+        while distance_since_last + segment_len_m >= spacing_m:
+            remaining_m = spacing_m - distance_since_last
+            ratio = remaining_m / segment_len_m
+            interp_lng = start_lng + (end_lng - start_lng) * ratio
+            interp_lat = start_lat + (end_lat - start_lat) * ratio
+            interpolated = (interp_lng, interp_lat)
+            out.append(interpolated)
+
+            start_lng, start_lat = interpolated
+            segment_len_m -= remaining_m
+            distance_since_last = 0.0
+
+        distance_since_last += segment_len_m
+        current_start = current_end
+
+    if out[-1] != coords[-1]:
+        out.append(coords[-1])
+    return out
 
 
-async def _fetch_elevations(
+async def _fetch_elevation_batch(
     client: httpx.AsyncClient,
     points: list[tuple[float, float]],
 ) -> list[float] | None:
+    if not points:
+        return []
+
     """
     Query OpenTopoData with a batch of (lng, lat) points.
 
@@ -46,8 +102,7 @@ async def _fetch_elevations(
 
     Returns list of elevation values in metres, or None on any failure.
     """
-    # Swap lng,lat → lat,lng for the API
-    locations = "|".join(f"{lat},{lng}" for lng, lat in points)
+    locations = "|".join(f"{lat:.5f},{lng:.5f}" for lng, lat in points)
     try:
         resp = await client.get(
             ELEVATION_API_URL,
@@ -64,12 +119,42 @@ async def _fetch_elevations(
         return None
 
 
+async def _fetch_elevations(
+    client: httpx.AsyncClient,
+    points: list[tuple[float, float]],
+) -> list[float] | None:
+    out: list[float] = []
+    for idx in range(0, len(points), ELEVATION_BATCH_SIZE):
+        batch = points[idx : idx + ELEVATION_BATCH_SIZE]
+        elevations = await _fetch_elevation_batch(client, batch)
+        if elevations is None:
+            logger.warning(
+                "Elevation batch failed: batch_size=%d sample_points=%d",
+                len(batch),
+                len(points),
+            )
+            return None
+        out.extend(elevations)
+    return out
+
+
+def _smooth_elevations(elevations: list[float]) -> list[float]:
+    if len(elevations) < 3:
+        return elevations
+
+    smoothed: list[float] = []
+    for idx in range(len(elevations)):
+        window = elevations[max(0, idx - 1) : min(len(elevations), idx + 2)]
+        smoothed.append(sum(window) / len(window))
+    return smoothed
+
+
 def _compute_elevation_gain(elevations: list[float]) -> float:
     """Sum of all uphill segments in metres. Descents ignored."""
     gain = 0.0
     for i in range(1, len(elevations)):
         delta = elevations[i] - elevations[i - 1]
-        if delta > 0:
+        if delta > ELEVATION_GAIN_THRESHOLD_M:
             gain += delta
     return gain
 
@@ -116,7 +201,7 @@ async def enrich_route_with_effort(
     elevation_gain_m is None if the elevation API was unreachable.
     effort_label is always returned — falls back to distance-only if no elevation.
     """
-    sampled = _subsample_polyline(polyline, MAX_ELEVATION_SAMPLES)
+    sampled = _resample_polyline(polyline, ELEVATION_SAMPLE_SPACING_M)
     elevations = await _fetch_elevations(client, sampled)
 
     if elevations is None:
@@ -124,7 +209,8 @@ async def enrich_route_with_effort(
         label = _classify_effort(distance_km, 0.0, mode)
         return None, label
 
-    gain_m = _compute_elevation_gain(elevations)
+    smoothed_elevations = _smooth_elevations(elevations)
+    gain_m = _compute_elevation_gain(smoothed_elevations)
     label = _classify_effort(distance_km, gain_m, mode)
     return gain_m, label
 
