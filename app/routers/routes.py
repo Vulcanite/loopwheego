@@ -35,7 +35,9 @@ CYCLE_SPEED_KMH = 10.0
 MIN_DISTANCE_KM = 3.0
 MAX_WALK_DISTANCE_KM = 50.0
 MAX_CYCLE_DISTANCE_KM = 100.0
-MAX_FITNESS_ROUTES = 5
+MAX_FITNESS_ROUTES = 4
+ROUTE_DUPLICATE_SIMILARITY_THRESHOLD = 0.88
+ROUTE_SELECTION_SIMILARITY_THRESHOLD = 0.82
 
 
 def get_llm_service() -> LLMService:
@@ -60,12 +62,46 @@ def _route_signature(route: dict) -> tuple:
     return (round(float(route.get("distance_km", 0.0)), 2), sampled_points)
 
 
+def _route_point_signature(
+    route: dict,
+    *,
+    max_points: int = 180,
+    precision: int = 4,
+) -> set[tuple[float, float]]:
+    polyline = route.get("polyline") or []
+    if not polyline:
+        return set()
+
+    step = max(1, len(polyline) // max_points)
+    sampled = {
+        (round(float(polyline[idx][0]), precision), round(float(polyline[idx][1]), precision))
+        for idx in range(0, len(polyline), step)
+    }
+    last = polyline[-1]
+    sampled.add((round(float(last[0]), precision), round(float(last[1]), precision)))
+    return sampled
+
+
+def _route_similarity_ratio(route_a: dict, route_b: dict) -> float:
+    sig_a = _route_point_signature(route_a)
+    sig_b = _route_point_signature(route_b)
+    if not sig_a or not sig_b:
+        return 0.0
+    shared = len(sig_a & sig_b)
+    baseline = min(len(sig_a), len(sig_b))
+    if baseline <= 0:
+        return 0.0
+    return shared / baseline
+
+
 def _dedupe_routes(routes: list[dict]) -> list[dict]:
     out: list[dict] = []
     seen: set[tuple] = set()
     for route in routes:
         sig = _route_signature(route)
         if sig in seen:
+            continue
+        if any(_route_similarity_ratio(route, kept) >= ROUTE_DUPLICATE_SIMILARITY_THRESHOLD for kept in out):
             continue
         seen.add(sig)
         out.append(route)
@@ -170,7 +206,24 @@ def _pick_route_pairs(
     ]
 
     selection_pool = acceptable if acceptable else shortlist[: min(3, len(shortlist))]
-    selected = [(route, effort) for route, effort, _ in selection_pool[:limit]]
+
+    selected: list[tuple[dict, tuple[float | None, str]]] = []
+    backup: list[tuple[dict, tuple[float | None, str]]] = []
+    diversity_rejected = 0
+    for route, effort, _ in selection_pool:
+        if any(_route_similarity_ratio(route, chosen_route) >= ROUTE_SELECTION_SIMILARITY_THRESHOLD for chosen_route, _ in selected):
+            diversity_rejected += 1
+            backup.append((route, effort))
+            continue
+        selected.append((route, effort))
+        if len(selected) >= limit:
+            break
+
+    if len(selected) < limit:
+        for route, effort in backup:
+            selected.append((route, effort))
+            if len(selected) >= limit:
+                break
 
     print(
         "fitness_route_ranking: "
@@ -179,6 +232,7 @@ def _pick_route_pairs(
         f"shortlist={shortlist_size} "
         f"distance_tolerance_km={distance_tolerance_km:.2f} "
         f"acceptable={len(acceptable)} "
+        f"diversity_rejected={diversity_rejected} "
         f"top={[{'distance_km': round(float(route['distance_km']), 2), 'score': round(selection_score, 2)} for route, _, selection_score in scored[:min(5, len(scored))]]}"
     )
     return selected[:limit]
