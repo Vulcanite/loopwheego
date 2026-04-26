@@ -225,6 +225,12 @@ html, body, #root {
 }
 .animate-fade-up { animation: fadeUp 0.28s ease forwards; }
 
+@keyframes riseIn {
+  from { transform: translateY(8px); }
+  to   { transform: translateY(0); }
+}
+.animate-rise-in { animation: riseIn 0.24s ease forwards; }
+
 @keyframes timeoutShrink {
   from { width: 100%; }
   to   { width: 0%; }

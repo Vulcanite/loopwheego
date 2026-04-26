@@ -186,7 +186,7 @@ export function PlaceSearch({
   const showDropdown = open && !disabled && (loading || results.length > 0)
 
   return (
-    <div className="relative z-40">
+    <div className="relative z-20 isolate">
       <input
         value={query}
         onChange={(e) => {
@@ -230,6 +230,7 @@ export function PlaceSearch({
             opacity: 1,
             backdropFilter: "none",
             WebkitBackdropFilter: "none",
+            isolation: "isolate",
           }}
           role="listbox"
         >
@@ -256,7 +257,7 @@ export function PlaceSearch({
                   <button
                     type="button"
                     className="w-full px-4 py-3 text-left text-sm transition-colors flex items-start gap-3"
-                    style={{ color: "var(--fg-muted)" }}
+                    style={{ color: "var(--fg-muted)", background: "var(--surface)" }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.background = "var(--pill-hover)"
                       e.currentTarget.style.color = "var(--fg)"

@@ -23,6 +23,7 @@ interface RouteControlsProps {
 type AppMode = "fitness" | "explorer"
 type TransportMode = "walk" | "cycle"
 type RouteType = "loop" | "a2b"
+type ExplorerTargetMode = "distance" | "time"
 type StopDraft = {
   query: string
   lng: number | null
@@ -35,6 +36,7 @@ type RouteControlsSession = Pick<RouteRequest, "mode" | "routeType" | "distance_
 const MAX_WALK_KM = 50
 const MAX_CYCLE_KM = 100
 const MIN_DISTANCE_KM = 3
+const DEFAULT_DISTANCE_KM = 5
 const MAX_WALK_DURATION = 300
 const MAX_CYCLE_DURATION = 360
 const SG_CENTER = { lng: 103.8198, lat: 1.3521, label: "Singapore City Centre" }
@@ -123,8 +125,9 @@ export function RouteControls({
   const [outsideSingapore, setOutsideSingapore] = useState(false)
   const [showRegionModal, setShowRegionModal] = useState(false)
 
-  const [distanceKm, setDistanceKm] = useState(MIN_DISTANCE_KM)
+  const [distanceKm, setDistanceKm] = useState(DEFAULT_DISTANCE_KM)
   const [durationMin, setDurationMin] = useState(60)
+  const [explorerTargetMode, setExplorerTargetMode] = useState<ExplorerTargetMode>("distance")
   const [stops, setStops] = useState<StopDraft[]>([])
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [isCategoryPickerOpen, setIsCategoryPickerOpen] = useState(false)
@@ -272,12 +275,17 @@ export function RouteControls({
       const explorerCategories = appMode === "explorer"
         ? selectedCategories
         : undefined
+      const shouldSendLoopDistance = routeType === "loop" && (
+        appMode === "fitness" ||
+        (appMode === "explorer" && explorerTargetMode === "distance")
+      )
+      const shouldSendExplorerDuration = appMode === "explorer" && routeType === "loop" && explorerTargetMode === "time"
       const session: RouteControlsSession = {
         appMode,
         mode: transport,
         routeType,
-        distance_km: appMode === "fitness" && routeType === "loop" ? distanceKm : undefined,
-        target_duration_minutes: appMode === "explorer" ? durationMin : undefined,
+        distance_km: shouldSendLoopDistance ? distanceKm : undefined,
+        target_duration_minutes: shouldSendExplorerDuration ? durationMin : undefined,
         poi_categories: explorerCategories,
         waypoints: selectedStops.length > 0 ? selectedStops : undefined,
       }
@@ -381,14 +389,18 @@ export function RouteControls({
       </div>
 
       {appMode === "explorer" && (
-        <div className="mb-4 animate-fade-up">
+        <div className="mb-4 animate-rise-in">
           <div className="flex items-center justify-between mb-2">
             <SectionLabel>Categories</SectionLabel>
             <span className="text-[11px]" style={{ color: "var(--fg-faint)" }}>
               {selectedCategories.length > 0 ? `${selectedCategories.length} selected` : "None selected"}
             </span>
           </div>
-          <div className="relative" ref={categoryPickerRef}>
+          <div
+            className="relative isolate"
+            ref={categoryPickerRef}
+            style={{ zIndex: isCategoryPickerOpen ? 90 : 1 }}
+          >
             <button
               type="button"
               disabled={disabled}
@@ -428,7 +440,15 @@ export function RouteControls({
             {isCategoryPickerOpen && (
               <div
                 className="absolute left-0 right-0 top-[calc(100%+8px)] z-30 rounded-2xl border p-3 shadow-2xl"
-                style={{ borderColor: "var(--border-mid)", background: "var(--surface)" }}
+                style={{
+                  zIndex: 10020,
+                  borderColor: "var(--border-mid)",
+                  background: "var(--surface)",
+                  opacity: 1,
+                  backdropFilter: "none",
+                  WebkitBackdropFilter: "none",
+                  isolation: "isolate",
+                }}
               >
                 <div className="flex items-center justify-between mb-3">
                   <p className="text-[11px] uppercase tracking-widest font-semibold" style={{ color: "var(--fg-faint)" }}>
@@ -532,7 +552,7 @@ export function RouteControls({
 
       {/* END (A→B only) */}
       {routeType === "a2b" && (
-        <div className="mb-4 animate-fade-up">
+        <div className="mb-4 animate-rise-in">
           <SectionLabel>End Point</SectionLabel>
           <PlaceSearch
             query={endLabel}
@@ -545,7 +565,7 @@ export function RouteControls({
       )}
 
       {routeType === "loop" && (
-        <div className="mb-4 animate-fade-up">
+        <div className="mb-4 animate-rise-in">
           <div className="flex items-center justify-between mb-2">
             <SectionLabel>Stops</SectionLabel>
             <button
@@ -614,22 +634,66 @@ export function RouteControls({
         </div>
       )}
 
-      {/* DURATION (Explorer only) */}
-      {appMode === "explorer" && (
-        <div className="mb-4 animate-fade-up">
+      {/* EXPLORER TARGET (Loop only) */}
+      {appMode === "explorer" && routeType === "loop" && (
+        <div className="mb-4 animate-rise-in">
           <div className="flex items-center justify-between mb-2">
-            <SectionLabel>Duration</SectionLabel>
-            <span className="text-sm font-semibold tabular-nums" style={{ color: "var(--fg)" }}>
-              {durationMin >= 60 ? `${Math.floor(durationMin / 60)}h${durationMin % 60 ? ` ${durationMin % 60}m` : ""}` : `${durationMin}m`}
+            <SectionLabel>Target By</SectionLabel>
+            <span className="text-[11px]" style={{ color: "var(--fg-faint)" }}>
+              Choose one
             </span>
           </div>
-          <div className="animate-fade-up">
-            <Slider min={15} max={maxDuration} step={15} value={[durationMin]} disabled={disabled}
-              onValueChange={(v) => { const val = v[0]; if (val !== undefined) setDurationMin(val) }} />
-            <div className="flex justify-between mt-1 text-[10px]" style={{ color: "var(--fg-faint)" }}>
-              <span>15 min</span><span>{Math.floor(maxDuration / 60)} hr</span>
-            </div>
+          <div className="flex gap-2 mb-4">
+            {([
+              ["distance", "Distance"],
+              ["time", "Time"],
+            ] as const).map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                disabled={disabled}
+                onClick={() => setExplorerTargetMode(value)}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg border text-sm font-medium transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+                style={{
+                  background: explorerTargetMode === value ? "var(--red)" : "transparent",
+                  borderColor: explorerTargetMode === value ? "var(--red)" : "var(--border-mid)",
+                  color: explorerTargetMode === value ? "#fff" : "var(--fg-muted)",
+                }}
+              >
+                {label}
+              </button>
+            ))}
           </div>
+
+          {explorerTargetMode === "distance" ? (
+            <div className="animate-rise-in">
+              <div className="flex items-center justify-between mb-2">
+                <SectionLabel>Distance</SectionLabel>
+                <span className="text-sm font-semibold tabular-nums" style={{ color: "var(--fg)" }}>
+                  {distanceKm.toFixed(1)} km
+                </span>
+              </div>
+              <Slider min={MIN_DISTANCE_KM} max={maxKm} step={0.5} value={[distanceKm]} disabled={disabled}
+                onValueChange={(v) => { const val = v[0]; if (val !== undefined) setDistanceKm(val) }} />
+              <div className="flex justify-between mt-1 text-[10px]" style={{ color: "var(--fg-faint)" }}>
+                <span>{MIN_DISTANCE_KM} km</span><span>{maxKm} km</span>
+              </div>
+            </div>
+          ) : (
+            <div className="animate-rise-in">
+              <div className="flex items-center justify-between mb-2">
+                <SectionLabel>Duration</SectionLabel>
+                <span className="text-sm font-semibold tabular-nums" style={{ color: "var(--fg)" }}>
+                  {durationMin >= 60 ? `${Math.floor(durationMin / 60)}h${durationMin % 60 ? ` ${durationMin % 60}m` : ""}` : `${durationMin}m`}
+                </span>
+              </div>
+              <Slider min={15} max={maxDuration} step={15} value={[durationMin]} disabled={disabled}
+                onValueChange={(v) => { const val = v[0]; if (val !== undefined) setDurationMin(val) }} />
+              <div className="flex justify-between mt-1 text-[10px]" style={{ color: "var(--fg-faint)" }}>
+                <span>15 min</span><span>{Math.floor(maxDuration / 60)} hr</span>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
