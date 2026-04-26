@@ -228,3 +228,147 @@ def distance_to_polyline_km(
         )
         for idx in range(len(polyline) - 1)
     )
+
+
+def _point_within_radius_km(
+    lat: float,
+    lng: float,
+    center_lat: float,
+    center_lng: float,
+    radius_km: float,
+) -> bool:
+    return _haversine_km(lat, lng, center_lat, center_lng) <= radius_km
+
+
+def _polyline_bounds(
+    polyline: list[list[float]] | list[tuple[float, float]],
+) -> tuple[float, float, float, float]:
+    lngs = [float(point[0]) for point in polyline]
+    lats = [float(point[1]) for point in polyline]
+    return min(lngs), min(lats), max(lngs), max(lats)
+
+
+def _loop_zone_definitions(
+    polyline: list[list[float]] | list[tuple[float, float]],
+) -> list[dict[str, float | str]]:
+    west, south, east, north = _polyline_bounds(polyline)
+    width_km = _haversine_km((south + north) / 2.0, west, (south + north) / 2.0, east)
+    height_km = _haversine_km(south, (west + east) / 2.0, north, (west + east) / 2.0)
+    diag_km = _haversine_km(south, west, north, east)
+
+    center_lat = (south + north) / 2.0
+    center_lng = (west + east) / 2.0
+    edge_radius_km = max(0.45, min(diag_km * 0.18, max(width_km, height_km) * 0.35, 1.8))
+    center_radius_km = max(edge_radius_km * 0.95, min(diag_km * 0.42, 2.6))
+
+    return [
+        {"name": "center", "lat": center_lat, "lng": center_lng, "radius_km": center_radius_km, "weight": 0.9},
+        {"name": "west", "lat": center_lat, "lng": west, "radius_km": edge_radius_km, "weight": 1.25},
+        {"name": "north", "lat": north, "lng": center_lng, "radius_km": edge_radius_km, "weight": 1.25},
+        {"name": "east", "lat": center_lat, "lng": east, "radius_km": edge_radius_km, "weight": 1.25},
+        {"name": "south", "lat": south, "lng": center_lng, "radius_km": edge_radius_km, "weight": 1.1},
+    ]
+
+
+def pick_places_for_loop_area(
+    polyline: list[list[float]] | list[tuple[float, float]],
+    categories: list[str] | None = None,
+    exclude_ids: set[str] | None = None,
+    limit: int = 6,
+    max_route_distance_km: float = 0.9,
+    min_spacing_km: float = 0.35,
+) -> list[dict[str, Any]]:
+    if not polyline or len(polyline) < 2:
+        return []
+
+    selected_categories = _normalize_categories(categories)
+    excluded = exclude_ids or set()
+    if not selected_categories:
+        return []
+
+    zones = _loop_zone_definitions(polyline)
+    candidates: list[dict[str, Any]] = []
+    for place in load_cached_places():
+        if place["category"] not in selected_categories or place["id"] in excluded:
+            continue
+
+        zone_hits = [
+            zone for zone in zones
+            if _point_within_radius_km(
+                float(place["lat"]),
+                float(place["lng"]),
+                float(zone["lat"]),
+                float(zone["lng"]),
+                float(zone["radius_km"]),
+            )
+        ]
+        if not zone_hits:
+            continue
+
+        route_dist_km = distance_to_polyline_km(place, polyline)
+        if route_dist_km > max_route_distance_km:
+            continue
+
+        best_zone = max(zone_hits, key=lambda zone: float(zone["weight"]))
+        zone_center_dist_km = _haversine_km(
+            float(place["lat"]),
+            float(place["lng"]),
+            float(best_zone["lat"]),
+            float(best_zone["lng"]),
+        )
+        score = (
+            float(place["_prominence"]) * 2.0
+            + category_weight(str(place["category"])) * 1.5
+            + float(best_zone["weight"]) * 2.4
+            + (len(zone_hits) - 1) * 0.55
+            - route_dist_km * 3.2
+            - zone_center_dist_km * 1.1
+        )
+        candidates.append(
+            {
+                **place,
+                "_score": score,
+                "_route_dist_km": route_dist_km,
+                "_zone": str(best_zone["name"]),
+                "_zone_hits": [str(zone["name"]) for zone in zone_hits],
+                "_zone_center_dist_km": zone_center_dist_km,
+            }
+        )
+
+    if not candidates:
+        return []
+
+    candidates.sort(
+        key=lambda item: (
+            -float(item["_score"]),
+            float(item["_route_dist_km"]),
+            item["name"],
+        )
+    )
+
+    zone_counts: dict[str, int] = {}
+    out: list[dict[str, Any]] = []
+    for place in candidates:
+        if any(
+            _haversine_km(
+                float(place["lat"]),
+                float(place["lng"]),
+                float(selected["lat"]),
+                float(selected["lng"]),
+            ) < min_spacing_km
+            for selected in out
+        ):
+            continue
+
+        zone = str(place["_zone"])
+        diversity_penalty = zone_counts.get(zone, 0)
+        adjusted = {**place, "_score": float(place["_score"]) - diversity_penalty * 1.1}
+        if diversity_penalty > 0 and any(str(selected.get("_zone")) != zone for selected in out):
+            adjusted["_score"] = float(adjusted["_score"]) - 0.35
+
+        out.append(adjusted)
+        zone_counts[zone] = zone_counts.get(zone, 0) + 1
+        if len(out) >= limit:
+            break
+
+    return out

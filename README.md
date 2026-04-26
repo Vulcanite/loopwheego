@@ -80,14 +80,21 @@ Copy and edit `.env` before running (auto-created with defaults by `setup.sh` if
 ## Refreshing Cached Explorer Places
 
 The curated Explorer cache lives at `app/data/singapore_places_cached.json`.
-Rebuild it from Overpass with:
+Runtime requests only read that file; Overpass is used only during maintenance.
+
+The maintainer script supports a safer fetch/build/validate pipeline:
 
 ```bash
-python3 scripts/update_cached_places.py
+python3 scripts/update_cached_places.py fetch
+python3 scripts/update_cached_places.py build
+python3 scripts/update_cached_places.py validate
+python3 scripts/update_cached_places.py refresh
 ```
 
-The script normalizes raw OSM data into Explorer-facing categories and is
-intended to be run periodically to refresh the cached place list.
+Notes:
+- Raw per-category snapshots are stored under `app/data/raw_places/`.
+- `refresh` fetches fresh snapshots, builds to a temporary file, validates it, and only then replaces the live cache.
+- `validate` is lenient by default about legacy categories already present in an older cache. Use `--strict-categories` to fail on categories outside the current Explorer target set.
 
 ## Running Tests
 

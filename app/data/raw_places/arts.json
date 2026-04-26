@@ -1,0 +1,5935 @@
+{
+  "category": "arts",
+  "fetched_at": "2026-04-26T03:36:25.856070+00:00",
+  "bbox": "1.13,103.6,1.48,104.05",
+  "limit": 180,
+  "clauses": [
+    "nwr[\"amenity\"=\"theatre\"]({bbox});",
+    "nwr[\"amenity\"=\"arts_centre\"]({bbox});",
+    "nwr[\"amenity\"=\"cinema\"]({bbox});",
+    "nwr[\"building\"=\"theatre\"]({bbox});",
+    "nwr[\"amenity\"=\"concert_hall\"][\"name\"]({bbox});",
+    "nwr[\"amenity\"=\"community_centre\"][\"name\"]({bbox});",
+    "nwr[\"leisure\"=\"dance\"][\"name\"]({bbox});"
+  ],
+  "raw_total": 356,
+  "unique_total": 328,
+  "endpoints_used": [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter"
+  ],
+  "clause_errors": [],
+  "places": [
+    {
+      "id": "china-cultural-centre-12982-1038520",
+      "name": "China Cultural Centre",
+      "lat": 1.298169,
+      "lng": 103.851959,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 12,
+      "_tags": {
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "22",
+        "community_centre": "cultural_centre",
+        "email": "info@cccsingapore.org",
+        "height": "55",
+        "name": "China Cultural Centre",
+        "name:zh": "\u4e2d\u56fd\u6587\u5316\u4e2d\u5fc3",
+        "opening_hours": "Tu-Su 11:00-17:30",
+        "operator": "Government of China",
+        "operator:type": "foreign_government",
+        "phone": "(+65) 6351 1858-8100",
+        "source": "echo-brucy",
+        "start_date": "2015",
+        "website": "https://cccsingapore.org/",
+        "wikidata": "Q28224034",
+        "wikipedia": "en:China Cultural Centre (Singapore)"
+      }
+    },
+    {
+      "id": "shaw-theatres-lido-13058-1038318",
+      "name": "Shaw Theatres Lido",
+      "lat": 1.305789,
+      "lng": 103.831796,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 12,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "350",
+        "addr:postcode": "238868",
+        "addr:street": "Orchard Road",
+        "amenity": "cinema",
+        "cinema:IMAX": "yes",
+        "internet_access": "wlan",
+        "level": "5;6",
+        "name": "Shaw Theatres Lido",
+        "operator": "Shaw",
+        "website": "https://shaw.sg/",
+        "wikidata": "Q7491172",
+        "wikimedia_commons": "Category:Shaw House, Singapore",
+        "wikipedia": "en:Shaw House and Centre"
+      }
+    },
+    {
+      "id": "victoria-theatre-and-concert-hall-12884-1038516",
+      "name": "Victoria Theatre and Concert Hall",
+      "lat": 1.28835,
+      "lng": 103.851591,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 12,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "9",
+        "addr:postcode": "179556",
+        "addr:street": "Empress Place",
+        "alt_name": "Victoria Theatre & Concert Hall",
+        "amenity": "theatre",
+        "building": "yes",
+        "check_date": "2026-04-15",
+        "height": "15",
+        "image": "https://images.mapillary.com/XRqmYLg4O-XZEsy7xoaaNw/thumb-2048.jpg",
+        "mapillary": "https://www.mapillary.com/map/im/XRqmYLg4O-XZEsy7xoaaNw",
+        "name": "Victoria Theatre and Concert Hall",
+        "name:zh": "\u7ef4\u591a\u5229\u4e9a\u5267\u9662\u4e0e\u97f3\u4e50\u5385",
+        "operator": "Arts House Ltd",
+        "start_date": "1909",
+        "toilets": "yes",
+        "toilets:access": "yes",
+        "type": "multipolygon",
+        "website": "https://artshousegroup.sg/vtvch",
+        "wheelchair": "yes",
+        "wikidata": "Q557635",
+        "wikimedia_commons": "Category:Victoria_Theatre_and_Concert_Hall",
+        "wikipedia": "en:Victoria Theatre and Concert Hall"
+      }
+    },
+    {
+      "id": "esplanade-theatres-on-the-bay-12897-1038557",
+      "name": "Esplanade Theatres on the Bay",
+      "lat": 1.289663,
+      "lng": 103.855684,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 11,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "8",
+        "addr:postcode": "039802",
+        "addr:street": "Raffles Avenue",
+        "amenity": "theatre",
+        "building": "yes",
+        "building:colour": "#ad9585",
+        "building:levels": "4",
+        "building:material": "brick",
+        "height": "13",
+        "name": "Esplanade Theatres on the Bay",
+        "name:ko": "\uc5d0\uc2a4\ud50c\ub77c\ub124\uc774\ub4dc \uadf9\uc7a5",
+        "name:zh": "\u6ff1\u6d77\u85dd\u8853\u4e2d\u5fc3",
+        "roof:colour": "#ad9585",
+        "start_date": "2002",
+        "website": "https://www.esplanade.com/",
+        "wheelchair": "yes",
+        "wikidata": "Q559113",
+        "wikimedia_commons": "Category:Esplanade - Theatres on the Bay",
+        "wikipedia": "en:Esplanade \u2013 Theatres on the Bay"
+      }
+    },
+    {
+      "id": "golden-village-yishun-ten-14299-1038364",
+      "name": "Golden Village - Yishun Ten",
+      "lat": 1.429929,
+      "lng": 103.83642,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 10,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "51",
+        "addr:postcode": "768794",
+        "addr:street": "Yishun Central 1",
+        "amenity": "cinema",
+        "building": "yes",
+        "building:levels": "4",
+        "name": "Golden Village - Yishun Ten",
+        "wikidata": "Q5514862",
+        "wikipedia": "en:GV Yishun"
+      }
+    },
+    {
+      "id": "kallang-theatre-13019-1038757",
+      "name": "Kallang Theatre",
+      "lat": 1.301912,
+      "lng": 103.875723,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 10,
+      "_tags": {
+        "amenity": "theatre",
+        "building": "yes",
+        "building:colour": "#f1dca8",
+        "building:levels": "4",
+        "building:material": "concrete",
+        "name": "Kallang Theatre",
+        "name:zh": "\u5609\u9f99\u5267\u9662",
+        "roof:colour": "#dae0d2",
+        "roof:material": "concrete",
+        "toilets:wheelchair": "yes",
+        "wikidata": "Q48734046",
+        "wikipedia": "en:Kallang Theatre"
+      }
+    },
+    {
+      "id": "national-design-centre-12988-1038535",
+      "name": "National Design Centre",
+      "lat": 1.298784,
+      "lng": 103.853532,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 10,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "111",
+        "addr:postcode": "188969",
+        "addr:street": "Middle Road",
+        "amenity": "arts_centre",
+        "check_date": "2025-10-27",
+        "name": "National Design Centre",
+        "wheelchair": "yes",
+        "wikidata": "Q18737176",
+        "wikimedia_commons": "Category:National Design Centre",
+        "wikipedia": "en:National Design Centre"
+      }
+    },
+    {
+      "id": "omni-theatre-13345-1037354",
+      "name": "Omni-Theatre",
+      "lat": 1.334509,
+      "lng": 103.735414,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 10,
+      "_tags": {
+        "amenity": "cinema",
+        "building": "yes",
+        "name": "Omni-Theatre",
+        "name:zh": "\u4e07\u8c61\u9986",
+        "opening_hours": "12:00-19:00",
+        "source": "bing",
+        "wikidata": "Q7523067",
+        "wikipedia": "en:Singapore Omni-Theatre"
+      }
+    },
+    {
+      "id": "sengkang-community-club-13928-1038939",
+      "name": "Sengkang Community Club",
+      "lat": 1.392836,
+      "lng": 103.893899,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 10,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "2",
+        "addr:postcode": "545025",
+        "addr:street": "Sengkang Square",
+        "amenity": "community_centre",
+        "name": "Sengkang Community Club",
+        "opening_hours": "Mo-Su 10:00-18:00; PH closed",
+        "wikidata": "Q7450574",
+        "wikipedia": "en:Sengkang Community Club"
+      }
+    },
+    {
+      "id": "the-substation-12945-1038492",
+      "name": "The Substation",
+      "lat": 1.294484,
+      "lng": 103.849176,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 10,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "45",
+        "addr:street": "Armenian Street",
+        "amenity": "arts_centre",
+        "building": "yes",
+        "building:levels": "3",
+        "height": "20",
+        "name": "The Substation",
+        "start_date": "1926",
+        "wikidata": "Q7767154",
+        "wikimedia_commons": "Category:The Substation",
+        "wikipedia": "en:The Substation"
+      }
+    },
+    {
+      "id": "capitol-theatre-12935-1038512",
+      "name": "Capitol Theatre",
+      "lat": 1.293495,
+      "lng": 103.851176,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 7,
+      "_tags": {
+        "amenity": "theatre",
+        "building": "yes",
+        "check_date": "2025-03-15",
+        "height": "34",
+        "name": "Capitol Theatre",
+        "start_date": "1930",
+        "toilets:wheelchair": "yes",
+        "wheelchair": "limited",
+        "wikidata": "Q36158363",
+        "wikimedia_commons": "Category:Capitol_Theatre_(Singapore)"
+      }
+    },
+    {
+      "id": "enabling-village-12864-1038147",
+      "name": "Enabling Village",
+      "lat": 1.286391,
+      "lng": 103.814663,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 7,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "20",
+        "addr:postcode": "159053",
+        "addr:street": "Lengkok Bahru",
+        "amenity": "community_centre",
+        "name": "Enabling Village",
+        "operator": "Ministry of Social and Family Development (MSFD)",
+        "website": "https://enablingvillage.sg/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "gv-plaza-13009-1038449",
+      "name": "GV Plaza",
+      "lat": 1.300937,
+      "lng": 103.84485,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 7,
+      "_tags": {
+        "addr:housenumber": "#07-01",
+        "addr:street": "68 Orchard Rd",
+        "amenity": "cinema",
+        "name": "GV Plaza",
+        "operator": "Golden Village",
+        "website": "https://www.gv.com.sg/GVCinemaDetails#/cinema/08"
+      }
+    },
+    {
+      "id": "gv-vivocity-12647-1038234",
+      "name": "GV VivoCity",
+      "lat": 1.264734,
+      "lng": 103.823413,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 7,
+      "_tags": {
+        "air_conditioning": "yes",
+        "amenity": "cinema",
+        "branch": "VivoCity",
+        "check_date": "2023-06-23",
+        "name": "GV VivoCity",
+        "operator": "Golden Village",
+        "payment:apple_pay": "yes",
+        "payment:contactless": "yes",
+        "payment:credit_cards": "yes",
+        "payment:google_pay": "yes",
+        "payment:mastercard": "yes",
+        "payment:mastercard_contactless": "yes",
+        "payment:visa": "yes",
+        "screen": "15",
+        "source": "survey",
+        "toilets": "yes",
+        "website": "https://www.gv.com.sg/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "games-garage-13320-1038910",
+      "name": "Games Garage",
+      "lat": 1.332012,
+      "lng": 103.890991,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 7,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:postcode": "408730",
+        "addr:street": "67, Ubi road 1, Oxley Biz Hub 1, #07-08",
+        "amenity": "community_centre",
+        "check_date": "2015-03-18",
+        "name": "Games Garage",
+        "operator": "CoinPip",
+        "phone": "+6562946445",
+        "website": "https://gamesgaragesg.wix.com/games-garage"
+      }
+    },
+    {
+      "id": "joo-chiat-community-club-13075-1039041",
+      "name": "Joo Chiat Community Club",
+      "lat": 1.307477,
+      "lng": 103.904131,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 7,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "405",
+        "addr:postcode": "427633",
+        "addr:street": "Joo Chiat Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "3",
+        "name": "Joo Chiat Community Club",
+        "type": "multipolygon",
+        "wikidata": "Q136102003"
+      }
+    },
+    {
+      "id": "kampong-ubi-community-centre-13179-1039007",
+      "name": "Kampong Ubi Community Centre",
+      "lat": 1.317864,
+      "lng": 103.900739,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 7,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "10",
+        "addr:postcode": "409075",
+        "addr:street": "Jalan Ubi",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Kampong Ubi Community Centre",
+        "name:ms": "Kelab Masyarakat Kampong Ubi",
+        "source": "Bing",
+        "wikidata": "Q136102002"
+      }
+    },
+    {
+      "id": "marine-crescent-ville-residents-committee-13037-1039123",
+      "name": "Marine Crescent Ville Residents Committee",
+      "lat": 1.303687,
+      "lng": 103.912269,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 7,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Marine Crescent Ville Residents Committee",
+        "opening_hours": "Su-Tu 09:00-11:30,14:00-17:00; Th-Fr 14:00-17:00,19:00-21:00; We,Sa closed",
+        "operator": "Marine Crescent Ville Residents Committee",
+        "operator:type": "community",
+        "phone": "+65 6444 4221",
+        "website": "https://www.facebook.com/MCVResidentsCommittee/"
+      }
+    },
+    {
+      "id": "marymount-community-club-13615-1038414",
+      "name": "Marymount Community Club",
+      "lat": 1.361502,
+      "lng": 103.841448,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 7,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "191",
+        "addr:street": "Sin Ming Avenue",
+        "amenity": "community_centre",
+        "community_centre": "club_home",
+        "name": "Marymount Community Club",
+        "opening_hours": "10:00-18:00",
+        "operator": "OnePA",
+        "website": "https://www.onepa.sg"
+      }
+    },
+    {
+      "id": "permaisuri-zarith-sofiah-opera-house-14567-1037703",
+      "name": "Permaisuri Zarith Sofiah Opera House",
+      "lat": 1.45674,
+      "lng": 103.770295,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 7,
+      "_tags": {
+        "amenity": "theatre",
+        "building": "yes",
+        "image": "https://images.mapillary.com/VaOt8wz0UOwtF6XP92dL6A/thumb-2048.jpg",
+        "mapillary": "970746280395746",
+        "name": "Permaisuri Zarith Sofiah Opera House",
+        "name:en": "Permaisuri Zarith Sofiah Opera House",
+        "name:zh": "\u82cf\u4e39\u540e\u67e5\u4e3d\u82cf\u83f2\u96c5\u6b4c\u5267\u9662",
+        "name:zh-Hans": "\u82cf\u4e39\u540e\u67e5\u4e3d\u82cf\u83f2\u96c5\u6b4c\u5267\u9662",
+        "name:zh-Hant": "\u8607\u4e39\u5f8c\u67e5\u9e97\u8607\u83f2\u96c5\u6b4c\u5287\u9662",
+        "wikidata": "Q83511920",
+        "wikimedia_commons": "File:Permaisuri_Zarith_Sofiah_Opera_House.jpg"
+      }
+    },
+    {
+      "id": "queenstown-community-centre-12991-1038014",
+      "name": "Queenstown Community Centre",
+      "lat": 1.299124,
+      "lng": 103.801351,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 7,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "365",
+        "addr:postcode": "149732",
+        "addr:street": "Commonwealth Avenue",
+        "amenity": "community_centre",
+        "building": "yes",
+        "internet_access": "wlan",
+        "name": "Queenstown Community Centre",
+        "name:ms": "Kelab Masyarakat Queenstown",
+        "name:zh": "\u5973\u7687\u9547\u8054\u7edc\u6240",
+        "opening_hours": "10:00-18:00",
+        "operator": "People's Association",
+        "operator:type": "public/government",
+        "source": "Bing",
+        "website": "https://www.onepa.gov.sg/sitecore/commerce/commerce-control-panel/shared-settings/paoutlets/queenstown-cc",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "tanglin-community-club-13234-1038269",
+      "name": "Tanglin Community Club",
+      "lat": 1.323393,
+      "lng": 103.826909,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 7,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "245",
+        "addr:postcode": "297829",
+        "addr:street": "Whitley Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "check_date": "2023-02-05",
+        "contact:facebook": "https://www.facebook.com/tanglincc/",
+        "email": "PA_TANGLINCC@pa.gov.sg",
+        "internet_access": "wlan",
+        "internet_access:fee": "no",
+        "name": "Tanglin Community Club",
+        "name:ms": "Kelab Masyarakat Tanglin",
+        "name:zh": "\u4e1c\u9675\u8054\u7edc\u6240",
+        "opening_hours": "Mo-Su 09:00-22:00",
+        "operator": "People's Association",
+        "operator:type": "public",
+        "operator:wikidata": "Q7165467",
+        "phone": "+65 6251 3922",
+        "website": "https://www.pa.gov.sg/our-network/community-clubs/Locate-CC/detail/Tanglin-Community-Club",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "telok-blangah-community-centre-12748-1038078",
+      "name": "Telok Blangah Community Centre",
+      "lat": 1.274849,
+      "lng": 103.807839,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 7,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "450",
+        "addr:postcode": "108943",
+        "addr:street": "Telok Blangah Street 31",
+        "amenity": "community_centre",
+        "building": "yes",
+        "internet_access": "wlan",
+        "name": "Telok Blangah Community Centre",
+        "name:ms": "Kelab Masyarakat Telok Blangah",
+        "name:zh": "\u76f4\u843d\u5e03\u5170\u96c5\u8054\u7edc\u6240",
+        "opening_hours": "Mo-Fr 10:00-18:00",
+        "operator": "People's Association",
+        "operator:type": "public/government",
+        "phone": "+65 6271 9602",
+        "type": "multipolygon",
+        "website": "https://www.onepa.gov.sg/sitecore/commerce/commerce-control-panel/shared-settings/paoutlets/telok-blangah-cc",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "the-lighthouse-14020-1038996",
+      "name": "The Lighthouse",
+      "lat": 1.40199,
+      "lng": 103.899578,
+      "category": "arts",
+      "description": "Hosts programmes geared towards children and youth development",
+      "_prominence": 7,
+      "_tags": {
+        "amenity": "community_centre",
+        "community_centre": "youth_centre",
+        "description": "Hosts programmes geared towards children and youth development",
+        "landuse": "recreation_ground",
+        "name": "The Lighthouse",
+        "operator": "Suncare SG",
+        "website": "https://suncaresg.com/"
+      }
+    },
+    {
+      "id": "72-13-12914-1038401",
+      "name": "72-13",
+      "lat": 1.291386,
+      "lng": 103.840125,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:housenumber": "72-13",
+        "addr:postcode": "239007",
+        "addr:street": "Mohamed Sultan Road",
+        "amenity": "theatre",
+        "name": "72-13",
+        "website": "https://www.72-13.com/"
+      }
+    },
+    {
+      "id": "acad-mie-of-stars-13150-1039111",
+      "name": "Acad\u00e9mie of Stars",
+      "lat": 1.314968,
+      "lng": 103.911108,
+      "category": "arts",
+      "description": "Acad\u00e9mie of Stars is located at The Yards, in Joo Chiat. In the premises of our late founding father, Mr Lee Kuan Yew\u2019s primary school, it is a creative hub for talented youths to ",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "406",
+        "addr:postcode": "428084",
+        "addr:street": "Joo Chiat Place",
+        "amenity": "arts_centre",
+        "building": "yes",
+        "description": "Acad\u00e9mie of Stars is located at The Yards, in Joo Chiat. In the premises of our late founding father, Mr Lee Kuan Yew\u2019s primary school, it is a creative hub for talented youths to hone their skills and develop their artistry. ",
+        "email": "info@academieofstars.com",
+        "level": "02-24",
+        "name": "Acad\u00e9mie of Stars",
+        "opening_hours": "Mo-Su 11:00-20:00",
+        "phone": "+6569097678",
+        "website": "http://www.academieofstars.com"
+      }
+    },
+    {
+      "id": "acad-mie-of-stars-13151-1039111",
+      "name": "Acad\u00e9mie of Stars",
+      "lat": 1.315107,
+      "lng": 103.91108,
+      "category": "arts",
+      "description": "Acad\u00e9mie of Stars is located at The Yards, in Joo Chiat. In the premises of our late founding father, Mr Lee Kuan Yew\u2019s primary school, it is a creative hub for talented youths to ",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "406",
+        "addr:postcode": "428084",
+        "addr:street": "Joo Chiat Place",
+        "amenity": "arts_centre",
+        "building": "yes",
+        "description": "Acad\u00e9mie of Stars is located at The Yards, in Joo Chiat. In the premises of our late founding father, Mr Lee Kuan Yew\u2019s primary school, it is a creative hub for talented youths to hone their skills and develop their artistry. ",
+        "email": "info@academieofstars.com",
+        "level": "02-21",
+        "name": "Acad\u00e9mie of Stars",
+        "opening_hours": "Mo-Su 11:00-20:00",
+        "phone": "+6569097678",
+        "website": "http://www.academieofstars.com"
+      }
+    },
+    {
+      "id": "acad-mie-of-stars-13148-1039112",
+      "name": "Acad\u00e9mie of Stars",
+      "lat": 1.31484,
+      "lng": 103.911195,
+      "category": "arts",
+      "description": "Acad\u00e9mie of Stars is located at The Yards, in Joo Chiat. In the premises of our late founding father, Mr Lee Kuan Yew\u2019s primary school, it is a creative hub for talented youths to ",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "406",
+        "addr:postcode": "428084",
+        "addr:street": "Joo Chiat Place",
+        "amenity": "arts_centre",
+        "building": "yes",
+        "description": "Acad\u00e9mie of Stars is located at The Yards, in Joo Chiat. In the premises of our late founding father, Mr Lee Kuan Yew\u2019s primary school, it is a creative hub for talented youths to hone their skills and develop their artistry. ",
+        "email": "info@academieofstars.com",
+        "level": "02-25",
+        "name": "Acad\u00e9mie of Stars",
+        "opening_hours": "Mo-Su 11:00-20:00",
+        "phone": "+6569097678",
+        "website": "http://www.academieofstars.com"
+      }
+    },
+    {
+      "id": "artiste-quotient-13064-1039059",
+      "name": "Artiste Quotient",
+      "lat": 1.306398,
+      "lng": 103.905914,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "154",
+        "addr:postcode": "428864",
+        "addr:street": "East Coast Road",
+        "check_date": "2024-07",
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "name": "Artiste Quotient",
+        "phone": "+65 63482878",
+        "source": "Kaart Ground Survey 2017",
+        "website": "https://aqdance.com.sg/"
+      }
+    },
+    {
+      "id": "boon-lay-view-rc-13510-1037121",
+      "name": "Boon Lay View RC",
+      "lat": 1.351011,
+      "lng": 103.712081,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "218D",
+        "addr:postcode": "644218",
+        "addr:street": "Boon Lay Avenue",
+        "amenity": "community_centre",
+        "name": "Boon Lay View RC",
+        "phone": "+65 6261 9947",
+        "website": "http://www.facebook.com/OneBoonLay"
+      }
+    },
+    {
+      "id": "bukit-merah-community-hub-12842-1038156",
+      "name": "Bukit Merah Community Hub",
+      "lat": 1.284217,
+      "lng": 103.81556,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "3779",
+        "addr:postcode": "159462",
+        "addr:street": "Jalan Bukit Merah",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Bukit Merah Community Hub",
+        "operator": "PA",
+        "operator:type": "public"
+      }
+    },
+    {
+      "id": "bukit-panjang-community-club-13765-1037706",
+      "name": "Bukit Panjang Community Club",
+      "lat": 1.376472,
+      "lng": 103.770649,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "8",
+        "addr:postcode": "678295",
+        "addr:street": "Pending Road",
+        "alt_name": "Bukit Panjang CC",
+        "amenity": "community_centre",
+        "building": "public",
+        "building:levels": "4",
+        "name": "Bukit Panjang Community Club",
+        "operator": "OnePA"
+      }
+    },
+    {
+      "id": "cgv-grand-batam-mall-11362-1040059",
+      "name": "CGV Grand Batam Mall",
+      "lat": 1.136151,
+      "lng": 104.005929,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Batam",
+        "addr:district": "Lubuk Baja",
+        "addr:housename": "Grand Batam Mall #03-A3",
+        "addr:postcode": "29444",
+        "addr:province": "Kep Riau",
+        "addr:street": "Jl.Pembangunan",
+        "addr:subdistrict": "Batu Selicin",
+        "amenity": "cinema",
+        "brand": "CGV",
+        "brand:en": "CGV Cinemas",
+        "brand:ko": "CGV",
+        "brand:wikidata": "Q135400010",
+        "name": "CGV Grand Batam Mall",
+        "name:en": "CGV Grand Batam",
+        "name:ko": "CGV",
+        "payment:cash": "yes",
+        "payment:contactless": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "payment:mastercard": "yes",
+        "payment:visa": "yes",
+        "screen": "6"
+      }
+    },
+    {
+      "id": "carnival-cinemas-goldem-mile-13019-1038640",
+      "name": "Carnival Cinemas, Goldem Mile",
+      "lat": 1.301925,
+      "lng": 103.864049,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "addr:housenumber": "6001",
+        "addr:postcode": "199589",
+        "amenity": "cinema",
+        "email": "enquiry@carnivalcinemas.sg",
+        "level": "5",
+        "name": "Carnival Cinemas, Goldem Mile",
+        "name:en": "Carnival Cinemas",
+        "opening_hours": "24/7",
+        "phone": "+65 69027095",
+        "website": "http://carnivalcinemas.sg"
+      }
+    },
+    {
+      "id": "cathay-cineplexes-century-square-13521-1039440",
+      "name": "Cathay Cineplexes Century Square",
+      "lat": 1.352099,
+      "lng": 103.944002,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "addr:housenumber": "#05-11/11A",
+        "addr:street": "Century Square",
+        "amenity": "cinema",
+        "name": "Cathay Cineplexes Century Square",
+        "operator": "Film Garde"
+      }
+    },
+    {
+      "id": "chinese-puppet-play-stand-13651-1038284",
+      "name": "Chinese Puppet Play Stand",
+      "lat": 1.365134,
+      "lng": 103.828383,
+      "category": "arts",
+      "description": "Area of the temple alloted for Chinese Puppetry",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "theatre",
+        "building": "seasonal",
+        "description": "Area of the temple alloted for Chinese Puppetry",
+        "name": "Chinese Puppet Play Stand",
+        "operator": "\u4e5d\u9ca4\u6d1e Temple"
+      }
+    },
+    {
+      "id": "eagle-wings-cinematics-13369-1037792",
+      "name": "Eagle Wings Cinematics",
+      "lat": 1.33691,
+      "lng": 103.779174,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "9",
+        "addr:postcode": "589474",
+        "addr:street": "King Albert Park",
+        "addr:unit": "#01-58",
+        "amenity": "cinema",
+        "email": "info@eaglewingscinematics.com.sg",
+        "name": "Eagle Wings Cinematics",
+        "opening_hours": "Mo-Su 10:00-23:00",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "phone": "+65 9848 7777",
+        "website": "https://www.eaglewingscinematics.com.sg/"
+      }
+    },
+    {
+      "id": "film-garde-kallang-leisure-park-13020-1038763",
+      "name": "Film Garde Kallang Leisure Park",
+      "lat": 1.301968,
+      "lng": 103.876305,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "cinema",
+        "level": "2-3",
+        "name": "Film Garde Kallang Leisure Park",
+        "operator": "Film Garde Cineplex",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "gv-bishan-13505-1038485",
+      "name": "GV Bishan",
+      "lat": 1.350527,
+      "lng": 103.84853,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "cinema",
+        "brand:wikidata": "Q5579944",
+        "level": "3",
+        "name": "GV Bishan",
+        "opening_hours": "Mo-Su 10:00-22:00",
+        "operator": "Golden Village",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "gv-city-square-13115-1038570",
+      "name": "GV City Square",
+      "lat": 1.311482,
+      "lng": 103.856955,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "cinema",
+        "level": "4",
+        "name": "GV City Square",
+        "operator": "Golden Village"
+      }
+    },
+    {
+      "id": "gv-funan-12911-1038501",
+      "name": "GV Funan",
+      "lat": 1.291098,
+      "lng": 103.850081,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "cinema",
+        "level": "4",
+        "name": "GV Funan",
+        "name:zh": "\u798f\u5357\u5609\u534e\u9662\u7ebf",
+        "operator": "Golden Village",
+        "screen": "7"
+      }
+    },
+    {
+      "id": "gv-grand-12929-1038320",
+      "name": "GV Grand",
+      "lat": 1.292927,
+      "lng": 103.832012,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "1 #03-29",
+        "addr:postcode": "237994",
+        "addr:street": "Kim Seng Promenade",
+        "amenity": "cinema",
+        "name": "GV Grand",
+        "operator": "Golden Village",
+        "screen": "6"
+      }
+    },
+    {
+      "id": "gv-jurong-point-13400-1037062",
+      "name": "GV Jurong Point",
+      "lat": 1.339986,
+      "lng": 103.706212,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "addr:floor": "3",
+        "addr:housenumber": "1",
+        "addr:street": "Jurong West Central 2",
+        "amenity": "cinema",
+        "check_date": "2025-06-06",
+        "level": "2",
+        "name": "GV Jurong Point",
+        "operator": "Golden Village"
+      }
+    },
+    {
+      "id": "gv-katong-13053-1039049",
+      "name": "GV Katong",
+      "lat": 1.305327,
+      "lng": 103.904898,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "cinema",
+        "level": "4",
+        "name": "GV Katong",
+        "operator": "Golden Village",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "gv-paya-lebar-13190-1038938",
+      "name": "GV Paya Lebar",
+      "lat": 1.319047,
+      "lng": 103.893771,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "cinema",
+        "level": "2",
+        "name": "GV Paya Lebar",
+        "operator": "Golden Village"
+      }
+    },
+    {
+      "id": "gv-suntec-city-12950-1038603",
+      "name": "GV Suntec City",
+      "lat": 1.29497,
+      "lng": 103.860317,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "3",
+        "addr:postcode": "038983",
+        "addr:street": "Temasek Boulevard",
+        "addr:unit": "#03-373",
+        "alt_name": "Golden Village",
+        "amenity": "cinema",
+        "level": "2",
+        "name": "GV Suntec City",
+        "operator": "Golden Village",
+        "screen": "11"
+      }
+    },
+    {
+      "id": "gv-tampines-13522-1039448",
+      "name": "GV Tampines",
+      "lat": 1.352158,
+      "lng": 103.944765,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "cinema",
+        "name": "GV Tampines",
+        "operator": "Golden Village"
+      }
+    },
+    {
+      "id": "gv-tiong-bahru-12864-1038266",
+      "name": "GV Tiong Bahru",
+      "lat": 1.286359,
+      "lng": 103.826566,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "cinema",
+        "level": "3",
+        "name": "GV Tiong Bahru",
+        "operator": "Golden Village"
+      }
+    },
+    {
+      "id": "golden-screen-cinemas-13975-1036306",
+      "name": "Golden Screen Cinemas",
+      "lat": 1.397471,
+      "lng": 103.630595,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "cinema",
+        "brand": "Golden Screen Cinemas",
+        "brand:wikidata": "Q5579784",
+        "level": "2",
+        "name": "Golden Screen Cinemas",
+        "short_name": "GSC"
+      }
+    },
+    {
+      "id": "golden-village-bugis-12998-1038541",
+      "name": "Golden Village Bugis+",
+      "lat": 1.299785,
+      "lng": 103.854133,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "amenity": "cinema",
+        "level": "4",
+        "name": "Golden Village Bugis+",
+        "operator": "Golden Village",
+        "screen": "8",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "hotel-grand-ballroom-12952-1038559",
+      "name": "Hotel Grand Ballroom",
+      "lat": 1.295215,
+      "lng": 103.855901,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 6,
+      "_tags": {
+        "leisure": "dance",
+        "name": "Hotel Grand Ballroom",
+        "operator": "South Beach"
+      }
+    },
+    {
+      "id": "inspired-arts-13090-1038570",
+      "name": "Inspired Arts",
+      "lat": 1.309037,
+      "lng": 103.856986,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:housename": "TRIO",
+        "addr:housenumber": "29",
+        "addr:postcode": "207903",
+        "addr:street": "Sam Leong Road",
+        "amenity": "arts_centre",
+        "check_date": "2024-01-28",
+        "contact:instagram": "https://www.instagram.com/Inspired_artssg",
+        "level": "1",
+        "name": "Inspired Arts",
+        "phone": "+65 9146 9428",
+        "website": "https://www.inspiredartssg.com/"
+      }
+    },
+    {
+      "id": "kampung-admiralty-14397-1038007",
+      "name": "Kampung Admiralty",
+      "lat": 1.43975,
+      "lng": 103.800705,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "676",
+        "addr:postcode": "730676",
+        "addr:street": "Woodlands Drive 71",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Kampung Admiralty",
+        "operator": "HDB"
+      }
+    },
+    {
+      "id": "makespace-singapore-13097-1038619",
+      "name": "Makespace Singapore",
+      "lat": 1.309743,
+      "lng": 103.861868,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "318C",
+        "addr:postcode": "208563",
+        "addr:street": "King George's Avenue",
+        "amenity": "community_centre",
+        "name": "Makespace Singapore",
+        "website": "https://makespace.sg/"
+      }
+    },
+    {
+      "id": "ntu-centre-for-contemporary-art-singapore-12745-1038042",
+      "name": "NTU Centre for Contemporary Art Singapore",
+      "lat": 1.274468,
+      "lng": 103.804212,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "43",
+        "addr:postcode": "109443",
+        "addr:street": "Malan Road",
+        "alt_name": "CCA",
+        "amenity": "arts_centre",
+        "building": "yes",
+        "name": "NTU Centre for Contemporary Art Singapore",
+        "name:zh": "\u65b0\u52a0\u5761\u5357\u5927\u5f53\u4ee3\u827a\u672f\u4e2d\u5fc3",
+        "opening_hours": "Tu-Su, PH 12:00-19:00; Th 12:00-21:00",
+        "website": "http://ntu.ccasingapore.org/"
+      }
+    },
+    {
+      "id": "oldham-theatre-12934-1038484",
+      "name": "Oldham Theatre",
+      "lat": 1.293393,
+      "lng": 103.848422,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:housenumber": "1",
+        "addr:street": "Canning Rise",
+        "amenity": "theatre",
+        "name": "Oldham Theatre",
+        "website": "https://www.asianfilmarchive.org/"
+      }
+    },
+    {
+      "id": "phil-s-studio-12901-1038491",
+      "name": "Phil's Studio",
+      "lat": 1.290116,
+      "lng": 103.849116,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "1",
+        "addr:postcode": "179094",
+        "addr:street": "North Bridge Rd #03-16",
+        "amenity": "theatre",
+        "level:ref": "5",
+        "name": "Phil's Studio",
+        "website": "https://www.philstudio-performing-arts.com/"
+      }
+    },
+    {
+      "id": "screening-room-12813-1038455",
+      "name": "Screening Room",
+      "lat": 1.281292,
+      "lng": 103.845459,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "12",
+        "addr:postcode": "069692",
+        "addr:street": "Ann Siang Road",
+        "amenity": "theatre",
+        "email": "info@screeningroom.com.sg",
+        "name": "Screening Room",
+        "phone": "+65 6221 1694",
+        "website": "http://www.screeningroom.com.sg/"
+      }
+    },
+    {
+      "id": "sengkang-family-service-centre-206b-13871-1038968",
+      "name": "Sengkang Family Service Centre @206B",
+      "lat": 1.387146,
+      "lng": 103.896802,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "community_centre",
+        "community_centre": "family_centre",
+        "name": "Sengkang Family Service Centre @206B",
+        "opening_hours:covid19": "closed",
+        "operator": "AMKFSC Community Services"
+      }
+    },
+    {
+      "id": "senja-cashew-community-centre-13817-1037646",
+      "name": "Senja-Cashew Community Centre",
+      "lat": 1.381677,
+      "lng": 103.764569,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "101",
+        "addr:postcode": "679910",
+        "addr:street": "Bukit Panjang Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "check_date": "2024-11-21",
+        "email": "PA_SENJA-CASHEWCC@pa.gov.sg",
+        "internet_access": "wlan",
+        "internet_access:fee": "no",
+        "name": "Senja-Cashew Community Centre",
+        "name:en": "Senja-Cashew Community Centre",
+        "name:ms": "Kelab Masyarakat Senja-Cashew",
+        "opening_hours": "10:00-22:00",
+        "operator:type": "public",
+        "phone": "+65 6219 4561",
+        "sport": "basketball",
+        "website": "https://www.onepa.gov.sg/cc/senja-cashew-cc",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "shaw-theatres-13849-1037452",
+      "name": "Shaw Theatres",
+      "lat": 1.384895,
+      "lng": 103.745222,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "cinema",
+        "name": "Shaw Theatres",
+        "opening_hours": "Mo-Th, Sa 10:00-22:00; Su, Fr 10:00-01:00",
+        "operator": "Shaw"
+      }
+    },
+    {
+      "id": "shaw-theatres-balestier-13254-1038510",
+      "name": "Shaw Theatres Balestier",
+      "lat": 1.325427,
+      "lng": 103.851022,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:floor": "4;5",
+        "addr:housenumber": "360",
+        "addr:postcode": "329783",
+        "addr:street": "Balestier Road",
+        "amenity": "cinema",
+        "check_date": "2024-04-17",
+        "level": "3;4",
+        "name": "Shaw Theatres Balestier",
+        "operator": "Shaw",
+        "screen": "11",
+        "temporary:access": "no"
+      }
+    },
+    {
+      "id": "shaw-theatres-waterway-point-14067-1039026",
+      "name": "Shaw Theatres Waterway Point",
+      "lat": 1.406718,
+      "lng": 103.902647,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "cinema",
+        "check_date": "2026-01-18",
+        "cinema:3D": "yes",
+        "level": "-2",
+        "name": "Shaw Theatres Waterway Point",
+        "operator": "Shaw Theatres",
+        "screen": "10",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "id": "shaw-theatres-nex-13511-1038721",
+      "name": "Shaw Theatres nex",
+      "lat": 1.351056,
+      "lng": 103.872114,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "cinema",
+        "name": "Shaw Theatres nex",
+        "operator": "Shaw"
+      }
+    },
+    {
+      "id": "thk-pan-disability-centre-eunos-13205-1039033",
+      "name": "THK Pan-Disability Centre @ Eunos",
+      "lat": 1.320493,
+      "lng": 103.903274,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "community_centre",
+        "community_centre:for": "disabled",
+        "name": "THK Pan-Disability Centre @ Eunos",
+        "operator": "Thye Hua Kwan Moral Society"
+      }
+    },
+    {
+      "id": "the-arts-house-at-the-old-parliament-12886-1038510",
+      "name": "The Arts House At The Old Parliament",
+      "lat": 1.288601,
+      "lng": 103.85105,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "1",
+        "addr:postcode": "179429",
+        "addr:street": "Old Parliament Lane",
+        "amenity": "arts_centre",
+        "email": "enquiries@toph.com.sg",
+        "facebook": "https://www.facebook.com/theartshouse",
+        "name": "The Arts House At The Old Parliament",
+        "name:zh": "\u65b0\u52a0\u5761\u65e7\u56fd\u4f1a\u5927\u53a6 \u827a\u672f\u4e4b\u5bb6",
+        "opening_hours": "10:00-22:00",
+        "phone": "+65 6332 6900",
+        "website": "https://www.theartshouse.sg/"
+      }
+    },
+    {
+      "id": "the-attic-by-sg-montessori-02-03-12766-1038360",
+      "name": "The Attic by SG Montessori #02-03",
+      "lat": 1.276556,
+      "lng": 103.835969,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "61",
+        "addr:postcode": "169368",
+        "addr:street": "Kampong Bahru Road",
+        "amenity": "community_centre",
+        "email": "sgmontessori@icloud.com",
+        "image": "https://www.instagram.com/p/CS8Rfjin5cs/?utm_source=ig_web_copy_link",
+        "level": "2",
+        "name": "The Attic by SG Montessori #02-03",
+        "website": "https://sgmontessorimoms.simplybook.asia/v2/"
+      }
+    },
+    {
+      "id": "the-chinese-opera-institute-12986-1038534",
+      "name": "The Chinese Opera Institute",
+      "lat": 1.298597,
+      "lng": 103.853387,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "arts_centre",
+        "facebook": "https://www.facebook.com/singaporecoi/",
+        "name": "The Chinese Opera Institute",
+        "name:zh": "\u65b0\u52a0\u5761\u620f\u66f2\u5b66\u9662",
+        "website": "https://www.coi.org.sg/"
+      }
+    },
+    {
+      "id": "the-serangoon-cc-13701-1038741",
+      "name": "The Serangoon CC",
+      "lat": 1.370083,
+      "lng": 103.874092,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "10",
+        "addr:postcode": "555877",
+        "addr:street": "Serangoon North Avenue 2",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "The Serangoon CC",
+        "opening_hours": "09:00-21:00",
+        "operator:type": "public",
+        "source": "Bing",
+        "survey:date": "2020-08-01",
+        "website": "https://www.onepa.gov.sg/cc/the-serangoon-cc?"
+      }
+    },
+    {
+      "id": "the-theatre-practice-12986-1038510",
+      "name": "The Theatre Practice",
+      "lat": 1.29862,
+      "lng": 103.851039,
+      "category": "arts",
+      "description": "Performing Arts Company",
+      "_prominence": 6,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "54",
+        "addr:postcode": "187953",
+        "addr:street": "Waterloo Street",
+        "amenity": "arts_centre",
+        "building": "yes",
+        "building:levels": "2",
+        "description": "Performing Arts Company",
+        "height": "40",
+        "name": "The Theatre Practice",
+        "website": "http://www.practice.org.sg/"
+      }
+    },
+    {
+      "id": "vos-adelphi-12912-1038514",
+      "name": "VOS @ Adelphi",
+      "lat": 1.291241,
+      "lng": 103.851448,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "arts_centre",
+        "fixme": "tag",
+        "level": "2",
+        "name": "VOS @ Adelphi",
+        "operator": "Voices of Singapore"
+      }
+    },
+    {
+      "id": "wings-of-time-musical-12513-1038171",
+      "name": "Wings of Time (Musical)",
+      "lat": 1.251281,
+      "lng": 103.817055,
+      "category": "arts",
+      "description": "7.40pm & 8.40pm daily",
+      "_prominence": 6,
+      "_tags": {
+        "amenity": "theatre",
+        "description": "7.40pm & 8.40pm daily",
+        "name": "Wings of Time (Musical)",
+        "name:zh": "\u65f6\u5149\u4e4b\u7ffc\uff08\u97f3\u4e50\u5267\uff09",
+        "website": "http://www.wingsoftime.com.sg/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "xm-studios-12970-1038532",
+      "name": "XM Studios",
+      "lat": 1.296989,
+      "lng": 103.853222,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 6,
+      "_tags": {
+        "addr:unit": "#04-43",
+        "amenity": "arts_centre",
+        "level": "3",
+        "name": "XM Studios",
+        "website": "https://www.xm-studios.com/"
+      }
+    },
+    {
+      "id": "21-cinema-bcs-11324-1040105",
+      "name": "21 Cinema Bcs",
+      "lat": 1.13243,
+      "lng": 104.01049,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "cinema",
+        "name": "21 Cinema Bcs",
+        "source": "Batam Mapping Project"
+      }
+    },
+    {
+      "id": "21-cinema-nagoya-hill-11467-1040122",
+      "name": "21 Cinema Nagoya Hill",
+      "lat": 1.146738,
+      "lng": 104.012167,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "cinema",
+        "name": "21 Cinema Nagoya Hill",
+        "source": "Batam Mapping Project"
+      }
+    },
+    {
+      "id": "ace-the-place-cc-14275-1037923",
+      "name": "ACE The Place CC",
+      "lat": 1.427496,
+      "lng": 103.792252,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "120",
+        "addr:postcode": "739069",
+        "addr:street": "Woodlands Avenue 1",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "ACE The Place CC"
+      }
+    },
+    {
+      "id": "amk-3g-centre-13718-1038490",
+      "name": "AMK 3G Centre",
+      "lat": 1.371779,
+      "lng": 103.849022,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "AMK 3G Centre"
+      }
+    },
+    {
+      "id": "acacia-sengkang-south-13753-1038884",
+      "name": "Acacia @ Sengkang South",
+      "lat": 1.375312,
+      "lng": 103.888388,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Acacia @ Sengkang South"
+      }
+    },
+    {
+      "id": "adelphi-family-youth-centre-12914-1038514",
+      "name": "Adelphi Family & Youth Centre",
+      "lat": 1.291381,
+      "lng": 103.851372,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "community_centre:for": "family;juvenile",
+        "level": "3",
+        "name": "Adelphi Family & Youth Centre"
+      }
+    },
+    {
+      "id": "adventist-active-centre-13127-1038709",
+      "name": "Adventist Active Centre",
+      "lat": 1.312742,
+      "lng": 103.87093,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Adventist Active Centre"
+      }
+    },
+    {
+      "id": "aliwal-arts-centre-13027-1038610",
+      "name": "Aliwal Arts Centre",
+      "lat": 1.302696,
+      "lng": 103.861001,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:housenumber": "30;28",
+        "addr:street": "Aliwal Street",
+        "amenity": "arts_centre",
+        "building": "yes",
+        "name": "Aliwal Arts Centre",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "aliwal-arts-centre-13025-1038611",
+      "name": "Aliwal Arts Centre",
+      "lat": 1.302475,
+      "lng": 103.861138,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:housenumber": "30;28",
+        "addr:street": "Aliwal Street",
+        "amenity": "arts_centre",
+        "building": "yes",
+        "name": "Aliwal Arts Centre",
+        "source": "Bing",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "id": "aljunied-community-centre-13549-1038897",
+      "name": "Aljunied Community Centre",
+      "lat": 1.354885,
+      "lng": 103.889667,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "110",
+        "addr:postcode": "530110",
+        "addr:street": "Hougang Avenue 1",
+        "amenity": "community_centre",
+        "name": "Aljunied Community Centre",
+        "name:ms": "Kelab Masyarakat Aljunied"
+      }
+    },
+    {
+      "id": "alliance-fran-aise-de-singapour-13141-1038371",
+      "name": "Alliance Fran\u00e7aise De Singapour",
+      "lat": 1.314136,
+      "lng": 103.837134,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "building": "yes",
+        "check_date": "2024-01-12",
+        "name": "Alliance Fran\u00e7aise De Singapour",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "amphitheater-14758-1037237",
+      "name": "Amphitheater",
+      "lat": 1.475796,
+      "lng": 103.723682,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "building": "yes",
+        "name": "Amphitheater"
+      }
+    },
+    {
+      "id": "amphitheatre-13250-1037727",
+      "name": "Amphitheatre",
+      "lat": 1.325012,
+      "lng": 103.772736,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "name": "Amphitheatre"
+      }
+    },
+    {
+      "id": "amphitheatre-13059-1037698",
+      "name": "Amphitheatre",
+      "lat": 1.305868,
+      "lng": 103.769842,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "name": "Amphitheatre",
+        "theatre:type": "amphi"
+      }
+    },
+    {
+      "id": "amphitheatre-13787-1038571",
+      "name": "Amphitheatre",
+      "lat": 1.378687,
+      "lng": 103.857075,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "building:part": "college",
+        "name": "Amphitheatre",
+        "theatre:type": "amphi"
+      }
+    },
+    {
+      "id": "amphitheatre-at-clementi-woods-park-12986-1037685",
+      "name": "Amphitheatre at Clementi Woods Park",
+      "lat": 1.298583,
+      "lng": 103.768524,
+      "category": "arts",
+      "description": "Clementi Woods Park offers an amphitheatre with lush greenery as a backdrop for you to hold your event.",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "capacity": "200",
+        "description": "Clementi Woods Park offers an amphitheatre with lush greenery as a backdrop for you to hold your event.",
+        "name": "Amphitheatre at Clementi Woods Park",
+        "name:zh": "\u91d1\u6587\u6cf0\u68ee\u6797\u516c\u56ed\u9732\u5929\u5267\u573a",
+        "source": "https://www2.nparks.gov.sg/vbs/external/Space/edit.aspx?ID=rqyL22bwrLqMuSgaRjN%2BeSQKOdEWjz%2FlQrE%2BUs4huh029JxI9a2pivSmbBpwoG4fxVRHnPMJuvRoQC7XKKemNlXB%2BPprY9LKpt2fOXlbf7NSvNRoU33lkQ%3D%3D&TYPE=GHxazb09RtsITMgMFvVa0A%3D%3D&",
+        "theatre:type": "amphi"
+      }
+    },
+    {
+      "id": "anchorvale-community-club-13971-1038867",
+      "name": "Anchorvale Community Club",
+      "lat": 1.397067,
+      "lng": 103.886659,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "59",
+        "addr:postcode": "544965",
+        "addr:street": "Anchorvale Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Anchorvale Community Club",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "ang-mo-kio-community-centre-13667-1038408",
+      "name": "Ang Mo Kio Community Centre",
+      "lat": 1.366678,
+      "lng": 103.840845,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "795",
+        "addr:postcode": "569976",
+        "addr:street": "Ang Mo Kio Avenue 1",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Ang Mo Kio Community Centre",
+        "name:ms": "Kelab Masyarakat Ang Mo Kio"
+      }
+    },
+    {
+      "id": "ang-mo-kio-hougang-rainforrest-centre-13705-1038822",
+      "name": "Ang Mo Kio-Hougang Rainforrest Centre",
+      "lat": 1.370511,
+      "lng": 103.882202,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Ang Mo Kio-Hougang Rainforrest Centre"
+      }
+    },
+    {
+      "id": "anglican-community-centre-11316-1040254",
+      "name": "Anglican Community Centre",
+      "lat": 1.131565,
+      "lng": 104.025357,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Anglican Community Centre"
+      }
+    },
+    {
+      "id": "angsana-rc-sengkang-south-13776-1038896",
+      "name": "Angsana RC @ Sengkang South",
+      "lat": 1.37755,
+      "lng": 103.889584,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "alt_name": "Angsana @ Sengkang South RC",
+        "amenity": "community_centre",
+        "name": "Angsana RC @ Sengkang South"
+      }
+    },
+    {
+      "id": "annexe-studio-12894-1038567",
+      "name": "Annexe Studio",
+      "lat": 1.28936,
+      "lng": 103.856656,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "name": "Annexe Studio",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "auditorium-12860-1038002",
+      "name": "Auditorium",
+      "lat": 1.286024,
+      "lng": 103.80024,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "level": "Basement",
+        "name": "Auditorium"
+      }
+    },
+    {
+      "id": "aura-gallery-13176-1039064",
+      "name": "Aura Gallery",
+      "lat": 1.31761,
+      "lng": 103.906358,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "arts_centre",
+        "name": "Aura Gallery",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "id": "ayer-rajah-community-centre-13209-1037476",
+      "name": "Ayer Rajah Community Centre",
+      "lat": 1.320916,
+      "lng": 103.747558,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "150",
+        "addr:postcode": "609335",
+        "addr:street": "Pandan Gardens",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "3",
+        "name": "Ayer Rajah Community Centre",
+        "name:ms": "Kelab Masyarakat Ayer Rajah",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "bedok-community-centre-13243-1039361",
+      "name": "Bedok Community Centre",
+      "lat": 1.324288,
+      "lng": 103.936066,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "850",
+        "addr:postcode": "467352",
+        "addr:street": "New Upper Changi Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Bedok Community Centre",
+        "name:ms": "Kelab Masyarakat Bedok",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "bedok-reservoir-punggol-vale-rc-13724-1038887",
+      "name": "Bedok Reservoir - Punggol Vale RC",
+      "lat": 1.37241,
+      "lng": 103.888661,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Bedok Reservoir - Punggol Vale RC"
+      }
+    },
+    {
+      "id": "bedok-reservoir-punggol-harmony-rc-13753-1038969",
+      "name": "Bedok Reservoir Punggol Harmony RC",
+      "lat": 1.375302,
+      "lng": 103.896872,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Bedok Reservoir Punggol Harmony RC"
+      }
+    },
+    {
+      "id": "bedok-reservoir-punggol-crest-residents-committee-13734-1038913",
+      "name": "Bedok Reservoir-Punggol Crest Residents' Committee",
+      "lat": 1.373386,
+      "lng": 103.891295,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Bedok Reservoir-Punggol Crest Residents' Committee"
+      }
+    },
+    {
+      "id": "bedok-reservoir-punggol-heights-13744-1038943",
+      "name": "Bedok Reservoir-Punggol Heights",
+      "lat": 1.374446,
+      "lng": 103.894256,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Bedok Reservoir-Punggol Heights"
+      }
+    },
+    {
+      "id": "bethesda-care-senior-activity-centre-13982-1038959",
+      "name": "Bethesda Care Senior Activity Centre",
+      "lat": 1.398201,
+      "lng": 103.895899,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "alt_name": "BCare Senior Activity Centrr",
+        "amenity": "community_centre",
+        "community_centre:for": "senior",
+        "fixme": "tag",
+        "name": "Bethesda Care Senior Activity Centre",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "bidadari-community-club-13391-1038719",
+      "name": "Bidadari Community Club",
+      "lat": 1.339095,
+      "lng": 103.871898,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "air_conditioning": "yes",
+        "amenity": "community_centre",
+        "level": "0;1",
+        "name": "Bidadari Community Club",
+        "name:zh": "\u6bd4\u8fbe\u8fbe\u5229\u6c11\u4f17\u4ff1\u4e50\u90e8"
+      }
+    },
+    {
+      "id": "bishan-community-centre-13497-1038507",
+      "name": "Bishan Community Centre",
+      "lat": 1.349746,
+      "lng": 103.850711,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housename": "Bishan Community Club",
+        "addr:housenumber": "51",
+        "addr:postcode": "579799",
+        "addr:street": "Bishan Street 13",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "4",
+        "name": "Bishan Community Centre",
+        "name:ms": "Kelab Masyarakat Bishan",
+        "toilets:wheelchair": "yes",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "bishan-community-centre-13498-1038506",
+      "name": "Bishan Community Centre",
+      "lat": 1.349839,
+      "lng": 103.850596,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "building": "no",
+        "leisure": "park",
+        "name": "Bishan Community Centre",
+        "name:ms": "Kelab Masyarakat Bishan",
+        "name:zh": "\u78a7\u5c71\u8054\u7edc\u6240"
+      }
+    },
+    {
+      "id": "bishan-north-community-centre-13586-1038455",
+      "name": "Bishan North Community Centre",
+      "lat": 1.358648,
+      "lng": 103.845535,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "233",
+        "addr:postcode": "570233",
+        "addr:street": "Bishan Street 22",
+        "amenity": "community_centre",
+        "name": "Bishan North Community Centre",
+        "name:ms": "Kelab Masyarakat Bishan North"
+      }
+    },
+    {
+      "id": "boon-lay-community-centre-13484-1037114",
+      "name": "Boon Lay Community Centre",
+      "lat": 1.3484,
+      "lng": 103.711356,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "10",
+        "addr:postcode": "649882",
+        "addr:street": "Boon Lay Place",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Boon Lay Community Centre",
+        "name:ms": "Kelab Masyarakat Boon Lay"
+      }
+    },
+    {
+      "id": "braddell-heights-zone-f-rc-13529-1038675",
+      "name": "Braddell Heights Zone F RC",
+      "lat": 1.352939,
+      "lng": 103.867522,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "318",
+        "addr:postcode": "550318",
+        "addr:street": "Serangoon Avenue 2",
+        "amenity": "community_centre",
+        "name": "Braddell Heights Zone F RC"
+      }
+    },
+    {
+      "id": "buangkok-community-centre-13823-1038926",
+      "name": "Buangkok Community Centre",
+      "lat": 1.382273,
+      "lng": 103.892605,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "level": "0;1",
+        "name": "Buangkok Community Centre",
+        "name:ms": "Kelab Masyarakat Buangkok",
+        "opening_hours": "Mo-Su 10:00-18:00; PH closed"
+      }
+    },
+    {
+      "id": "buddhist-art-centre-13126-1038782",
+      "name": "Buddhist Art Centre",
+      "lat": 1.312551,
+      "lng": 103.878191,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:street": "Geylang Road",
+        "amenity": "arts_centre",
+        "name": "Buddhist Art Centre",
+        "source": "Kaart Ground Survey 2017"
+      }
+    },
+    {
+      "id": "bukit-batok-community-club-13501-1037476",
+      "name": "Bukit Batok Community Club",
+      "lat": 1.350134,
+      "lng": 103.747568,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "21",
+        "addr:postcode": "659959",
+        "addr:street": "Bukit Batok Central",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Bukit Batok Community Club",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "bukit-batok-east-community-club-13489-1037583",
+      "name": "Bukit Batok East Community Club",
+      "lat": 1.348924,
+      "lng": 103.758342,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "23",
+        "addr:postcode": "659841",
+        "addr:street": "Bukit Batok East Avenue 4",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "4",
+        "name": "Bukit Batok East Community Club",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "bukit-batok-zone-11-residents-network-13438-1037472",
+      "name": "Bukit Batok Zone 11 Residents Network",
+      "lat": 1.3438,
+      "lng": 103.747237,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Bukit Batok Zone 11 Residents Network"
+      }
+    },
+    {
+      "id": "bukit-gombak-community-centre-13640-1037527",
+      "name": "Bukit Gombak Community Centre",
+      "lat": 1.363997,
+      "lng": 103.752741,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "386",
+        "addr:postcode": "650386",
+        "addr:street": "Bukit Batok West Avenue 5",
+        "amenity": "community_centre",
+        "name": "Bukit Gombak Community Centre",
+        "name:ms": "Kelab Masyarakat Bukit Gombak"
+      }
+    },
+    {
+      "id": "bukit-gombak-neighbourhood-centre-13587-1037513",
+      "name": "Bukit Gombak Neighbourhood Centre",
+      "lat": 1.358672,
+      "lng": 103.751327,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:street": "Bukit Batok West Avenue 5",
+        "amenity": "community_centre",
+        "name": "Bukit Gombak Neighbourhood Centre",
+        "source": "Kaart Ground Survey 2017"
+      }
+    },
+    {
+      "id": "buona-vista-community-club-13092-1037926",
+      "name": "Buona Vista Community Club",
+      "lat": 1.309178,
+      "lng": 103.792649,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "36",
+        "addr:postcode": "270036",
+        "addr:street": "Holland Drive",
+        "amenity": "community_centre",
+        "building": "yes",
+        "height": "15",
+        "name": "Buona Vista Community Club",
+        "name:zh": "\u6ce2\u90a3\u7ef4\u65af\u8fbe\u8054\u7edc\u6240"
+      }
+    },
+    {
+      "id": "cairnhill-arts-centre-13085-1038374",
+      "name": "Cairnhill Arts Centre",
+      "lat": 1.308516,
+      "lng": 103.837448,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "building": "yes",
+        "name": "Cairnhill Arts Centre",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "cairnhill-community-club-13104-1038390",
+      "name": "Cairnhill Community Club",
+      "lat": 1.310448,
+      "lng": 103.839014,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:housenumber": "1",
+        "addr:postcode": "229944",
+        "addr:street": "Anthony Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "2",
+        "name": "Cairnhill Community Club",
+        "name:zh": "\u7ecf\u79a7\u8054\u7edc\u6240",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "canberra-community-club-14451-1038196",
+      "name": "Canberra Community Club",
+      "lat": 1.445069,
+      "lng": 103.81961,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "2",
+        "addr:postcode": "757632",
+        "addr:street": "Sembawang Crescent",
+        "amenity": "community_centre",
+        "building": "public",
+        "name": "Canberra Community Club"
+      }
+    },
+    {
+      "id": "casa-clementi-residents-committee-13097-1037687",
+      "name": "Casa Clementi Residents' Committee",
+      "lat": 1.309688,
+      "lng": 103.768717,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Casa Clementi Residents' Committee"
+      }
+    },
+    {
+      "id": "cathay-cineplex-13762-1039553",
+      "name": "Cathay Cineplex",
+      "lat": 1.376211,
+      "lng": 103.955307,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "1",
+        "addr:postcode": "519599",
+        "addr:street": "Pasir Ris Close",
+        "amenity": "cinema",
+        "level": "4",
+        "name": "Cathay Cineplex"
+      }
+    },
+    {
+      "id": "cathay-cineplex-13499-1037493",
+      "name": "Cathay Cineplex",
+      "lat": 1.349851,
+      "lng": 103.749277,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "cinema",
+        "name": "Cathay Cineplex"
+      }
+    },
+    {
+      "id": "cathay-cineplex-13331-1037430",
+      "name": "Cathay Cineplex",
+      "lat": 1.333054,
+      "lng": 103.743014,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "cinema",
+        "name": "Cathay Cineplex"
+      }
+    },
+    {
+      "id": "cathay-cineplex-14360-1037856",
+      "name": "Cathay Cineplex",
+      "lat": 1.435959,
+      "lng": 103.785586,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "cinema",
+        "name": "Cathay Cineplex"
+      }
+    },
+    {
+      "id": "cathay-cineplex-13015-1039050",
+      "name": "Cathay Cineplex",
+      "lat": 1.301478,
+      "lng": 103.905043,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "cinema",
+        "level": "2",
+        "name": "Cathay Cineplex"
+      }
+    },
+    {
+      "id": "changi-simei-community-club-13450-1039552",
+      "name": "Changi Simei Community Club",
+      "lat": 1.344965,
+      "lng": 103.955171,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "10",
+        "addr:postcode": "529915",
+        "addr:street": "Simei Street 2",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "5",
+        "name": "Changi Simei Community Club",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "cheng-san-community-club-13720-1038495",
+      "name": "Cheng San Community Club",
+      "lat": 1.371951,
+      "lng": 103.849526,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "6",
+        "addr:postcode": "569205",
+        "addr:street": "Ang Mo Kio Street 53",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Cheng San Community Club"
+      }
+    },
+    {
+      "id": "children-s-aid-society-melrose-13306-1037769",
+      "name": "Children's Aid Society \"Melrose\"",
+      "lat": 1.330622,
+      "lng": 103.77692,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:country": "SG",
+        "addr:housenumber": "503",
+        "addr:postcode": "599488",
+        "addr:street": "Clementi Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Children's Aid Society \"Melrose\""
+      }
+    },
+    {
+      "id": "chong-pang-amphitheatre-14315-1038281",
+      "name": "Chong Pang Amphitheatre",
+      "lat": 1.431502,
+      "lng": 103.82811,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "building": "yes",
+        "name": "Chong Pang Amphitheatre",
+        "theatre:type": "amphi"
+      }
+    },
+    {
+      "id": "chua-chu-kang-community-club-13812-1037518",
+      "name": "Chua Chu Kang Community Club",
+      "lat": 1.381173,
+      "lng": 103.751762,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "35",
+        "addr:postcode": "688892",
+        "addr:street": "Teck Whye Avenue",
+        "amenity": "community_centre",
+        "building": "public",
+        "height": "0",
+        "name": "Chua Chu Kang Community Club",
+        "short_name": "Chua Chu Kang CC"
+      }
+    },
+    {
+      "id": "cinewav-mkb-12636-1038108",
+      "name": "Cinewav @ MKB",
+      "lat": 1.263608,
+      "lng": 103.810847,
+      "category": "arts",
+      "description": "open-air",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "cinema",
+        "description": "open-air",
+        "name": "Cinewav @ MKB",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "id": "clementi-community-club-13189-1037682",
+      "name": "Clementi Community Club",
+      "lat": 1.318875,
+      "lng": 103.768197,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "220",
+        "addr:postcode": "129880",
+        "addr:street": "Clementi Avenue 4",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Clementi Community Club",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "community-center-13394-1037435",
+      "name": "Community Center",
+      "lat": 1.339419,
+      "lng": 103.74345,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Community Center"
+      }
+    },
+    {
+      "id": "compassvale-ancilla-residents-committee-13855-1038929",
+      "name": "Compassvale Ancilla Residents' Committee",
+      "lat": 1.385473,
+      "lng": 103.892901,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Compassvale Ancilla Residents' Committee"
+      }
+    },
+    {
+      "id": "compassvale-aspella-13828-1038946",
+      "name": "Compassvale Aspella",
+      "lat": 1.382807,
+      "lng": 103.894634,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:unit": "01-262",
+        "amenity": "community_centre",
+        "level": "0",
+        "name": "Compassvale Aspella",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "compassvale-cape-residents-network-13980-1038965",
+      "name": "Compassvale Cape Residents' Network",
+      "lat": 1.39795,
+      "lng": 103.896467,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Compassvale Cape Residents' Network"
+      }
+    },
+    {
+      "id": "compassvale-haven-residents-committee-13921-1039000",
+      "name": "Compassvale Haven Residents' Committee",
+      "lat": 1.392063,
+      "lng": 103.900013,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Compassvale Haven Residents' Committee"
+      }
+    },
+    {
+      "id": "compassvale-mast-residents-network-13902-1038946",
+      "name": "Compassvale Mast Residents' Network",
+      "lat": 1.390175,
+      "lng": 103.894555,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "alt_name": "Compassvale Mast RN",
+        "amenity": "community_centre",
+        "name": "Compassvale Mast Residents' Network"
+      }
+    },
+    {
+      "id": "compassvale-vista-residents-committee-13875-1038997",
+      "name": "Compassvale Vista Residents' Committee",
+      "lat": 1.387484,
+      "lng": 103.899739,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Compassvale Vista Residents' Committee"
+      }
+    },
+    {
+      "id": "dbs-foundation-outdoor-theatre-12889-1038560",
+      "name": "DBS Foundation Outdoor Theatre",
+      "lat": 1.288879,
+      "lng": 103.856007,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:street": "The Esplanade",
+        "air_conditioning": "no",
+        "amenity": "theatre",
+        "building": "roof",
+        "check_date": "2024-04-13",
+        "height": "16",
+        "image": "https://images.mapillary.com/-Gpomu3mSt5ZVqjuhGkdCw/thumb-2048.jpg",
+        "mapillary": "194564509170578",
+        "name": "DBS Foundation Outdoor Theatre",
+        "name:ko": "\ub178\ucc9c \uadf9\uc7a5",
+        "start_date": "2002"
+      }
+    },
+    {
+      "id": "dance-studio-13045-1037723",
+      "name": "Dance Studio",
+      "lat": 1.304541,
+      "lng": 103.772309,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "name": "Dance Studio",
+        "name:zh": "\u821e\u8e48\u5ba4"
+      }
+    },
+    {
+      "id": "dancepointe-academy-13862-1038734",
+      "name": "Dancepointe Academy",
+      "lat": 1.386188,
+      "lng": 103.873413,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "name": "Dancepointe Academy"
+      }
+    },
+    {
+      "id": "danz-people-12910-1038569",
+      "name": "Danz People",
+      "lat": 1.290991,
+      "lng": 103.85693,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "level": "1",
+        "name": "Danz People"
+      }
+    },
+    {
+      "id": "dewan-serbaguna-taman-mawar-14726-1038957",
+      "name": "Dewan Serbaguna Taman Mawar",
+      "lat": 1.472637,
+      "lng": 103.895671,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Dewan Serbaguna Taman Mawar",
+        "source:name": "https://openstreetcam.org/details/2368930/1527"
+      }
+    },
+    {
+      "id": "dewan-taman-pasir-putih-14704-1039410",
+      "name": "Dewan Taman Pasir Putih",
+      "lat": 1.470411,
+      "lng": 103.941039,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Dewan Taman Pasir Putih"
+      }
+    },
+    {
+      "id": "dewanraya-jalan-rawa-14725-1036681",
+      "name": "Dewanraya Jalan Rawa",
+      "lat": 1.472502,
+      "lng": 103.668113,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Dewanraya Jalan Rawa"
+      }
+    },
+    {
+      "id": "distinct-creative-arts-14168-1039021",
+      "name": "Distinct Creative Arts",
+      "lat": 1.416825,
+      "lng": 103.902076,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "level": "2",
+        "name": "Distinct Creative Arts"
+      }
+    },
+    {
+      "id": "dover-community-centre-13024-1037835",
+      "name": "Dover Community Centre",
+      "lat": 1.302422,
+      "lng": 103.783479,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "1",
+        "addr:postcode": "130001",
+        "addr:street": "Dover Road",
+        "amenity": "community_centre",
+        "name": "Dover Community Centre",
+        "name:ms": "Kelab Masyarakat Dover",
+        "name:zh": "\u675c\u4f5b\u8054\u7edc\u6240"
+      }
+    },
+    {
+      "id": "eco-botanic-club-house-14461-1036195",
+      "name": "Eco Botanic Club House",
+      "lat": 1.446079,
+      "lng": 103.619518,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Eco Botanic Club House"
+      }
+    },
+    {
+      "id": "en-motion-dance-school-13016-1038362",
+      "name": "En Motion Dance School",
+      "lat": 1.301579,
+      "lng": 103.836232,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "level": "2",
+        "name": "En Motion Dance School"
+      }
+    },
+    {
+      "id": "epit-ome-13087-1038513",
+      "name": "Epit Ome",
+      "lat": 1.308717,
+      "lng": 103.851299,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "name": "Epit Ome"
+      }
+    },
+    {
+      "id": "esplanade-concert-hall-12894-1038552",
+      "name": "Esplanade Concert Hall",
+      "lat": 1.289371,
+      "lng": 103.855184,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "building": "yes",
+        "building:colour": "#5d7877",
+        "building:levels": "4",
+        "building:material": "metal",
+        "height": "35",
+        "image": "https://images.mapillary.com/U0XAdW-fL728WcunC5psPA/thumb-2048.jpg",
+        "mapillary": "476422076901651",
+        "name": "Esplanade Concert Hall",
+        "name:ms": "Dewan Konsert Esplanade",
+        "name:zh": "\u6ee8\u6d77\u827a\u672f\u4e2d\u5fc3\u97f3\u4e50\u5385",
+        "roof:colour": "#5d7877",
+        "roof:material": "metal",
+        "roof:shape": "dome",
+        "roof:type:height": "15",
+        "start_date": "2002",
+        "theatre:type": "concert_hall",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "esplanade-recital-studio-12892-1038556",
+      "name": "Esplanade Recital Studio",
+      "lat": 1.289178,
+      "lng": 103.85559,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "name": "Esplanade Recital Studio",
+        "theatre:type": "concert_hall",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "esplanade-theatre-12902-1038555",
+      "name": "Esplanade Theatre",
+      "lat": 1.290207,
+      "lng": 103.855538,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "building": "yes",
+        "building:colour": "#5d7877",
+        "building:levels": "4",
+        "building:material": "metal",
+        "height": "35",
+        "image": "https://images.mapillary.com/YrNabPqQJr2Q7Cd9zxZgcw/thumb-2048.jpg",
+        "mapillary": "217873169808680",
+        "name": "Esplanade Theatre",
+        "name:zh": "\u6ee8\u6d77\u827a\u672f\u4e2d\u5fc3\u5267\u9662",
+        "roof:colour": "#5d7877",
+        "roof:material": "metal",
+        "roof:shape": "dome",
+        "roof:type:height": "15",
+        "start_date": "2002",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "esplanade-theatre-studio-12896-1038564",
+      "name": "Esplanade Theatre Studio",
+      "lat": 1.289567,
+      "lng": 103.856353,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "name": "Esplanade Theatre Studio",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "eunos-community-club-13325-1039152",
+      "name": "Eunos Community Club",
+      "lat": 1.332515,
+      "lng": 103.915247,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "180",
+        "addr:postcode": "479220",
+        "addr:street": "Bedok Reservoir Road",
+        "amenity": "community_centre",
+        "building": "public",
+        "building:levels": "3",
+        "leisure": "common",
+        "name": "Eunos Community Club",
+        "roof:material": "roof_tiles"
+      }
+    },
+    {
+      "id": "fengshan-community-club-13307-1039366",
+      "name": "Fengshan Community Club",
+      "lat": 1.330749,
+      "lng": 103.93665,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "20",
+        "addr:postcode": "469644",
+        "addr:street": "Bedok North Street 2",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "3",
+        "name": "Fengshan Community Club"
+      }
+    },
+    {
+      "id": "festive-arts-theatre-13522-1039410",
+      "name": "Festive Arts Theatre",
+      "lat": 1.352196,
+      "lng": 103.940968,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "level": "1",
+        "name": "Festive Arts Theatre"
+      }
+    },
+    {
+      "id": "festive-arts-theatre-13522-1039404",
+      "name": "Festive Arts Theatre",
+      "lat": 1.352166,
+      "lng": 103.9404,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "air_conditioning": "yes",
+        "amenity": "cinema",
+        "name": "Festive Arts Theatre"
+      }
+    },
+    {
+      "id": "fort-canning-open-air-green-12954-1038474",
+      "name": "Fort Canning Open Air Green",
+      "lat": 1.295389,
+      "lng": 103.847431,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "name": "Fort Canning Open Air Green"
+      }
+    },
+    {
+      "id": "free-cinema-13576-1039864",
+      "name": "Free cinema",
+      "lat": 1.357643,
+      "lng": 103.986426,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "cinema",
+        "check_date": "2024-12-29",
+        "level": "2",
+        "name": "Free cinema",
+        "name:en": "Free cinema"
+      }
+    },
+    {
+      "id": "fuchun-community-club-14295-1037750",
+      "name": "Fuchun Community Club",
+      "lat": 1.429519,
+      "lng": 103.775003,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "1",
+        "addr:postcode": "738581",
+        "addr:street": "Woodlands Street 31",
+        "amenity": "community_centre",
+        "building": "public",
+        "name": "Fuchun Community Club"
+      }
+    },
+    {
+      "id": "gv-bedok-13261-1039295",
+      "name": "GV Bedok",
+      "lat": 1.326131,
+      "lng": 103.929491,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "cinema",
+        "name": "GV Bedok"
+      }
+    },
+    {
+      "id": "gateway-theatre-12840-1038166",
+      "name": "Gateway Theatre",
+      "lat": 1.283965,
+      "lng": 103.816554,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "3615",
+        "addr:street": "Jalan Bukit Merah",
+        "amenity": "theatre",
+        "building": "yes",
+        "name": "Gateway Theatre",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "id": "gek-poh-ville-community-club-13487-1036988",
+      "name": "Gek Poh Ville Community Club",
+      "lat": 1.348666,
+      "lng": 103.69883,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "1",
+        "addr:postcode": "649149",
+        "addr:street": "Jurong West Street 74",
+        "amenity": "community_centre",
+        "building": "public",
+        "height": "0",
+        "name": "Gek Poh Ville Community Club"
+      }
+    },
+    {
+      "id": "geylang-serai-community-club-13166-1038970",
+      "name": "Geylang Serai Community Club",
+      "lat": 1.316622,
+      "lng": 103.896989,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "1",
+        "addr:postcode": "408528",
+        "addr:street": "Engku Aman Turn",
+        "amenity": "community_centre",
+        "name": "Geylang Serai Community Club",
+        "name:zh": "\u82bd\u7b3c\u58eb\u4e43\u8054\u7edc\u6240",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "geylang-serai-community-club-13110-1038978",
+      "name": "Geylang Serai Community Club",
+      "lat": 1.310992,
+      "lng": 103.897811,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "99",
+        "addr:postcode": "438748",
+        "addr:street": "Haig Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Geylang Serai Community Club",
+        "name:zh": "\u82bd\u7b3c\u58eb\u4e43\u8054\u7edc\u6240"
+      }
+    },
+    {
+      "id": "geylang-west-community-club-13156-1038726",
+      "name": "Geylang West Community Club",
+      "lat": 1.315624,
+      "lng": 103.872553,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "1205",
+        "addr:postcode": "387311",
+        "addr:street": "Upper Boon Keng Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "height": "0",
+        "name": "Geylang West Community Club",
+        "name:zh": "\u82bd\u7b3c\u897f\u8054\u7edc\u6240"
+      }
+    },
+    {
+      "id": "glory-centre-community-services-association-13778-1038913",
+      "name": "Glory Centre Community Services Association",
+      "lat": 1.377838,
+      "lng": 103.891328,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Glory Centre Community Services Association"
+      }
+    },
+    {
+      "id": "goodman-arts-centre-13040-1038850",
+      "name": "Goodman Arts Centre",
+      "lat": 1.303952,
+      "lng": 103.884969,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housename": "Goodman Arts Centre Block A",
+        "addr:housenumber": "90",
+        "addr:postcode": "439053",
+        "addr:street": "Goodman Road",
+        "amenity": "theatre",
+        "name": "Goodman Arts Centre"
+      }
+    },
+    {
+      "id": "hcsa-community-services-13138-1038807",
+      "name": "HCSA Community Services",
+      "lat": 1.313843,
+      "lng": 103.880732,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "HCSA Community Services",
+        "source": "Kaart Ground Survey 2017"
+      }
+    },
+    {
+      "id": "henderson-community-club-12859-1038233",
+      "name": "Henderson Community Club",
+      "lat": 1.285941,
+      "lng": 103.823336,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "500",
+        "addr:postcode": "159682",
+        "addr:street": "Bukit Merah View",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Henderson Community Club",
+        "name:zh": "\u4ea8\u5fb7\u7533\u8054\u7edc\u6240"
+      }
+    },
+    {
+      "id": "hillview-community-club-13620-1037643",
+      "name": "Hillview Community Club",
+      "lat": 1.361972,
+      "lng": 103.764268,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housename": "Hillview Community Club",
+        "addr:housenumber": "1",
+        "addr:postcode": "667970",
+        "addr:street": "Hillview Rise",
+        "amenity": "community_centre",
+        "building": "government",
+        "building:levels": "4",
+        "check_date": "2024-12-13",
+        "name": "Hillview Community Club",
+        "name:ms": "Kelab Masyarakat Hillview",
+        "name:zh": "\u5c71\u666f\u6c11\u4f17\u4ff1\u4e50\u90e8",
+        "opening_hours": "Mo-Su 10:00-18:00",
+        "operator:type": "public",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "hometeamns-13535-1039403",
+      "name": "HomeTeamNS",
+      "lat": 1.353524,
+      "lng": 103.940321,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "level": "2",
+        "name": "HomeTeamNS"
+      }
+    },
+    {
+      "id": "hometeamns-jom-balestier-clubhouse-13289-1038486",
+      "name": "HomeTeamNS-JOM Balestier Clubhouse",
+      "lat": 1.328877,
+      "lng": 103.848596,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "31",
+        "addr:postcode": "329979",
+        "addr:street": "Ah Hood Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "club": "social;sport",
+        "community_centre": "club_home",
+        "name": "HomeTeamNS-JOM Balestier Clubhouse",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "hong-kah-north-community-club-13592-1037495",
+      "name": "Hong Kah North Community Club",
+      "lat": 1.359182,
+      "lng": 103.749469,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "30",
+        "addr:postcode": "659440",
+        "addr:street": "Bukit Batok Street 31",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Hong Kah North Community Club"
+      }
+    },
+    {
+      "id": "hougang-block-145-13515-1038833",
+      "name": "Hougang Block 145",
+      "lat": 1.351477,
+      "lng": 103.883292,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "145",
+        "addr:postcode": "530145",
+        "addr:street": "Lorong Ah Soo",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Hougang Block 145",
+        "source": "Kaart Ground Survey 2017"
+      }
+    },
+    {
+      "id": "hougang-community-club-13648-1038925",
+      "name": "Hougang Community Club",
+      "lat": 1.364761,
+      "lng": 103.892524,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "35",
+        "addr:postcode": "538840",
+        "addr:street": "Hougang Avenue 3",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Hougang Community Club"
+      }
+    },
+    {
+      "id": "hsinghai-art-association-13001-1038528",
+      "name": "Hsinghai Art Association",
+      "lat": 1.300119,
+      "lng": 103.852838,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "arts_centre",
+        "name": "Hsinghai Art Association"
+      }
+    },
+    {
+      "id": "hwi-yoh-community-centre-13738-1038739",
+      "name": "Hwi Yoh Community Centre",
+      "lat": 1.373764,
+      "lng": 103.873927,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "535",
+        "addr:postcode": "550535",
+        "addr:street": "Serangoon North Avenue 4",
+        "amenity": "community_centre",
+        "name": "Hwi Yoh Community Centre",
+        "name:ms": "Kelab Masyarakat Hwi Yoh"
+      }
+    },
+    {
+      "id": "jalan-besar-community-club-13078-1038617",
+      "name": "Jalan Besar Community Club",
+      "lat": 1.307781,
+      "lng": 103.861676,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "69",
+        "addr:postcode": "208737",
+        "addr:street": "Jellicoe Road",
+        "amenity": "community_centre",
+        "building": "public",
+        "height": "0",
+        "name": "Jalan Besar Community Club",
+        "name:zh": "\u60f9\u5170\u52ff\u5239\u8054\u7edc\u6240"
+      }
+    },
+    {
+      "id": "jurong-green-community-club-13505-1037254",
+      "name": "Jurong Green Community Club",
+      "lat": 1.350485,
+      "lng": 103.725428,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housename": "Jurong Green Community Club",
+        "addr:housenumber": "6",
+        "addr:postcode": "649520",
+        "addr:street": "Jurong West Avenue 1",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Jurong Green Community Club"
+      }
+    },
+    {
+      "id": "jurong-spring-community-centre-13485-1037182",
+      "name": "Jurong Spring Community Centre",
+      "lat": 1.348513,
+      "lng": 103.718189,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "8",
+        "addr:postcode": "649296",
+        "addr:street": "Jurong West Street 52",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Jurong Spring Community Centre",
+        "name:ms": "Kelab Masyarakat Jurong Spring",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "juz-art-studio-13053-1039038",
+      "name": "Juz Art Studio",
+      "lat": 1.305329,
+      "lng": 103.903816,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:street": "East Coast Road",
+        "amenity": "arts_centre",
+        "name": "Juz Art Studio",
+        "source": "Kaart Ground Survey 2017"
+      }
+    },
+    {
+      "id": "kaki-bukit-community-club-13334-1039268",
+      "name": "Kaki Bukit Community Club",
+      "lat": 1.333397,
+      "lng": 103.92684,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "670",
+        "addr:postcode": "469627",
+        "addr:street": "Bedok North Street 3",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Kaki Bukit Community Club",
+        "name:ms": "Kelab Masyarakat Kaki Bukit",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "kallang-community-club-13180-1038623",
+      "name": "Kallang Community Club",
+      "lat": 1.318007,
+      "lng": 103.862335,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "45",
+        "addr:postcode": "339771",
+        "addr:street": "Boon Keng Road",
+        "amenity": "community_centre",
+        "building": "public",
+        "building:levels": "2",
+        "name": "Kallang Community Club",
+        "name:zh": "\u52a0\u51b7\u8054\u7edc\u6240",
+        "roof:levels": "1",
+        "roof:material": "roof_tiles",
+        "roof:shape": "hipped",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "kampong-glam-community-club-13028-1038636",
+      "name": "Kampong Glam Community Club",
+      "lat": 1.30283,
+      "lng": 103.863572,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "385",
+        "addr:postcode": "199581",
+        "addr:street": "Beach Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "3",
+        "name": "Kampong Glam Community Club",
+        "name:zh": "\u7518\u699c\u683c\u5357\u8054\u7edc\u6240",
+        "source": "Bing",
+        "toilets:wheelchair": "yes",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "kampong-kembangan-community-club-13215-1039132",
+      "name": "Kampong Kembangan Community Club",
+      "lat": 1.321511,
+      "lng": 103.913243,
+      "category": "arts",
+      "description": "community club facilities on 1st and 2nd floor",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "building:part": "yes",
+        "description": "community club facilities on 1st and 2nd floor",
+        "name": "Kampong Kembangan Community Club"
+      }
+    },
+    {
+      "id": "kampung-chai-chee-community-club-13267-1039323",
+      "name": "Kampung Chai Chee Community Club",
+      "lat": 1.326716,
+      "lng": 103.932314,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:street": "Bedok North Street 1",
+        "amenity": "community_centre",
+        "name": "Kampung Chai Chee Community Club",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "kantor-spsi-11348-1040428",
+      "name": "Kantor SPSI",
+      "lat": 1.134787,
+      "lng": 104.042774,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:street": "komplek bintang raya blok B no2",
+        "amenity": "community_centre",
+        "name": "Kantor SPSI",
+        "opening_hours": "Mo-Sa 08:00-18:00"
+      }
+    },
+    {
+      "id": "katong-community-centre-13006-1038847",
+      "name": "Katong Community Centre",
+      "lat": 1.300562,
+      "lng": 103.884682,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "51",
+        "addr:postcode": "438178",
+        "addr:street": "Kampong Arang Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Katong Community Centre",
+        "name:ms": "Kelab Masyarakat Katong",
+        "name:zh": "\u52a0\u4e1c\u8054\u7edc\u6240",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "keat-hong-community-club-13841-1037450",
+      "name": "Keat Hong Community Club",
+      "lat": 1.3841,
+      "lng": 103.744964,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "2",
+        "addr:postcode": "689687",
+        "addr:street": "Choa Chu Kang Loop",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "5",
+        "name": "Keat Hong Community Club"
+      }
+    },
+    {
+      "id": "kebun-baru-community-club-13730-1038376",
+      "name": "Kebun Baru Community Club",
+      "lat": 1.373008,
+      "lng": 103.83759,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "216",
+        "addr:postcode": "569897",
+        "addr:street": "Ang Mo Kio Avenue 4",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "4",
+        "name": "Kebun Baru Community Club"
+      }
+    },
+    {
+      "id": "kidney-dialysis-foundation-bishan-centre-13487-1038504",
+      "name": "Kidney Dialysis Foundation Bishan Centre",
+      "lat": 1.34873,
+      "lng": 103.850403,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Kidney Dialysis Foundation Bishan Centre"
+      }
+    },
+    {
+      "id": "kim-seng-community-club-12895-1038308",
+      "name": "Kim Seng Community Club",
+      "lat": 1.289527,
+      "lng": 103.830782,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "570",
+        "addr:postcode": "169640",
+        "addr:street": "Havelock Road",
+        "amenity": "community_centre",
+        "name": "Kim Seng Community Club",
+        "name:zh": "\u91d1\u58f0\u8054\u7edc\u6240"
+      }
+    },
+    {
+      "id": "kolam-ayer-community-club-13241-1038698",
+      "name": "Kolam Ayer Community Club",
+      "lat": 1.32411,
+      "lng": 103.869849,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "3188",
+        "addr:postcode": "339717",
+        "addr:street": "Geylang Bahru",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Kolam Ayer Community Club",
+        "name:zh": "\u6c34\u8f66\u6c11\u4f17\u4ff1\u4e50\u90e8",
+        "source": "Bing",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "id": "kreta-ayer-community-club-12812-1038430",
+      "name": "Kreta Ayer Community Club",
+      "lat": 1.281159,
+      "lng": 103.843009,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "28A",
+        "addr:neighbourhood": "Kreta Ayer Heights",
+        "addr:postcode": "088995",
+        "addr:street": "Kreta Ayer Road",
+        "amenity": "community_centre",
+        "name": "Kreta Ayer Community Club",
+        "name:zh": "\u725b\u8f66\u6c34\u6c11\u4f17\u4ff1\u4e50\u90e8",
+        "short_name": "Kreta Ayer CC"
+      }
+    },
+    {
+      "id": "la-danz-12977-1038518",
+      "name": "La Danz",
+      "lat": 1.297734,
+      "lng": 103.851815,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "name": "La Danz",
+        "source": "Kaart Ground Survey 2017"
+      }
+    },
+    {
+      "id": "lego-city-stage-14282-1036292",
+      "name": "Lego City Stage",
+      "lat": 1.428238,
+      "lng": 103.629198,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "building": "yes",
+        "name": "Lego City Stage",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "leng-kee-community-centre-12897-1038145",
+      "name": "Leng Kee Community Centre",
+      "lat": 1.289666,
+      "lng": 103.814536,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "400",
+        "addr:postcode": "159049",
+        "addr:street": "Lengkok Bahru",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Leng Kee Community Centre",
+        "name:ms": "Kelab Masyarakat Leng Kee",
+        "name:zh": "\u9e9f\u8bb0\u8054\u7edc\u6240"
+      }
+    },
+    {
+      "id": "lhorna-13507-1037432",
+      "name": "Lhorna",
+      "lat": 1.350664,
+      "lng": 103.743176,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Lhorna"
+      }
+    },
+    {
+      "id": "life-community-13899-1038882",
+      "name": "Life Community",
+      "lat": 1.389874,
+      "lng": 103.888234,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Life Community"
+      }
+    },
+    {
+      "id": "life-edu-services-13230-1038854",
+      "name": "Life Edu Services",
+      "lat": 1.322974,
+      "lng": 103.885378,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:housenumber": "01-999",
+        "addr:postcode": "370086",
+        "addr:street": "Circuit Road",
+        "amenity": "community_centre",
+        "name": "Life Edu Services",
+        "phone": "+65 6844 6291"
+      }
+    },
+    {
+      "id": "mws-covenant-family-service-centre-hougang-13697-1038846",
+      "name": "MWS Covenant Family Service Centre Hougang",
+      "lat": 1.369705,
+      "lng": 103.884575,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "community_centre:for": "family",
+        "name": "MWS Covenant Family Service Centre Hougang"
+      }
+    },
+    {
+      "id": "macpherson-community-club-13235-1038846",
+      "name": "MacPherson Community Club",
+      "lat": 1.323509,
+      "lng": 103.88462,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "400",
+        "addr:postcode": "379131",
+        "addr:street": "Paya Lebar Way",
+        "amenity": "community_centre",
+        "building": "yes",
+        "height": "0",
+        "image": "https://images.mapillary.com/XPBaC8tcuqWitCOTQ-L0tg/thumb-2048.jpg",
+        "mapillary": "112332620922936",
+        "name": "MacPherson Community Club",
+        "name:zh": "\u9ea6\u6ce2\u7533\u8054\u7edc\u6240"
+      }
+    },
+    {
+      "id": "marina-bay-sands-expo-and-convention-centre-12823-1038585",
+      "name": "Marina Bay Sands Expo and Convention Centre",
+      "lat": 1.282329,
+      "lng": 103.858526,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "arts_centre",
+        "email": "sales@marinabaysands.com",
+        "name": "Marina Bay Sands Expo and Convention Centre",
+        "phone": "+65 6688 3000",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "marine-parade-community-club-13049-1039095",
+      "name": "Marine Parade Community Club",
+      "lat": 1.304901,
+      "lng": 103.909501,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "278",
+        "addr:postcode": "449282",
+        "addr:street": "Marine Parade Road Park",
+        "amenity": "community_centre",
+        "name": "Marine Parade Community Club",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "marsiling-community-club-14406-1037736",
+      "name": "Marsiling Community Club",
+      "lat": 1.440623,
+      "lng": 103.773621,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "100",
+        "addr:postcode": "739980",
+        "addr:street": "Admiralty Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Marsiling Community Club",
+        "roof:colour": "red",
+        "roof:material": "roof_tiles"
+      }
+    },
+    {
+      "id": "morning-star-sengkang-13935-1038944",
+      "name": "Morning Star Sengkang",
+      "lat": 1.393491,
+      "lng": 103.894404,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Morning Star Sengkang"
+      }
+    },
+    {
+      "id": "mountbatten-community-club-13093-1038868",
+      "name": "Mountbatten Community Club",
+      "lat": 1.309338,
+      "lng": 103.886794,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "87",
+        "addr:postcode": "390087",
+        "addr:street": "Jalan Satu",
+        "amenity": "community_centre",
+        "building": "public",
+        "name": "Mountbatten Community Club",
+        "name:zh": "\u8499\u5df4\u767b\u8054\u7edc\u6240",
+        "short_name": "Mountbatten CC"
+      }
+    },
+    {
+      "id": "myanmar-culture-society-13156-1038583",
+      "name": "Myanmar Culture Society",
+      "lat": 1.315646,
+      "lng": 103.858277,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:street": "Serangoon Road",
+        "amenity": "community_centre",
+        "name": "Myanmar Culture Society",
+        "source": "Kaart Ground Survey 2017"
+      }
+    },
+    {
+      "id": "n4-courtyard-14244-1038468",
+      "name": "N4 Courtyard",
+      "lat": 1.424393,
+      "lng": 103.846762,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "building": "yes",
+        "community_centre": "community_hall",
+        "layer": "-1",
+        "name": "N4 Courtyard"
+      }
+    },
+    {
+      "id": "nanyang-community-club-13424-1036924",
+      "name": "Nanyang Community Club",
+      "lat": 1.342423,
+      "lng": 103.692435,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "60",
+        "addr:postcode": "649040",
+        "addr:street": "Jurong West Street 91",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Nanyang Community Club",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "nee-soon-central-community-centre-14278-1038363",
+      "name": "Nee Soon Central Community Centre",
+      "lat": 1.427802,
+      "lng": 103.836308,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "level": "2",
+        "name": "Nee Soon Central Community Centre",
+        "name:ms": "Kelab Masyarakat Nee Soon Central",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "nee-soon-east-community-club-14307-1038386",
+      "name": "Nee Soon East Community Club",
+      "lat": 1.430738,
+      "lng": 103.8386,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "1",
+        "addr:postcode": "768893",
+        "addr:street": "Yishun Avenue 9",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "4",
+        "name": "Nee Soon East Community Club",
+        "source": "Kaart Ground Survey 2017"
+      }
+    },
+    {
+      "id": "nee-soon-south-cc-14152-1038349",
+      "name": "Nee Soon South CC",
+      "lat": 1.415159,
+      "lng": 103.834857,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "30",
+        "addr:postcode": "768455",
+        "addr:street": "Yishun Street 81",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Nee Soon South CC"
+      }
+    },
+    {
+      "id": "one-punggol-community-club-14089-1039053",
+      "name": "One Punggol Community Club",
+      "lat": 1.408876,
+      "lng": 103.905288,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "1",
+        "addr:postcode": "828629",
+        "addr:street": "Punggol Drive",
+        "amenity": "community_centre",
+        "name": "One Punggol Community Club"
+      }
+    },
+    {
+      "id": "ppis-family-service-centre-east-13164-1038971",
+      "name": "PPIS Family Service Centre (East)",
+      "lat": 1.316432,
+      "lng": 103.897055,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "community_centre": "family_centre",
+        "level": "2",
+        "name": "PPIS Family Service Centre (East)"
+      }
+    },
+    {
+      "id": "paint-blush-13051-1038534",
+      "name": "Paint Blush",
+      "lat": 1.305081,
+      "lng": 103.853413,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "arts_centre",
+        "check_date": "2024-09-28",
+        "name": "Paint Blush"
+      }
+    },
+    {
+      "id": "panggung-serbaguna-rw-04-11367-1040295",
+      "name": "Panggung Serbaguna RW 04",
+      "lat": 1.136747,
+      "lng": 104.029499,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Panggung Serbaguna RW 04"
+      }
+    },
+    {
+      "id": "panggung-serbaguna-rw-10-11368-1040304",
+      "name": "Panggung Serbaguna RW 10",
+      "lat": 1.136815,
+      "lng": 104.030372,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Panggung Serbaguna RW 10"
+      }
+    },
+    {
+      "id": "pasir-ris-east-community-club-13685-1039594",
+      "name": "Pasir Ris East Community Club",
+      "lat": 1.368478,
+      "lng": 103.95941,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "1",
+        "addr:postcode": "519457",
+        "addr:street": "Pasir Ris Drive 4",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "5",
+        "name": "Pasir Ris East Community Club",
+        "source": "Bing",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "pasir-ris-elias-community-club-13784-1039427",
+      "name": "Pasir Ris Elias Community Club",
+      "lat": 1.378391,
+      "lng": 103.942676,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "93",
+        "addr:postcode": "519498",
+        "addr:street": "Pasir Ris Drive 3",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "5",
+        "name": "Pasir Ris Elias Community Club",
+        "toilets:wheelchair": "yes",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "pawagam-kapitol-baru-14604-1037652",
+      "name": "Pawagam Kapitol Baru",
+      "lat": 1.460354,
+      "lng": 103.765227,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "cinema",
+        "name": "Pawagam Kapitol Baru",
+        "name:ms": "Pawagam Kapitol Baru",
+        "name:zh": "\u65b0\u91d1\u90fd\u6232\u9662"
+      }
+    },
+    {
+      "id": "paya-lebar-kovan-community-club-13577-1038863",
+      "name": "Paya Lebar Kovan Community Club",
+      "lat": 1.357744,
+      "lng": 103.886313,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "207",
+        "addr:postcode": "530207",
+        "addr:street": "Hougang Street 21",
+        "alt_name": "207",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Paya Lebar Kovan Community Club"
+      }
+    },
+    {
+      "id": "paya-lebar-kovan-community-club-13600-1038859",
+      "name": "Paya Lebar-Kovan Community Club",
+      "lat": 1.360016,
+      "lng": 103.885851,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "215",
+        "addr:postcode": "530215",
+        "addr:street": "Tampines Road",
+        "amenity": "community_centre",
+        "building": "construction",
+        "building:levels": "4",
+        "name": "Paya Lebar-Kovan Community Club",
+        "roof:material": "grass",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "pek-kio-community-centre-13131-1038514",
+      "name": "Pek Kio Community Centre",
+      "lat": 1.313081,
+      "lng": 103.851384,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "21",
+        "addr:postcode": "219458",
+        "addr:street": "Gloucester Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Pek Kio Community Centre",
+        "name:ms": "Kelab Masyarakat Pek Kio",
+        "name:zh": "\u767d\u6865\u8054\u7edc\u6240",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "performing-arts-studio-13004-1037855",
+      "name": "Performing Arts Studio",
+      "lat": 1.300427,
+      "lng": 103.785504,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "fixme:zh": "-",
+        "name": "Performing Arts Studio",
+        "name:zh": "\u8868\u6f14\u827a\u672f\u5de5\u4f5c\u5ba4"
+      }
+    },
+    {
+      "id": "potong-pasir-community-club-13327-1038671",
+      "name": "Potong Pasir Community Club",
+      "lat": 1.332656,
+      "lng": 103.867081,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "6",
+        "addr:postcode": "358361",
+        "addr:street": "Potong Pasir Avenue 2",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Potong Pasir Community Club",
+        "name:zh": "\u6ce2\u4e1c\u5df4\u897f\u8054\u7edc\u6240",
+        "source": "Bing",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "punggol-21-community-club-13935-1039136",
+      "name": "Punggol 21 Community Club",
+      "lat": 1.393529,
+      "lng": 103.913581,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "80",
+        "addr:postcode": "828815",
+        "addr:street": "Punggol Field",
+        "amenity": "community_centre",
+        "building": "civic",
+        "building:levels": "4",
+        "building:levels:underground": "1",
+        "name": "Punggol 21 Community Club"
+      }
+    },
+    {
+      "id": "punggol-bayvue-residents-network-14121-1038979",
+      "name": "Punggol BayVue Residents' Network",
+      "lat": 1.412144,
+      "lng": 103.897914,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "level": "0",
+        "name": "Punggol BayVue Residents' Network",
+        "source": "survey"
+      }
+    },
+    {
+      "id": "punggol-community-club-13743-1038919",
+      "name": "Punggol Community Club",
+      "lat": 1.374275,
+      "lng": 103.891909,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "3",
+        "addr:postcode": "538808",
+        "addr:street": "Hougang Avenue 6",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Punggol Community Club"
+      }
+    },
+    {
+      "id": "punggol-gems-residents-network-14027-1039014",
+      "name": "Punggol Gems Residents' Network",
+      "lat": 1.402667,
+      "lng": 103.901412,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Punggol Gems Residents' Network"
+      }
+    },
+    {
+      "id": "punggol-parc-terraces-residents-network-14112-1039008",
+      "name": "Punggol Parc Terraces Residents' Network",
+      "lat": 1.411177,
+      "lng": 103.90076,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "level": "0",
+        "name": "Punggol Parc Terraces Residents' Network",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "rc-centre-13189-1037486",
+      "name": "RC Centre",
+      "lat": 1.318893,
+      "lng": 103.748635,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "RC Centre"
+      }
+    },
+    {
+      "id": "reach-family-service-centre-13496-1038514",
+      "name": "REACH Family Service Centre",
+      "lat": 1.349589,
+      "lng": 103.851416,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "community_centre:for": "family",
+        "name": "REACH Family Service Centre"
+      }
+    },
+    {
+      "id": "radin-mas-community-club-12758-1038197",
+      "name": "Radin Mas Community Club",
+      "lat": 1.275833,
+      "lng": 103.819723,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "1",
+        "addr:postcode": "098915",
+        "addr:street": "Telok Blangah Crescent",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "2",
+        "name": "Radin Mas Community Club",
+        "name:zh": "\u62c9\u4e01\u9a6c\u58eb\u8054\u7edc\u6240",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "rainforest-kidsworld-ampitheatre-14035-1037965",
+      "name": "Rainforest KidsWorld Ampitheatre",
+      "lat": 1.403509,
+      "lng": 103.79648,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "building": "yes",
+        "image": "https://images.mapillary.com/3rbyawUuDgQNcabe_d9j5A/thumb-2048.jpg",
+        "mapillary": "168514691759973",
+        "name": "Rainforest KidsWorld Ampitheatre"
+      }
+    },
+    {
+      "id": "residents-committee-centre-13615-1039402",
+      "name": "Residents' Committee Centre",
+      "lat": 1.361547,
+      "lng": 103.940176,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "level": "2",
+        "name": "Residents' Committee Centre"
+      }
+    },
+    {
+      "id": "resorts-world-theatre-12563-1038200",
+      "name": "Resorts World Theatre",
+      "lat": 1.256302,
+      "lng": 103.820006,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "name": "Resorts World Theatre",
+        "name:zh": "\u540d\u80dc\u4e16\u754c\u5267\u573a"
+      }
+    },
+    {
+      "id": "rivervale-community-centre-13934-1039020",
+      "name": "Rivervale Community Centre",
+      "lat": 1.393366,
+      "lng": 103.902013,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "193",
+        "addr:postcode": "540193",
+        "addr:street": "Rivervale Drive",
+        "amenity": "community_centre",
+        "name": "Rivervale Community Centre",
+        "name:ms": "Kelab Masyarakat Rivervale"
+      }
+    },
+    {
+      "id": "rivervale-community-club-13852-1039024",
+      "name": "Rivervale Community Club",
+      "lat": 1.385158,
+      "lng": 103.902354,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:housenumber": "2",
+        "addr:postcode": "544583",
+        "addr:street": "Rivervale Close",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "4",
+        "name": "Rivervale Community Club"
+      }
+    },
+    {
+      "id": "saigon-disco-karaoke-13151-1038917",
+      "name": "Saigon Disco & Karaoke",
+      "lat": 1.315117,
+      "lng": 103.891667,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "addr:street": "Geylang Road",
+        "leisure": "dance",
+        "name": "Saigon Disco & Karaoke",
+        "source": "Kaart Ground Survey 2017"
+      }
+    },
+    {
+      "id": "sam-s-studio-13114-1038631",
+      "name": "Sam's Studio",
+      "lat": 1.31141,
+      "lng": 103.86307,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "leisure": "dance",
+        "name": "Sam's Studio"
+      }
+    },
+    {
+      "id": "selegie-arts-centre-13001-1038498",
+      "name": "Selegie Arts Centre",
+      "lat": 1.300077,
+      "lng": 103.849838,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "30",
+        "addr:postcode": "188351",
+        "addr:street": "Selegie Road",
+        "amenity": "arts_centre",
+        "building": "yes",
+        "building:levels": "3",
+        "name": "Selegie Arts Centre"
+      }
+    },
+    {
+      "id": "sembawang-community-centre-14517-1038288",
+      "name": "Sembawang Community Centre",
+      "lat": 1.451699,
+      "lng": 103.828811,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "2125",
+        "addr:postcode": "758528",
+        "addr:street": "Sembawang Road",
+        "alt_name": "Sembawang CC",
+        "amenity": "community_centre",
+        "building": "public",
+        "height": "0",
+        "name": "Sembawang Community Centre",
+        "name:ms": "Kelab Masyarakat Sembawang",
+        "type": "multipolygon",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "sengkang-family-service-centre-13891-1038974",
+      "name": "Sengkang Family Service Centre",
+      "lat": 1.389072,
+      "lng": 103.897387,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "community_centre": "family_centre",
+        "level": "0",
+        "name": "Sengkang Family Service Centre"
+      }
+    },
+    {
+      "id": "sengkang-west-zone-e-residents-network-13935-1038864",
+      "name": "Sengkang West Zone E Residents' Network",
+      "lat": 1.393473,
+      "lng": 103.88636,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Sengkang West Zone E Residents' Network"
+      }
+    },
+    {
+      "id": "sengkang-west-zone-k-cc-13958-1038882",
+      "name": "Sengkang West Zone K CC",
+      "lat": 1.39576,
+      "lng": 103.888227,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Sengkang West Zone K CC"
+      }
+    },
+    {
+      "id": "sengkang-west-zone-l-cc-13984-1038886",
+      "name": "Sengkang West Zone L CC",
+      "lat": 1.398405,
+      "lng": 103.888611,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Sengkang West Zone L CC"
+      }
+    },
+    {
+      "id": "serangoon-broadway-13271-1038673",
+      "name": "Serangoon Broadway",
+      "lat": 1.327098,
+      "lng": 103.867327,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:street": "Serangoon Road",
+        "amenity": "theatre",
+        "name": "Serangoon Broadway",
+        "source": "Kaart Ground Survey 2017"
+      }
+    },
+    {
+      "id": "shan-you-wellness-community-13208-1039032",
+      "name": "Shan You Wellness Community",
+      "lat": 1.32085,
+      "lng": 103.903233,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "name": "Shan You Wellness Community"
+      }
+    },
+    {
+      "id": "shaw-foundation-amphitheater-14046-1037950",
+      "name": "Shaw Foundation Amphitheater",
+      "lat": 1.404598,
+      "lng": 103.794955,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "building": "yes",
+        "image": "https://images.mapillary.com/vzZL4kldB1MsN98swfkMdg/thumb-2048.jpg",
+        "mapillary": "5795344363810764",
+        "name": "Shaw Foundation Amphitheater"
+      }
+    },
+    {
+      "id": "shaw-theatres-13174-1038929",
+      "name": "Shaw Theatres",
+      "lat": 1.317397,
+      "lng": 103.892912,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "cinema",
+        "level": "4",
+        "name": "Shaw Theatres"
+      }
+    },
+    {
+      "id": "shaw-theatres-13601-1039892",
+      "name": "Shaw Theatres",
+      "lat": 1.360133,
+      "lng": 103.989165,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "cinema",
+        "indoor": "room",
+        "level": "-2",
+        "name": "Shaw Theatres"
+      }
+    },
+    {
+      "id": "siglap-community-centre-13173-1039468",
+      "name": "Siglap Community Centre",
+      "lat": 1.317307,
+      "lng": 103.946849,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "151",
+        "addr:postcode": "460151",
+        "addr:street": "Bedok South Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Siglap Community Centre",
+        "name:ms": "Kelab Masyarakat Siglap"
+      }
+    },
+    {
+      "id": "siglap-south-community-centre-13133-1039307",
+      "name": "Siglap South Community Centre",
+      "lat": 1.31326,
+      "lng": 103.930702,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "6",
+        "addr:postcode": "456441",
+        "addr:street": "Palm Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Siglap South Community Centre",
+        "name:ms": "Kelab Masyarakat Siglap South",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "singapore-calligraphy-centre-12985-1038509",
+      "name": "Singapore Calligraphy Centre",
+      "lat": 1.29853,
+      "lng": 103.850894,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "48",
+        "addr:postcode": "187952",
+        "addr:street": "Waterloo Street",
+        "amenity": "arts_centre",
+        "building": "yes",
+        "building:levels": "3",
+        "height": "40",
+        "name": "Singapore Calligraphy Centre",
+        "source": "Bing",
+        "start_date": "1908"
+      }
+    },
+    {
+      "id": "singapore-conference-hall-12763-1038491",
+      "name": "Singapore Conference Hall",
+      "lat": 1.276331,
+      "lng": 103.849106,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "name": "Singapore Conference Hall",
+        "name:en": "Singapore Conference Hall",
+        "theatre:type": "concert_hall",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "singapore-dance-theatre-12997-1038541",
+      "name": "Singapore Dance Theatre",
+      "lat": 1.299749,
+      "lng": 103.854062,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "amenity": "theatre",
+        "dance": "teaching",
+        "leisure": "dance",
+        "level": "6",
+        "name": "Singapore Dance Theatre"
+      }
+    },
+    {
+      "id": "singapore-hainan-society-12961-1038548",
+      "name": "Singapore Hainan Society",
+      "lat": 1.296061,
+      "lng": 103.854821,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "check_date": "2025-09-13",
+        "community_centre": "cultural_centre",
+        "name": "Singapore Hainan Society"
+      }
+    },
+    {
+      "id": "singapore-indian-fine-arts-society-13147-1038530",
+      "name": "Singapore Indian Fine Arts Society",
+      "lat": 1.314732,
+      "lng": 103.853034,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "2A",
+        "addr:postcode": "217755",
+        "addr:street": "Starlight Road",
+        "amenity": "arts_centre",
+        "barrier": "fence",
+        "contact:facebook": "https://www.facebook.com/sifas.org/",
+        "contact:instagram": "https://instagram.com/wearesifas",
+        "contact:phone": "+65 6299 5929",
+        "contact:twitter": "https://twitter.com/weareSIFAS",
+        "contact:website": "https://www.sifas.org/",
+        "contact:youtube": "https://www.youtube.com/channel/UCQFscNs90SIR76p1AsTH8vw",
+        "name": "Singapore Indian Fine Arts Society",
+        "short_name": "SIFAS"
+      }
+    },
+    {
+      "id": "singapore-repertory-theatre-12914-1038417",
+      "name": "Singapore Repertory Theatre",
+      "lat": 1.2914,
+      "lng": 103.841715,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "20",
+        "addr:postcode": "239035",
+        "addr:street": "Merbau Road",
+        "amenity": "theatre",
+        "building": "yes",
+        "building:levels": "2",
+        "designation": "Theatre group and theatre venue",
+        "name": "Singapore Repertory Theatre"
+      }
+    },
+    {
+      "id": "singtel-waterfront-theatre-12891-1038572",
+      "name": "Singtel Waterfront Theatre",
+      "lat": 1.289124,
+      "lng": 103.857187,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "building": "yes",
+        "name": "Singtel Waterfront Theatre"
+      }
+    },
+    {
+      "id": "stamford-arts-centre-13001-1038529",
+      "name": "Stamford Arts Centre",
+      "lat": 1.300115,
+      "lng": 103.852927,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "155",
+        "addr:postcode": "187962",
+        "addr:street": "Waterloo Street",
+        "amenity": "arts_centre",
+        "building": "yes",
+        "building:levels": "3",
+        "name": "Stamford Arts Centre",
+        "source": "Bing",
+        "start_date": "1920"
+      }
+    },
+    {
+      "id": "stepup-learning-dance-14104-1039059",
+      "name": "StepUp Learning & Dance",
+      "lat": 1.410393,
+      "lng": 103.905884,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "addr:unit": "02",
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "level": "3",
+        "name": "StepUp Learning & Dance"
+      }
+    },
+    {
+      "id": "swan-ballet-academy-12869-1038450",
+      "name": "Swan Ballet Academy",
+      "lat": 1.286908,
+      "lng": 103.845041,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "level": "2",
+        "name": "Swan Ballet Academy"
+      }
+    },
+    {
+      "id": "sylvia-mccully-school-of-dancing-13546-1038315",
+      "name": "Sylvia McCully School of Dancing",
+      "lat": 1.354602,
+      "lng": 103.831468,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "addr:unit": "21",
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "level": "2",
+        "name": "Sylvia McCully School of Dancing"
+      }
+    },
+    {
+      "id": "touch-youth-13021-1038763",
+      "name": "TOUCH Youth",
+      "lat": 1.302071,
+      "lng": 103.876252,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "level": "3",
+        "name": "TOUCH Youth"
+      }
+    },
+    {
+      "id": "taman-jurong-community-club-13354-1037219",
+      "name": "Taman Jurong Community Club",
+      "lat": 1.33535,
+      "lng": 103.72187,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "1",
+        "addr:postcode": "618495",
+        "addr:street": "Yung Sheng Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Taman Jurong Community Club"
+      }
+    },
+    {
+      "id": "taman-seni-budaya-johor-14730-1037453",
+      "name": "Taman Seni Budaya Johor",
+      "lat": 1.47297,
+      "lng": 103.745295,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Johor Bahru",
+        "addr:postcode": "80100",
+        "addr:street": "Jalan Petri",
+        "amenity": "arts_centre",
+        "building": "yes",
+        "name": "Taman Seni Budaya Johor"
+      }
+    },
+    {
+      "id": "tampines-central-community-club-13553-1039344",
+      "name": "Tampines Central Community Club",
+      "lat": 1.35533,
+      "lng": 103.934435,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "866A",
+        "addr:postcode": "521866",
+        "addr:street": "Tampines Street 83",
+        "amenity": "community_centre",
+        "building": "public",
+        "building:levels": "5",
+        "name": "Tampines Central Community Club",
+        "short_name": "Tampines Central CC"
+      }
+    },
+    {
+      "id": "tampines-changkat-community-club-13458-1039477",
+      "name": "Tampines Changkat Community Club",
+      "lat": 1.345827,
+      "lng": 103.947695,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "13",
+        "addr:postcode": "529453",
+        "addr:street": "Tampines Street 11",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "4",
+        "name": "Tampines Changkat Community Club",
+        "source": "Bing",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "id": "tampines-east-community-club-13534-1039546",
+      "name": "Tampines East Community Club",
+      "lat": 1.353393,
+      "lng": 103.954608,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "10",
+        "addr:postcode": "529341",
+        "addr:street": "Tampines Street 23",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "6",
+        "name": "Tampines East Community Club",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "tampines-north-community-club-13573-1039466",
+      "name": "Tampines North Community Club",
+      "lat": 1.357313,
+      "lng": 103.946628,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "2",
+        "addr:postcode": "529204",
+        "addr:street": "Tampines Street 41",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "4",
+        "name": "Tampines North Community Club",
+        "name:zh": "\u6de1\u6ee8\u5c3c\u5317\u8054\u7edc\u6240"
+      }
+    },
+    {
+      "id": "tampines-west-community-club-13488-1039358",
+      "name": "Tampines West Community Club",
+      "lat": 1.348765,
+      "lng": 103.935761,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "5",
+        "addr:postcode": "529705",
+        "addr:street": "Tampines Avenue 3",
+        "amenity": "community_centre",
+        "building": "public",
+        "name": "Tampines West Community Club",
+        "short_name": "Tampines West CC"
+      }
+    },
+    {
+      "id": "tanjong-pagar-community-club-12762-1038416",
+      "name": "Tanjong Pagar Community Club",
+      "lat": 1.27621,
+      "lng": 103.841611,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "101",
+        "addr:postcode": "089774",
+        "addr:street": "Cantonment Road",
+        "amenity": "community_centre",
+        "building": "public",
+        "name": "Tanjong Pagar Community Club",
+        "name:en": "Tanjong Pagar Community Club",
+        "name:zh": "\u4e39\u6212\u5df4\u845b\u8054\u7edc\u6240",
+        "roof:colour": "red",
+        "roof:material": "roof_tiles",
+        "source": "http://www.tpcc.sg/",
+        "start_date": "1960"
+      }
+    },
+    {
+      "id": "taylors-arts-studio-13523-1038350",
+      "name": "Taylors Arts Studio",
+      "lat": 1.352312,
+      "lng": 103.834985,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:street": "Upper Thomson Road",
+        "amenity": "arts_centre",
+        "name": "Taylors Arts Studio",
+        "source": "Kaart Ground Survey 2017"
+      }
+    },
+    {
+      "id": "teck-ghee-community-club-13631-1038536",
+      "name": "Teck Ghee Community Club",
+      "lat": 1.363077,
+      "lng": 103.853622,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "861",
+        "addr:postcode": "569734",
+        "addr:street": "Ang Mo Kio Avenue 10",
+        "amenity": "community_centre",
+        "building": "public",
+        "name": "Teck Ghee Community Club",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "teen-challenge-singapore-13722-1037017",
+      "name": "Teen Challenge Singapore",
+      "lat": 1.37222,
+      "lng": 103.701657,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "community_centre": "youth_centre",
+        "community_centre:for": "juvenile",
+        "name": "Teen Challenge Singapore",
+        "religion": "christian"
+      }
+    },
+    {
+      "id": "telok-kurau-studios-13143-1039104",
+      "name": "Telok Kurau Studios",
+      "lat": 1.314313,
+      "lng": 103.91039,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "arts_centre",
+        "name": "Telok Kurau Studios"
+      }
+    },
+    {
+      "id": "tembusu-senior-activity-centre-13207-1039033",
+      "name": "Tembusu Senior Activity Centre",
+      "lat": 1.320661,
+      "lng": 103.903256,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "community_centre:for": "senior",
+        "name": "Tembusu Senior Activity Centre"
+      }
+    },
+    {
+      "id": "tengah-community-centre-13569-1037347",
+      "name": "Tengah Community Centre",
+      "lat": 1.356866,
+      "lng": 103.734705,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "119",
+        "addr:postcode": "690119",
+        "addr:street": "Plantation Crescent",
+        "amenity": "community_centre",
+        "building": "public",
+        "building:levels": "3",
+        "name": "Tengah Community Centre",
+        "name:ms": "Kelab Masyarakat Tengah",
+        "roof:levels": "1",
+        "roof:material": "grass",
+        "roof:shape": "flat"
+      }
+    },
+    {
+      "id": "the-arts-house-12880-1038508",
+      "name": "The Arts House",
+      "lat": 1.288013,
+      "lng": 103.850844,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "1",
+        "addr:postcode": "179429",
+        "addr:street": "Old Parliament Lane",
+        "amenity": "arts_centre",
+        "name": "The Arts House",
+        "opening_hours": "Mo-Su,PH 10:00-22:00"
+      }
+    },
+    {
+      "id": "the-ballet-music-company-13914-1038759",
+      "name": "The Ballet & Music Company",
+      "lat": 1.391432,
+      "lng": 103.875899,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "level": "2",
+        "name": "The Ballet & Music Company"
+      }
+    },
+    {
+      "id": "the-ballet-academy-13536-1038361",
+      "name": "The Ballet Academy",
+      "lat": 1.353565,
+      "lng": 103.836055,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "addr:unit": "04",
+        "dance:style": "ballet",
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "level": "0",
+        "name": "The Ballet Academy"
+      }
+    },
+    {
+      "id": "the-ballet-school-13693-1038486",
+      "name": "The Ballet School",
+      "lat": 1.369347,
+      "lng": 103.848628,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "level": "1",
+        "name": "The Ballet School"
+      }
+    },
+    {
+      "id": "the-frontier-community-club-13403-1037045",
+      "name": "The Frontier Community Club",
+      "lat": 1.340317,
+      "lng": 103.704471,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "60",
+        "addr:postcode": "648346",
+        "addr:street": "Jurong West Central 3",
+        "amenity": "community_centre",
+        "building": "yes",
+        "layer": "-1",
+        "name": "The Frontier Community Club",
+        "name:en": "The Frontier Community Club",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "id": "the-gallery-house-13069-1039062",
+      "name": "The Gallery House",
+      "lat": 1.306937,
+      "lng": 103.906222,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "arts_centre",
+        "name": "The Gallery House",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "the-ground-theatre-13009-1038355",
+      "name": "The Ground Theatre",
+      "lat": 1.300853,
+      "lng": 103.835482,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "level": "1",
+        "name": "The Ground Theatre"
+      }
+    },
+    {
+      "id": "the-martial-arts-centre-13102-1038625",
+      "name": "The Martial Arts Centre",
+      "lat": 1.310242,
+      "lng": 103.862454,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "arts_centre",
+        "name": "The Martial Arts Centre"
+      }
+    },
+    {
+      "id": "the-ngee-ann-kongsi-theatre-12910-1038501",
+      "name": "The Ngee Ann Kongsi Theatre",
+      "lat": 1.291049,
+      "lng": 103.850133,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "level": "3",
+        "name": "The Ngee Ann Kongsi Theatre",
+        "name:zh": "\u4e49\u5b89\u516c\u53f8\u5267\u9662",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "id": "the-singapore-buddhist-lodge-12943-1038391",
+      "name": "The Singapore Buddhist Lodge",
+      "lat": 1.294317,
+      "lng": 103.839084,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:housenumber": "17-19",
+        "addr:postcode": "239329",
+        "addr:street": "Kim Yam Road",
+        "amenity": "community_centre",
+        "name": "The Singapore Buddhist Lodge"
+      }
+    },
+    {
+      "id": "theatrette-13059-1037695",
+      "name": "Theatrette",
+      "lat": 1.305943,
+      "lng": 103.769502,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "level": "0",
+        "name": "Theatrette"
+      }
+    },
+    {
+      "id": "thomson-community-club-13514-1038364",
+      "name": "Thomson Community Club",
+      "lat": 1.351414,
+      "lng": 103.836395,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "194",
+        "addr:postcode": "574339",
+        "addr:street": "Upper Thomson Road",
+        "amenity": "community_centre",
+        "name": "Thomson Community Club"
+      }
+    },
+    {
+      "id": "tiong-bahru-community-centre-12835-1038319",
+      "name": "Tiong Bahru Community Centre",
+      "lat": 1.28348,
+      "lng": 103.831912,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "67A",
+        "addr:postcode": "169715",
+        "addr:street": "Eu Chin Street",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Tiong Bahru Community Centre",
+        "name:ms": "Kelab Masyarakat Tiong Bahru",
+        "name:zh": "\u4e2d\u5cc7\u9c81\u8054\u7edc\u6240",
+        "start_date": "1937"
+      }
+    },
+    {
+      "id": "toa-payoh-central-community-club-13347-1038503",
+      "name": "Toa Payoh Central Community Club",
+      "lat": 1.334732,
+      "lng": 103.85032,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "93",
+        "addr:postcode": "319194",
+        "addr:street": "Toa Payoh Central",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Toa Payoh Central Community Club",
+        "name:zh": "\u5927\u5df4\u7a91\u4e2d\u8054\u7edc\u6240"
+      }
+    },
+    {
+      "id": "toa-payoh-east-community-club-13363-1038547",
+      "name": "Toa Payoh East Community Club",
+      "lat": 1.33627,
+      "lng": 103.854697,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "160",
+        "addr:postcode": "319380",
+        "addr:street": "Lorong 6 Toa Payoh",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Toa Payoh East Community Club",
+        "name:zh": "\u5927\u5df4\u7a91\u4e1c\u8054\u7edc\u6240",
+        "opening_hours": "Mo-Su 09:00-22:00; PH off"
+      }
+    },
+    {
+      "id": "toa-payoh-south-community-club-13347-1038594",
+      "name": "Toa Payoh South Community Club",
+      "lat": 1.334736,
+      "lng": 103.859379,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "1999",
+        "addr:postcode": "319258",
+        "addr:street": "Lorong 8 Toa Payoh",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Toa Payoh South Community Club",
+        "name:zh": "\u5927\u5df4\u7a91\u5357\u8054\u7edc\u6240"
+      }
+    },
+    {
+      "id": "toa-payoh-west-cc-13352-1038450",
+      "name": "Toa Payoh West CC",
+      "lat": 1.335161,
+      "lng": 103.844971,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "200",
+        "addr:postcode": "319642",
+        "addr:street": "Lorong 2 Toa Payoh",
+        "amenity": "community_centre",
+        "building": "public",
+        "building:levels": "3",
+        "name": "Toa Payoh West CC"
+      }
+    },
+    {
+      "id": "toa-payoh-west-community-club-13354-1038452",
+      "name": "Toa Payoh West Community Club",
+      "lat": 1.335352,
+      "lng": 103.845161,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "200",
+        "addr:postcode": "319642",
+        "addr:street": "Lorong 2 Toa Payoh",
+        "amenity": "community_centre",
+        "name": "Toa Payoh West Community Club",
+        "name:zh": "\u5927\u5df4\u7a91\u897f\u8054\u7edc\u6240"
+      }
+    },
+    {
+      "id": "ucc-theatre-13020-1037722",
+      "name": "UCC Theatre",
+      "lat": 1.301999,
+      "lng": 103.77221,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "fixme:zh": "chinese name",
+        "name": "UCC Theatre",
+        "name:zh": "\u5927\u5b66\u6587\u5316\u4e2d\u5fc3\u5267\u9662",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "ulu-pandan-community-club-13122-1037894",
+      "name": "Ulu Pandan Community Club",
+      "lat": 1.312166,
+      "lng": 103.789443,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "170",
+        "addr:postcode": "279621",
+        "addr:street": "Ghim Moh Road",
+        "amenity": "community_centre",
+        "building": "public",
+        "name": "Ulu Pandan Community Club",
+        "name:zh": "\u4e4c\u9c81\u73ed\u4e39\u8054\u7edc\u6240",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "visual-arts-centre-12985-1038461",
+      "name": "Visual Arts Centre",
+      "lat": 1.298483,
+      "lng": 103.846116,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:arts_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "arts_centre",
+        "building": "yes",
+        "height": "5",
+        "name": "Visual Arts Centre",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "we-cinema-13119-1037651",
+      "name": "WE Cinema",
+      "lat": 1.311859,
+      "lng": 103.765072,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "cinema",
+        "name": "WE Cinema"
+      }
+    },
+    {
+      "id": "waterworld-12532-1038250",
+      "name": "WaterWorld",
+      "lat": 1.25324,
+      "lng": 103.825042,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "building": "yes",
+        "name": "WaterWorld",
+        "name:zh": "\u672a\u6765\u6c34\u4e16\u754c"
+      }
+    },
+    {
+      "id": "wayang-stage-14027-1039700",
+      "name": "Wayang Stage",
+      "lat": 1.402687,
+      "lng": 103.969971,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Pulau Ubin, Singapore",
+        "addr:postcode": "508309",
+        "addr:street": "Jalan Pekan Ubin",
+        "amenity": "theatre",
+        "building": "yes",
+        "name": "Wayang Stage",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "id": "wetuft-13015-1038367",
+      "name": "WeTuft",
+      "lat": 1.301472,
+      "lng": 103.836715,
+      "category": "arts",
+      "description": "art studio where people can create their own tufting artwork",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "arts_centre",
+        "description": "art studio where people can create their own tufting artwork",
+        "fixme": "tag",
+        "level": "1",
+        "name": "WeTuft",
+        "opening_hours": "10:00-22:00"
+      }
+    },
+    {
+      "id": "west-coast-community-centre-13028-1037649",
+      "name": "West Coast Community Centre",
+      "lat": 1.30281,
+      "lng": 103.764902,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "2",
+        "addr:postcode": "129605",
+        "addr:street": "Clementi West Street 2",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "3",
+        "name": "West Coast Community Centre",
+        "name:ms": "Kelab Masyarakat West Coast",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "whampoa-community-club-13248-1038571",
+      "name": "Whampoa Community Club",
+      "lat": 1.324806,
+      "lng": 103.857062,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housename": "Whampoa Community Club",
+        "addr:housenumber": "300",
+        "addr:postcode": "327737",
+        "addr:street": "Whampoa Drive",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Whampoa Community Club",
+        "name:zh": "\u9ec4\u57d4\u8054\u7edc\u6240",
+        "opening_hours": "Mo-Su 09:00-21:30",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "woodgrove-community-centre-14319-1037853",
+      "name": "Woodgrove Community Centre",
+      "lat": 1.431856,
+      "lng": 103.78532,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "353",
+        "addr:postcode": "730353",
+        "addr:street": "Woodlands Avenue 1",
+        "amenity": "community_centre",
+        "name": "Woodgrove Community Centre",
+        "name:ms": "Kelab Masyarakat Woodgrove"
+      }
+    },
+    {
+      "id": "woodlands-community-club-14398-1037882",
+      "name": "Woodlands Community Club",
+      "lat": 1.4398,
+      "lng": 103.788233,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "1",
+        "addr:postcode": "738526",
+        "addr:street": "Woodlands Street 81",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Woodlands Community Club"
+      }
+    },
+    {
+      "id": "woodlands-galaxy-community-club-14390-1038025",
+      "name": "Woodlands Galaxy Community Club",
+      "lat": 1.439025,
+      "lng": 103.802531,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "31",
+        "addr:postcode": "738991",
+        "addr:street": "Woodlands Avenue 6",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Woodlands Galaxy Community Club"
+      }
+    },
+    {
+      "id": "ystcm-concert-hall-13018-1037730",
+      "name": "YSTCM Concert Hall",
+      "lat": 1.301848,
+      "lng": 103.772966,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "name": "YSTCM Concert Hall",
+        "name:zh": "\u6768\u79c0\u6843\u97f3\u4e50\u5385",
+        "theatre:type": "concert_hall",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "yale-nus-black-box-theatre-13075-1037720",
+      "name": "Yale-NUS Black Box Theatre",
+      "lat": 1.307501,
+      "lng": 103.77203,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "theatre",
+        "name": "Yale-NUS Black Box Theatre",
+        "name:zh": "\u8036\u9c81-\u56fd\u5927\u9ed1\u7bb1\u5267\u573a"
+      }
+    },
+    {
+      "id": "yale-nus-performance-hall-13071-1037719",
+      "name": "Yale-NUS Performance Hall",
+      "lat": 1.307078,
+      "lng": 103.771945,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:theatre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:housename": "Yale-NUS College",
+        "addr:housenumber": "18",
+        "addr:postcode": "138538",
+        "addr:street": "College Avenue West",
+        "amenity": "theatre",
+        "name": "Yale-NUS Performance Hall",
+        "name:zh": "\u8036\u9c81-\u56fd\u5927\u8868\u6f14\u5385"
+      }
+    },
+    {
+      "id": "yan-ballet-academy-13151-1038947",
+      "name": "Yan Ballet Academy",
+      "lat": 1.315128,
+      "lng": 103.894681,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "level": "1",
+        "name": "Yan Ballet Academy"
+      }
+    },
+    {
+      "id": "yew-tee-community-club-13948-1037448",
+      "name": "Yew Tee Community Club",
+      "lat": 1.394795,
+      "lng": 103.744758,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "20",
+        "addr:postcode": "689286",
+        "addr:street": "Choa Chu Kang Street 52",
+        "amenity": "community_centre",
+        "building": "yes",
+        "internet_access": "wlan",
+        "name": "Yew Tee Community Club"
+      }
+    },
+    {
+      "id": "yio-chu-kang-community-club-13814-1038414",
+      "name": "Yio Chu Kang Community Club",
+      "lat": 1.381404,
+      "lng": 103.841416,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "50",
+        "addr:postcode": "569163",
+        "addr:street": "Ang Mo Kio Street 61",
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Yio Chu Kang Community Club"
+      }
+    },
+    {
+      "id": "yuhua-community-club-13399-1037371",
+      "name": "Yuhua Community Club",
+      "lat": 1.339871,
+      "lng": 103.737114,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "90",
+        "addr:postcode": "609958",
+        "addr:street": "Boon Lay Way",
+        "amenity": "community_centre",
+        "building": "yes",
+        "building:levels": "3",
+        "name": "Yuhua Community Club",
+        "name:en": "Yuhua Community Club",
+        "name:ms": "Kelab Masyarakat Yuhua"
+      }
+    },
+    {
+      "id": "yusof-ishak-house-12985-1037748",
+      "name": "Yusof Ishak House",
+      "lat": 1.298503,
+      "lng": 103.774772,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "building": "school",
+        "building:levels": "3",
+        "fixme:zh": "chinese name",
+        "name": "Yusof Ishak House",
+        "name:zh": "\u5c24\u7d22\u592b\u4f0a\u6c99\u5c4b",
+        "short_name": "YIH"
+      }
+    },
+    {
+      "id": "zhenghua-community-club-13869-1037717",
+      "name": "Zhenghua Community Club",
+      "lat": 1.386853,
+      "lng": 103.771725,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "1",
+        "addr:postcode": "677738",
+        "addr:street": "Segar Road",
+        "amenity": "community_centre",
+        "building": "yes",
+        "levels": "4",
+        "name": "Zhenghua Community Club",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "zhenghua-senja-square-rc-13862-1037632",
+      "name": "Zhenghua-Senja Square RC",
+      "lat": 1.386157,
+      "lng": 103.763183,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "community_centre",
+        "building": "yes",
+        "name": "Zhenghua-Senja Square RC"
+      }
+    },
+    {
+      "id": "zi-jung-cultural-centre-12824-1038455",
+      "name": "Zi Jung Cultural Centre",
+      "lat": 1.282402,
+      "lng": 103.845495,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:community_centre",
+      "_prominence": 5,
+      "_tags": {
+        "addr:street": "South Bridge Road",
+        "amenity": "community_centre",
+        "name": "Zi Jung Cultural Centre",
+        "source": "Kaart Ground Survey 2017"
+      }
+    },
+    {
+      "id": "ziggyfeet-12921-1038567",
+      "name": "ZiggyFeet",
+      "lat": 1.292114,
+      "lng": 103.856743,
+      "category": "arts",
+      "description": "Arts or performance venue",
+      "_prominence": 5,
+      "_tags": {
+        "dance:teaching": "yes",
+        "leisure": "dance",
+        "level": "-1",
+        "name": "ZiggyFeet"
+      }
+    },
+    {
+      "id": "mmcineplexes-city-square-johor-bahru-14615-1037638",
+      "name": "mmCineplexes City Square Johor Bahru",
+      "lat": 1.461518,
+      "lng": 103.763815,
+      "category": "arts",
+      "description": "Arts or performance venue, amenity:cinema",
+      "_prominence": 5,
+      "_tags": {
+        "addr:housenumber": "108",
+        "addr:postcode": "80000",
+        "addr:street": "Jalan Wong Ah Fook",
+        "amenity": "cinema",
+        "name": "mmCineplexes City Square Johor Bahru"
+      }
+    }
+  ]
+}

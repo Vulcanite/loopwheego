@@ -491,6 +491,8 @@ def _explorer_poi_score(places: list[dict]) -> float:
 def _build_explorer_route_pois(
     routes: list[dict],
     poi_categories: list[str] | None,
+    *,
+    loop_mode: bool = False,
 ) -> tuple[list[dict], list[list[POI]]]:
     ranked_routes: list[tuple[float, dict, list[POI]]] = []
     nearby_corridor_km = 0.25
@@ -498,17 +500,25 @@ def _build_explorer_route_pois(
     for route in routes:
         source = str(route.get("source", "unknown"))
         polyline = route.get("polyline") or []
-        nearby_places = cached_places.pick_places_along_polyline(
-            polyline,
-            categories=poi_categories,
-            limit=5,
-            corridor_km=nearby_corridor_km,
-        )
+        if loop_mode:
+            nearby_places = cached_places.pick_places_for_loop_area(
+                polyline,
+                categories=poi_categories,
+                limit=8,
+            )
+        else:
+            nearby_places = cached_places.pick_places_along_polyline(
+                polyline,
+                categories=poi_categories,
+                limit=8,
+                corridor_km=nearby_corridor_km,
+            )
         combined = cached_places.places_to_pois(nearby_places)
         score = _explorer_poi_score(nearby_places)
         print(
             "explorer_route_pois: "
             f"source={source} "
+            f"mode={'loop_area' if loop_mode else 'route_corridor'} "
             f"nearby={[place['name'] for place in nearby_places]} "
             f"total={len(combined)} "
             f"score={score:.2f}"
@@ -547,7 +557,7 @@ async def _generate_explorer_loop_routes(
         f"user_waypoints={0 if not user_waypoints else len(user_waypoints)} "
         f"sources={sources}"
     )
-    ranked_routes, route_pois = _build_explorer_route_pois(routes, poi_categories)
+    ranked_routes, route_pois = _build_explorer_route_pois(routes, poi_categories, loop_mode=True)
     print(
         "explorer_loop_routes_ranked: "
         f"routes={len(ranked_routes)} "
@@ -561,7 +571,6 @@ async def _generate_explorer_a2b_routes(
     start_lat: float,
     end_lng: float,
     end_lat: float,
-    target_distance_km: float,
     mode: str,
     poi_categories: list[str] | None,
     user_waypoints: list[tuple[float, float]] | None,
@@ -580,7 +589,7 @@ async def _generate_explorer_a2b_routes(
         f"user_waypoints={0 if not user_waypoints else len(user_waypoints)} "
         f"sources={[route.get('source', 'unknown') for route in routes]}"
     )
-    ranked_routes, route_pois = _build_explorer_route_pois(routes, poi_categories)
+    ranked_routes, route_pois = _build_explorer_route_pois(routes, poi_categories, loop_mode=False)
     print(
         "explorer_a2b_routes_ranked: "
         f"routes={len(ranked_routes)} "
@@ -623,11 +632,37 @@ async def generate_route_variants(
 
         target_distance_km = body.distance_km
         if app_mode == "explorer":
-            if body.target_duration_minutes is None:
-                raise HTTPException(status_code=400, detail="Explorer routes require target_duration_minutes.")
             if not body.poi_categories:
                 raise HTTPException(status_code=400, detail="Explorer routes require at least one POI category.")
-            target_distance_km = _target_distance_for_duration(mode, body.target_duration_minutes)
+            if route_type == "loop":
+                has_distance = body.distance_km is not None
+                has_duration = body.target_duration_minutes is not None
+                if has_distance == has_duration:
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Explorer loop routes require exactly one of distance_km or target_duration_minutes.",
+                    )
+                if has_duration:
+                    target_distance_km = _target_distance_for_duration(mode, body.target_duration_minutes)
+                else:
+                    target_distance_km = body.distance_km
+                max_distance = MAX_CYCLE_DISTANCE_KM if mode == "cycle" else MAX_WALK_DISTANCE_KM
+                if target_distance_km is None or target_distance_km < MIN_DISTANCE_KM:
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"distance_km must be at least {MIN_DISTANCE_KM:g} for explorer loop routes.",
+                    )
+                if target_distance_km > max_distance:
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"distance_km cannot exceed {max_distance:g} for mode={mode}.",
+                    )
+            elif body.distance_km is not None or body.target_duration_minutes is not None:
+                print(
+                    "explorer_a2b_target_ignored: "
+                    f"distance_km={body.distance_km} "
+                    f"target_duration_minutes={body.target_duration_minutes}"
+                )
         elif route_type != "a2b":
             if target_distance_km is None:
                 raise HTTPException(status_code=400, detail="Fitness routes require distance_km.")
@@ -659,7 +694,6 @@ async def generate_route_variants(
                     body.start_lat,
                     end_lng,
                     end_lat,
-                    float(target_distance_km),
                     mode=mode,
                     poi_categories=body.poi_categories,
                     user_waypoints=body.waypoints,
