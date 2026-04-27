@@ -186,7 +186,7 @@ export function PlaceSearch({
   const showDropdown = open && !disabled && (loading || results.length > 0)
 
   return (
-    <div className="relative z-20 isolate">
+    <div className="relative" style={{ zIndex: 100 }}>
       <input
         value={query}
         onChange={(e) => {
@@ -226,11 +226,7 @@ export function PlaceSearch({
             background: "var(--surface)",
             border: "1px solid var(--border-mid)",
             maxHeight: "280px",
-            zIndex: 9999,
-            opacity: 1,
-            backdropFilter: "none",
-            WebkitBackdropFilter: "none",
-            isolation: "isolate",
+            zIndex: 200,
           }}
           role="listbox"
         >

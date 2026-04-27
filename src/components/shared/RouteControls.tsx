@@ -1,5 +1,5 @@
-import { Loader2, MapPin, Navigation, Bike, Footprints, RotateCcw, ArrowRight, Plus, X, ChevronDown } from "lucide-react"
-import { useState, useCallback, useEffect, useMemo, useRef } from "react"
+import { Loader2, MapPin, Navigation, Bike, Footprints, RotateCcw, ArrowRight, Plus, X } from "lucide-react"
+import { useState, useCallback, useEffect, useMemo } from "react"
 
 import { PlaceSearch } from "@/components/shared/PlaceSearch"
 import { Slider } from "@/components/ui/slider"
@@ -130,8 +130,6 @@ export function RouteControls({
   const [explorerTargetMode, setExplorerTargetMode] = useState<ExplorerTargetMode>("distance")
   const [stops, setStops] = useState<StopDraft[]>([])
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [isCategoryPickerOpen, setIsCategoryPickerOpen] = useState(false)
-  const categoryPickerRef = useRef<HTMLDivElement | null>(null)
   const availableCategories = useMemo(
     () => (availableExplorerCategories && availableExplorerCategories.length > 0
       ? availableExplorerCategories
@@ -184,26 +182,6 @@ export function RouteControls({
     onExplorerCategoriesChange?.(selectedCategories)
   }, [appMode, onExplorerCategoriesChange, selectedCategories])
 
-  useEffect(() => {
-    if (!isCategoryPickerOpen) return
-
-    const handlePointerDown = (event: MouseEvent): void => {
-      if (!categoryPickerRef.current?.contains(event.target as Node)) {
-        setIsCategoryPickerOpen(false)
-      }
-    }
-
-    const handleEscape = (event: KeyboardEvent): void => {
-      if (event.key === "Escape") setIsCategoryPickerOpen(false)
-    }
-
-    document.addEventListener("mousedown", handlePointerDown)
-    document.addEventListener("keydown", handleEscape)
-    return () => {
-      document.removeEventListener("mousedown", handlePointerDown)
-      document.removeEventListener("keydown", handleEscape)
-    }
-  }, [isCategoryPickerOpen])
 
   useEffect(() => {
     setSelectedCategories((prev) => prev.filter((category) => availableCategories.includes(category)))
@@ -392,106 +370,38 @@ export function RouteControls({
         <div className="mb-4 animate-rise-in">
           <div className="flex items-center justify-between mb-2">
             <SectionLabel>Categories</SectionLabel>
-            <span className="text-[11px]" style={{ color: "var(--fg-faint)" }}>
-              {selectedCategories.length > 0 ? `${selectedCategories.length} selected` : "None selected"}
-            </span>
-          </div>
-          <div
-            className="relative isolate"
-            ref={categoryPickerRef}
-            style={{ zIndex: isCategoryPickerOpen ? 90 : 1 }}
-          >
-            <button
-              type="button"
-              disabled={disabled}
-              onClick={() => setIsCategoryPickerOpen((prev) => !prev)}
-              className="w-full rounded-xl border px-3 py-3 text-left transition-all disabled:opacity-40"
-              style={{ borderColor: "var(--border-mid)", background: "var(--card)", color: "var(--fg)" }}
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex min-w-0 flex-1 flex-wrap gap-2">
-                  {selectedCategories.length > 0 ? (
-                    selectedCategories.map((category) => (
-                      <span
-                        key={category}
-                        className="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium"
-                        style={{ background: "rgba(230,51,41,0.12)", color: "var(--fg)" }}
-                      >
-                        {formatPOICategory(category)}
-                      </span>
-                    ))
-                  ) : (
-                    <span className="text-sm" style={{ color: "var(--fg-faint)" }}>
-                      Select categories
-                    </span>
-                  )}
-                </div>
-                <ChevronDown
-                  size={16}
-                  style={{
-                    color: "var(--fg-faint)",
-                    transform: isCategoryPickerOpen ? "rotate(180deg)" : "rotate(0deg)",
-                    transition: "transform 160ms ease",
-                  }}
-                />
-              </div>
-            </button>
-
-            {isCategoryPickerOpen && (
-              <div
-                className="absolute left-0 right-0 top-[calc(100%+8px)] z-30 rounded-2xl border p-3 shadow-2xl"
-                style={{
-                  zIndex: 10020,
-                  borderColor: "var(--border-mid)",
-                  background: "var(--surface)",
-                  opacity: 1,
-                  backdropFilter: "none",
-                  WebkitBackdropFilter: "none",
-                  isolation: "isolate",
-                }}
+            {selectedCategories.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setSelectedCategories([])}
+                className="text-[11px] transition-colors"
+                style={{ color: "var(--red)" }}
               >
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-[11px] uppercase tracking-widest font-semibold" style={{ color: "var(--fg-faint)" }}>
-                    Explorer Categories
-                  </p>
-                  {selectedCategories.length > 0 && (
-                    <button
-                      type="button"
-                      onClick={() => setSelectedCategories([])}
-                      className="text-[11px] transition-colors"
-                      style={{ color: "var(--red)" }}
-                    >
-                      Clear
-                    </button>
-                  )}
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {availableCategories.map((category) => {
-                    const active = selectedCategories.includes(category)
-                    return (
-                      <button
-                        key={category}
-                        type="button"
-                        disabled={disabled}
-                        onClick={() => toggleCategory(category)}
-                        className="rounded-full border px-3 py-1.5 text-xs font-medium transition-all disabled:opacity-40"
-                        style={{
-                          background: active ? "var(--red)" : "transparent",
-                          borderColor: active ? "var(--red)" : "var(--border-mid)",
-                          color: active ? "#fff" : "var(--fg-muted)",
-                        }}
-                      >
-                        {formatPOICategory(category)}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
+                Clear
+              </button>
             )}
           </div>
-          <p className="text-[11px] mt-2" style={{ color: "var(--fg-faint)" }}>
-            Explorer categories are opt-in. Select one or more before generating a route.
-          </p>
+          <div className="flex flex-wrap gap-2">
+            {availableCategories.map((category) => {
+              const active = selectedCategories.includes(category)
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  disabled={disabled}
+                  onClick={() => toggleCategory(category)}
+                  className="rounded-full border px-3 py-1.5 text-xs font-medium transition-all disabled:opacity-40"
+                  style={{
+                    background: active ? "var(--red)" : "transparent",
+                    borderColor: active ? "var(--red)" : "var(--border-mid)",
+                    color: active ? "#fff" : "var(--fg-muted)",
+                  }}
+                >
+                  {formatPOICategory(category)}
+                </button>
+              )
+            })}
+          </div>
         </div>
       )}
 

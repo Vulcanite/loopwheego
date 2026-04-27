@@ -8,7 +8,7 @@ interface POICardProps {
   index: number
   isSelected: boolean
   onSelect: (id: string) => void
-  onAddWaypoint?: (lng: number, lat: number) => void // NEW
+  onAddWaypoint?: (lng: number, lat: number) => void
 }
 
 export function POICard({ poi, index, isSelected, onSelect, onAddWaypoint }: POICardProps): JSX.Element {
@@ -24,22 +24,23 @@ export function POICard({ poi, index, isSelected, onSelect, onAddWaypoint }: POI
         isSelected ? "selected" : ""
       }`}
       style={{
-        background: isSelected ? "rgba(230,51,41,0.08)" : "rgba(255,255,255,0.03)",
-        borderColor: isSelected ? "rgba(230,51,41,0.3)" : "rgba(255,255,255,0.07)",
         borderLeftWidth: "3px",
         borderLeftColor: isSelected ? "#e63329" : "transparent",
       }}
     >
       <div className="flex items-start gap-3">
         <span
-          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold text-white mt-0.5"
-          style={{ background: isSelected ? "#e63329" : "rgba(255,255,255,0.1)" }}
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold mt-0.5"
+          style={{
+            background: isSelected ? "#e63329" : "var(--pill-bg)",
+            color: isSelected ? "#fff" : "var(--fg)",
+          }}
         >
           {index + 1}
         </span>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm font-semibold text-white leading-tight truncate">
+            <span className="text-sm font-semibold leading-tight truncate" style={{ color: "var(--fg)" }}>
               {poi.name}
             </span>
             <span
@@ -50,24 +51,23 @@ export function POICard({ poi, index, isSelected, onSelect, onAddWaypoint }: POI
             </span>
           </div>
           {poi.narration && (
-            <p className="text-xs text-white/45 leading-relaxed line-clamp-2">
+            <p className="text-xs leading-relaxed line-clamp-2" style={{ color: "var(--fg-muted)" }}>
               {poi.narration}
             </p>
           )}
-          <p className="text-[11px] text-white/25 mt-1.5">
+          <p className="text-[11px] mt-1.5" style={{ color: "var(--fg-faint)" }}>
             ~{poi.duration_suggested_minutes} min suggested
           </p>
         </div>
       </div>
 
-      {/* NEW: Re-route Action Button */}
       {isSelected && onAddWaypoint && (
-        <div className="mt-4 ml-10 border-t border-white/10 pt-3 animate-fade-up">
+        <div className="mt-4 ml-10 pt-3 animate-fade-up" style={{ borderTop: "1px solid var(--border)" }}>
           <button
             type="button"
-            onClick={(e) => { 
-              e.stopPropagation() // Prevent card from collapsing
-              onAddWaypoint(poi.lng, poi.lat) 
+            onClick={(e) => {
+              e.stopPropagation()
+              onAddWaypoint(poi.lng, poi.lat)
             }}
             className="flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-md transition-all hover:opacity-80"
             style={{ background: "var(--red)", color: "white" }}

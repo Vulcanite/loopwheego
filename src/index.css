@@ -42,8 +42,8 @@
 [data-theme="light"] {
   --bg:           #f2f3f6;
   --surface:      #ffffff;
-  --card:         #ffffff;
-  --card-hover:   #f8f9fb;
+  --card:         #f0f2f5;
+  --card-hover:   #ebedf1;
   --border:       rgba(0,0,0,0.08);
   --border-mid:   rgba(0,0,0,0.13);
   --fg:           #111318;
