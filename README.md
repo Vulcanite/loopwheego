@@ -1,11 +1,11 @@
 # LoopWheeGo — Frontend
 
-React + TypeScript frontend for LoopWheeGo, a walking and cycling route generation and discovery platform. Renders routes on a Mapbox map, supports POI discovery, variant picking, and GPX export.
+React + TypeScript frontend for LoopWheeGo, a walking and cycling route generation and discovery platform. Renders routes on a MapLibre/MapTiler map, supports POI discovery, variant picking, and GPX export.
 
 ## Tech Stack
 
 - **React 18** + TypeScript + Vite
-- **Mapbox GL JS** — map rendering and geocoding
+- **MapLibre GL JS** — map rendering
 - **shadcn/ui** + Tailwind CSS — UI components
 - **React Query** — API caching
 - **Axios** — HTTP client
@@ -13,7 +13,7 @@ React + TypeScript frontend for LoopWheeGo, a walking and cycling route generati
 ## Prerequisites
 
 - Node.js 18+
-- A [Mapbox](https://mapbox.com) public token
+- A [MapTiler](https://www.maptiler.com/) API key
 - LoopWheeGo backend running (see backend README)
 
 ## Setup
@@ -25,7 +25,7 @@ npm install
 Create a `.env` file in this directory:
 
 ```env
-VITE_MAPBOX_TOKEN=pk.your_mapbox_token_here
+VITE_MAPTILER_KEY=your_maptiler_key_here
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
@@ -46,10 +46,10 @@ npm run preview     # preview production build locally
 
 ## Environment Variables
 
-| Variable | Description |
-|---|---|
-| `VITE_MAPBOX_TOKEN` | Mapbox public token (required) |
-| `VITE_API_BASE_URL` | Backend API base URL |
+| Variable            | Description                 |
+|---------------------|-----------------------------|
+| `VITE_MAPTILER_KEY` | MapTiler API key (required) |
+| `VITE_API_BASE_URL` | Backend API base URL        |
 
 ## Features
 

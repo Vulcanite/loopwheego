@@ -9,18 +9,17 @@ import { RouteControls } from "@/components/shared/RouteControls"
 import { RouteVariantPicker } from "@/components/shared/RouteVariantPicker"
 import { BottomSheet, type SheetState } from "@/components/mobile/BottomSheet"
 import { MobileRouteCards } from "@/components/mobile/MobileRouteCards"
-import type { RouteResponse } from "@/types/route"
+import type { AppMode, RouteResponse, RouteType, TransportMode } from "@/types/route"
 import { api, formatAxiosError } from "@/services/api"
 import { useToast } from "@/components/ui/use-toast"
 import type { POI } from "@/types/poi"
 import type { SuggestedPlace } from "@/types/place"
 import { formatPOICategory } from "@/lib/poiPresentation"
 
-type AppMode = "fitness" | "explorer"
 type RouteSession = {
   appMode: AppMode
-  mode: string
-  routeType?: string
+  mode: TransportMode
+  routeType?: RouteType
   distance_km?: number
   target_duration_minutes?: number
   poi_categories?: string[]

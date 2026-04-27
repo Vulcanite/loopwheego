@@ -280,6 +280,14 @@ export function RouteControls({
         waypoints: session.waypoints,
         poi_categories: session.poi_categories,
       })
+      if (result.routes.length === 0) {
+        toast({
+          title: "No routes generated",
+          description: "Try a different start, destination, distance, or stop.",
+          variant: "destructive",
+        })
+        return
+      }
       onLoopStopsPlanned(routeType === "loop" ? selectedStops : [])
       onRoutesGenerated(result.routes, appMode, session)
     } catch (e) {
@@ -340,7 +348,6 @@ export function RouteControls({
               if (m === appMode) return
               setAppMode(m)
               setStops([])
-              if (m !== "explorer") setIsCategoryPickerOpen(false)
               onAppModeChange?.(m)
             }}
             className={`mode-tab border disabled:opacity-40 disabled:cursor-not-allowed`}
