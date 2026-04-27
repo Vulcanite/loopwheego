@@ -4,6 +4,7 @@ import time
 import httpx
 
 PUBLIC_NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org"
+LOCAL_NOMINATIM_BASE_URL = "http://localhost:8080"
 PUBLIC_OSRM_BASE_URL = "https://router.project-osrm.org"
 UNHEALTHY_TTL_S = float(os.getenv("EXTERNAL_ENDPOINT_UNHEALTHY_TTL_S", "60"))
 _unhealthy_until: dict[str, float] = {}
@@ -48,7 +49,7 @@ def should_fallback_on_error(exc: Exception) -> bool:
 
 
 def get_nominatim_base_urls() -> list[str]:
-    configured = os.getenv("NOMINATIM_BASE_URL", PUBLIC_NOMINATIM_BASE_URL).rstrip("/")
+    configured = os.getenv("NOMINATIM_BASE_URL", LOCAL_NOMINATIM_BASE_URL).rstrip("/")
     return [url for url in _unique([configured, PUBLIC_NOMINATIM_BASE_URL]) if not is_base_url_temporarily_unhealthy(url)]
 
 

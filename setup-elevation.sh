@@ -8,8 +8,8 @@
 #   sudo ./setup_opentopodata.sh [OPTIONS]
 #
 # Options:
-#   --data-dir DIR      Base directory for data (default: /opt/opentopodata)
-#   --port PORT         Host port to expose the API (default: 5000)
+#   --data-dir DIR      Base directory for data (default: /home/amish/container-data/opentopodata)
+#   --port PORT         Host port to expose the API (default: 2999)
 #   --container NAME    Docker container name (default: opentopodata)
 #   --tiles TILES       Space-separated list of SRTM tile names to download
 #                       (default: a representative global set; use 'all' for all ~14k tiles)
@@ -26,7 +26,7 @@ set -euo pipefail
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
 DATA_DIR="/opt/opentopodata"
-HOST_PORT="5000"
+HOST_PORT="2999"
 CONTAINER_NAME="opentopodata"
 SKIP_DOWNLOAD=false
 TILE_LIST=()           # empty = use curated default set below
@@ -85,8 +85,7 @@ generate_all_tiles() {
   echo "${tiles[@]}"
 }
 
-# Singapore fits within a single SRTM tile: N01E103
-# (covers 1°N–2°N, 103°E–104°E — the entire island is inside this tile)
+# Singapore is covered by the N01E103 and N01E104 SRTM tiles.
 SINGAPORE_TILES=(N01E103 N01E104)
 
 # ── Dependency checks ──────────────────────────────────────────────────────────
@@ -244,18 +243,17 @@ smoke_test() {
     sleep "${delay}"
   done
 
-  # Query a sample point (Mount Everest)
-  info "Querying elevation for Mount Everest (27.9881°N, 86.9250°E)…"
+  # Query a sample Singapore point covered by the default N01E103/N01E104 tiles.
+  info "Querying elevation for Singapore test point (1.3521°N, 103.8198°E)…"
   local resp
-  resp=$(curl -sf "http://localhost:${HOST_PORT}/v1/srtm30m?locations=27.9881,86.9250" 2>/dev/null || echo "FAILED")
+  resp=$(curl -sf "http://localhost:${HOST_PORT}/v1/srtm30m?locations=1.3521,103.8198" 2>/dev/null || echo "FAILED")
 
   if echo "${resp}" | grep -q '"status":"OK"'; then
     local elev; elev=$(echo "${resp}" | grep -o '"elevation":[0-9.]*' | head -1 | cut -d: -f2)
-    success "Elevation returned: ${elev} m  (expected ~8849 m for Everest)"
+    success "Elevation returned: ${elev} m"
   else
     warn "Unexpected response: ${resp}"
-    warn "This is normal if the Everest tile (N27E086) was not downloaded."
-    info "To fetch it manually: $(dirname "$0")/setup_opentopodata.sh --skip-download --tiles N27E086"
+    warn "Check that the Singapore SRTM tiles were downloaded and the container is healthy."
   fi
 }
 
@@ -268,7 +266,7 @@ print_summary() {
   echo ""
   echo -e "  ${CYAN}Example queries:${RESET}"
   echo "    # Single point"
-  echo "    curl 'http://localhost:${HOST_PORT}/v1/srtm30m?locations=27.9881,86.9250'"
+  echo "    curl 'http://localhost:${HOST_PORT}/v1/srtm30m?locations=1.3521,103.8198'"
   echo ""
   echo "    # Multiple points"
   echo "    curl 'http://localhost:${HOST_PORT}/v1/srtm30m?locations=27.9881,86.9250|1.3521,103.8198'"

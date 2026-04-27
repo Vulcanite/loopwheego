@@ -122,9 +122,11 @@ if [[ ! -f "${SCRIPT_DIR}/.env" ]]; then
 CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 OSRM_FOOT_URL=http://localhost:5000
 OSRM_BIKE_URL=http://localhost:5001
+NOMINATIM_BASE_URL=http://localhost:8080
+ELEVATION_API_URL=http://localhost:2999/v1/srtm30m
 ROUTE_TIMEOUT_S=60
 ENABLE_POIS=true
-OVERPASS_URL=https://overpass.kumi.systems/api/interpreter
+OVERPASS_URL=http://localhost:12345/api/interpreter
 EOF
     ok "Created .env — edit it to configure CORS, routing, and POI discovery."
 else

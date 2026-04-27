@@ -50,14 +50,16 @@ The script is idempotent — safe to re-run. It will skip steps already complete
 
 Copy and edit `.env` before running (auto-created with defaults by `setup.sh` if missing):
 
-| Variable | Default | Description |
-|---|---|---|
-| `OSRM_FOOT_URL` | `http://localhost:5000` | Foot OSRM container |
-| `OSRM_BIKE_URL` | `http://localhost:5001` | Bicycle OSRM container |
-| `ENABLE_POIS` | `true` | Enable Overpass POI discovery |
-| `CORS_ORIGINS` | `http://localhost:5173` | Allowed frontend origins |
-| `ROUTE_TIMEOUT_S` | `60` | OSRM request timeout |
-| `OVERPASS_URL` | `https://overpass.kumi.systems/api/interpreter` | Overpass endpoint |
+| Variable             | Default                                  | Description                   |
+|----------------------|------------------------------------------|-------------------------------|
+| `OSRM_FOOT_URL`      | `http://localhost:5000`                  | Foot OSRM container           |
+| `OSRM_BIKE_URL`      | `http://localhost:5001`                  | Bicycle OSRM container        |
+| `NOMINATIM_BASE_URL` | `http://localhost:8080`                  | Local Nominatim container     |
+| `ELEVATION_API_URL`  | `http://localhost:2999/v1/srtm30m`       | Local OpenTopoData endpoint   |
+| `ENABLE_POIS`        | `true`                                   | Enable Overpass POI discovery |
+| `CORS_ORIGINS`       | `http://localhost:5173`                  | Allowed frontend origins      |
+| `ROUTE_TIMEOUT_S`    | `60`                                     | OSRM request timeout          |
+| `OVERPASS_URL`       | `http://localhost:12345/api/interpreter` | Local Overpass endpoint       |
 
 ## API Endpoints
 
@@ -72,7 +74,8 @@ Copy and edit `.env` before running (auto-created with defaults by `setup.sh` if
 ## Refreshing Cached Explorer Places
 
 The curated Explorer cache lives at `app/data/singapore_places_cached.json`.
-Runtime requests only read that file; Overpass is used only during maintenance.
+Explorer route generation reads that cache at runtime. The `/routes/discover-pois`
+endpoint can also query the local Overpass container for POIs along a route.
 
 The maintainer script supports a safer fetch/build/validate pipeline:
 
@@ -90,7 +93,7 @@ Notes:
 
 ## Running Tests
 
-Requires the server and OSRM containers to be running:
+The test script loads FastAPI in-process; no separate `uvicorn` server is required. It checks the expected local OSRM Foot, OSRM Cycle, Nominatim, Overpass, and OpenTopoData containers before route scenarios.
 
 ```bash
 python test_routes.py

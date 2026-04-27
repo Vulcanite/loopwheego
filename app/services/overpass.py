@@ -4,7 +4,7 @@ from typing import Any
 
 import httpx
 
-OVERPASS_URL = os.getenv("OVERPASS_URL", "https://overpass-api.de/api/interpreter")
+OVERPASS_URL = os.getenv("OVERPASS_URL", "http://localhost:12345/api/interpreter")
 
 def _derive_category(tags: dict[str, str]) -> str:
     if tags.get("tourism"):

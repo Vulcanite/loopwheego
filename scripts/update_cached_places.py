@@ -17,8 +17,8 @@ Pipeline:
 3. `validate` -> checks the generated cache before promotion
 4. `refresh`  -> fetch + build + validate, only replacing the cache when validation passes
 
-Runtime app requests still depend only on `app/data/singapore_places_cached.json`.
-Overpass is used only during cache maintenance.
+Explorer route generation still depends only on `app/data/singapore_places_cached.json`.
+POI discovery and cache maintenance can use the local Overpass container.
 """
 
 from __future__ import annotations
@@ -65,7 +65,7 @@ log = logging.getLogger("places_cache")
 OVERPASS_ENDPOINTS = tuple(
     endpoint.strip()
     for endpoint in (
-        os.getenv("OVERPASS_URL", ""),
+        os.getenv("OVERPASS_URL", "http://localhost:12345/api/interpreter"),
         "https://overpass-api.de/api/interpreter",
         "https://lz4.overpass-api.de/api/interpreter",
         "https://overpass.kumi.systems/api/interpreter",
