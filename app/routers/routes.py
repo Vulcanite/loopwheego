@@ -2,12 +2,10 @@ import asyncio
 import io
 import os
 import uuid
-from typing import Annotated
 
 import gpxpy
 import gpxpy.gpx
-import httpx
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
 from app.models.route import GPXRequest, MultiRouteResponse, POIDiscoveryRequest, RouteRequest, RouteResponse
@@ -16,20 +14,11 @@ from app.models.poi import POI
 from app.services import overpass
 from app.services import cached_places
 from app.services.elevation_service import enrich_routes_with_effort
-from app.services.external_endpoints import (
-    get_nominatim_base_urls,
-    mark_base_url_unhealthy,
-    should_fallback_on_error,
-)
-from app.services.llm import LLMService
 from app.services import route_generator
 
 router = APIRouter()
 
-_llm_singleton = LLMService()
-
 ENABLE_POIS = os.getenv("ENABLE_POIS", "false").lower() == "true"
-ENABLE_LLM_NARRATION = os.getenv("ENABLE_LLM_NARRATION", "false").lower() == "true"
 WALK_SPEED_KMH = 4.5
 CYCLE_SPEED_KMH = 10.0
 MIN_DISTANCE_KM = 3.0
@@ -38,10 +27,6 @@ MAX_CYCLE_DISTANCE_KM = 100.0
 MAX_FITNESS_ROUTES = 4
 ROUTE_DUPLICATE_SIMILARITY_THRESHOLD = 0.88
 ROUTE_SELECTION_SIMILARITY_THRESHOLD = 0.82
-
-
-def get_llm_service() -> LLMService:
-    return _llm_singleton
 
 
 def _target_distance_for_duration(mode: str, target_duration_minutes: int) -> float:
@@ -389,41 +374,8 @@ async def _build_route_responses(
     return out
 
 
-async def _reverse_geocode_name(lng: float, lat: float) -> str:
-    async with httpx.AsyncClient(timeout=8.0) as client:
-        for base_url in get_nominatim_base_urls():
-            try:
-                r = await client.get(
-                    f"{base_url}/reverse",
-                    params={
-                        "lat": lat,
-                        "lon": lng,
-                        "format": "json",
-                    },
-                    headers={
-                        "Accept": "application/json",
-                        "User-Agent": "LoopWheeGo/1.0",
-                    },
-                )
-                r.raise_for_status()
-                data = r.json()
-                name = data.get("display_name")
-                if isinstance(name, str) and name.strip():
-                    return name.strip()[:240]
-            except (httpx.HTTPError, KeyError, TypeError, ValueError) as exc:
-                if should_fallback_on_error(exc):
-                    mark_base_url_unhealthy(base_url)
-                    continue
-                break
-    return "your starting point"
-
-
 async def _build_pois(
     polyline: list[list[float]],
-    start_lng: float,
-    start_lat: float,
-    distance_km: float,
-    llm: LLMService,
 ) -> list[POI]:
     
     if not ENABLE_POIS:
@@ -435,23 +387,10 @@ async def _build_pois(
     if not raw_pois:
         return []
 
-    enriched = raw_pois
-    if ENABLE_LLM_NARRATION:
-        start_name = await _reverse_geocode_name(start_lng, start_lat)
-        route_context = {
-            "distance_km": distance_km,
-            "start_location_name": start_name,
-        }
-        
-        try:
-            enriched = await llm.narrate_pois(raw_pois, route_context)
-        except Exception as e:
-            print(f"-> ERROR IN LLM CALL: {e}")
-    else:
-        enriched = [
-            {**p, "narration": "", "duration_suggested_minutes": 5}
-            for p in raw_pois
-        ]
+    enriched = [
+        {**p, "narration": "", "duration_suggested_minutes": 5}
+        for p in raw_pois
+    ]
 
     pois_out: list[POI] = []
     for p in enriched:
@@ -601,15 +540,10 @@ async def _generate_explorer_a2b_routes(
 @router.post("/discover-pois", response_model=list[POI])
 async def discover_pois(
     body: POIDiscoveryRequest,
-    llm: Annotated[LLMService, Depends(get_llm_service)],
 ) -> list[POI]:
     try:
         pois = await _build_pois(
             polyline=body.polyline,
-            start_lng=body.start_lng,
-            start_lat=body.start_lat,
-            distance_km=body.distance_km,
-            llm=llm,
         )
         return pois
     except Exception as exc:
@@ -621,7 +555,6 @@ async def discover_pois(
 @router.post("/generate-variants", response_model=MultiRouteResponse)
 async def generate_route_variants(
     body: RouteRequest,
-    llm: Annotated[LLMService, Depends(get_llm_service)],
 ) -> MultiRouteResponse:
     try:
         # 1. Branching based on Route Type

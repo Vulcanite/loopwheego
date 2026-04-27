@@ -161,61 +161,8 @@ async def test_places(client):
         fail(f"{e}"); return False
 
 
-async def test_llm(client):
-    section("5. LLM Service")
-    provider = os.getenv("LLM_PROVIDER", "ollama").lower()
-    info(f"LLM_PROVIDER = {provider}")
-
-    if provider == "ollama":
-        base = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-        model = os.getenv("OLLAMA_MODEL", "llama3.2")
-        info(f"URL={base}  model={model}")
-        t0 = time.monotonic()
-        try:
-            r = await client.get(f"{base}/api/tags", timeout=5)
-            elapsed = time.monotonic() - t0
-            if r.status_code == 200:
-                models = [m["name"] for m in r.json().get("models", [])]
-                ok(f"Ollama running ({elapsed:.1f}s) — models: {models or '(none pulled yet)'}")
-                if any(model in m for m in models):
-                    ok(f"'{model}' is available")
-                else:
-                    warn(f"'{model}' NOT found — run:  ollama pull {model}")
-            else:
-                warn(f"Ollama HTTP {r.status_code} ({elapsed:.1f}s)")
-        except Exception as e:
-            elapsed = time.monotonic() - t0
-            warn(f"Ollama unreachable after {elapsed:.1f}s: {e}")
-            warn("Routes will generate but POI narrations will be empty strings")
-
-    elif provider == "groq":
-        key = os.getenv("GROQ_API_KEY", "")
-        model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
-        info(f"model={model}")
-        if not key:
-            warn("GROQ_API_KEY not set — narrations will be empty")
-            return
-        ok(f"GROQ_API_KEY set (len={len(key)})")
-        t0 = time.monotonic()
-        try:
-            r = await client.post(
-                "https://api.groq.com/openai/v1/chat/completions",
-                headers={"Authorization": f"Bearer {key}"},
-                json={"model": model, "messages": [{"role":"user","content":"say ok"}], "max_tokens": 5},
-                timeout=10,
-            )
-            elapsed = time.monotonic() - t0
-            if r.status_code == 200:
-                ok(f"Groq API reachable and key valid ({elapsed:.1f}s)")
-            else:
-                warn(f"Groq HTTP {r.status_code} ({elapsed:.1f}s): {r.text[:120]}")
-        except Exception as e:
-            elapsed = time.monotonic() - t0
-            warn(f"Cannot reach Groq after {elapsed:.1f}s: {e}")
-
-
 async def test_generate(client):
-    section("6. POST /routes/generate-variants (SCENARIO MATRIX)")
+    section("5. POST /routes/generate-variants (SCENARIO MATRIX)")
     info(f"Using client timeout: {CLIENT_TIMEOUT_S:.0f}s  (ROUTE_TIMEOUT_S={ROUTE_TIMEOUT_S:.0f}s from .env)")
     scenarios = [
         (
@@ -329,7 +276,6 @@ async def main():
         osrm_ok = await test_osrm_engines(client)
         await test_overpass(client)
         await test_places(client)
-        await test_llm(client)
         scenarios_ok = await test_generate(client)
 
     section("Summary")

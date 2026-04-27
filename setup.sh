@@ -13,7 +13,6 @@ OSRM_DATA_DIR="${OSRM_DATA_DIR:-/root/osrm-data}"
 FOOT_DATA="${FOOT_DATA:-malaysia-singapore-brunei-latest.osrm}"
 BIKE_DATA="${BIKE_DATA:-bike-singapore.osrm}"
 BACKEND_PORT="${BACKEND_PORT:-8000}"
-OLLAMA_LOG="${OLLAMA_LOG:-/var/log/ollama.log}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VENV_DIR="${SCRIPT_DIR}/.venv"
@@ -34,7 +33,6 @@ section() { echo -e "\n${CYAN}── $* ──${NC}"; }
 section "Checking prerequisites"
 
 command -v docker  &>/dev/null || fail "Docker not found. Install: dnf install docker-ce"
-command -v ollama  &>/dev/null || fail "Ollama not found. Install: curl -fsSL https://ollama.com/install.sh | sh"
 command -v python3 &>/dev/null || fail "python3 not found. Install: dnf install python3"
 
 PYTHON_VER=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
@@ -96,34 +94,7 @@ start_osrm_container "osrm-foot" 5000 "${FOOT_DATA}" "foot"
 start_osrm_container "osrm-bike" 5001 "${BIKE_DATA}" "bicycle"
 
 # ─────────────────────────────────────────────────────────────
-# 3. Ollama
-# ─────────────────────────────────────────────────────────────
-section "Ollama"
-
-if pgrep -x ollama &>/dev/null; then
-    ok "Ollama already running"
-else
-    info "Starting Ollama..."
-    nohup ollama serve > "${OLLAMA_LOG}" 2>&1 &
-    sleep 3
-    if pgrep -x ollama &>/dev/null; then
-        ok "Ollama started (log: ${OLLAMA_LOG})"
-    else
-        warn "Ollama may not have started — check ${OLLAMA_LOG}"
-    fi
-fi
-
-# Check llama3.1:8b is available
-EXPECTED_MODEL="llama3.1:8b"
-if ollama list 2>/dev/null | grep -q "${EXPECTED_MODEL}"; then
-    ok "${EXPECTED_MODEL} available"
-else
-    warn "${EXPECTED_MODEL} not found — pulling now (this may take a while)..."
-    ollama pull "${EXPECTED_MODEL}" || warn "Pull failed — narrations will be empty"
-fi
-
-# ─────────────────────────────────────────────────────────────
-# 4. Python venv + dependencies
+# 3. Python venv + dependencies
 # ─────────────────────────────────────────────────────────────
 section "Python environment"
 
@@ -141,33 +112,27 @@ info "Installing dependencies..."
 ok "Dependencies installed"
 
 # ─────────────────────────────────────────────────────────────
-# 5. .env
+# 4. .env
 # ─────────────────────────────────────────────────────────────
 section ".env"
 
 if [[ ! -f "${SCRIPT_DIR}/.env" ]]; then
     warn ".env not found — creating with defaults"
     cat > "${SCRIPT_DIR}/.env" <<EOF
-LLM_PROVIDER=ollama
-OLLAMA_BASE_URL=http://127.0.0.1:11434
-OLLAMA_MODEL=llama3.1:8b
-GROQ_API_KEY=
-GROQ_MODEL=llama-3.3-70b-versatile
 CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 OSRM_FOOT_URL=http://localhost:5000
 OSRM_BIKE_URL=http://localhost:5001
 ROUTE_TIMEOUT_S=60
 ENABLE_POIS=true
-ENABLE_LLM_NARRATION=false
 OVERPASS_URL=https://overpass.kumi.systems/api/interpreter
 EOF
-    ok "Created .env — edit it to configure LLM, CORS, etc."
+    ok "Created .env — edit it to configure CORS, routing, and POI discovery."
 else
     ok ".env exists"
 fi
 
 # ─────────────────────────────────────────────────────────────
-# 6. Start FastAPI
+# 5. Start FastAPI
 # ─────────────────────────────────────────────────────────────
 section "Starting FastAPI"
 

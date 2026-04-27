@@ -20,19 +20,6 @@ def _derive_category(tags: dict[str, str]) -> str:
     return "poi"
 
 
-def _build_query(lat: float, lng: float) -> str:
-    return f"""[out:json][timeout:25];
-(
-  node["tourism"](around:150,{lat},{lng});
-  node["historic"](around:150,{lat},{lng});
-  node["leisure"="park"](around:150,{lat},{lng});
-  node["amenity"="cafe"](around:150,{lat},{lng});
-  node["natural"="peak"](around:150,{lat},{lng});
-);
-out body;
-"""
-
-
 def _haversine_m(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
     r = 6371000.0
     p1, p2 = math.radians(lat1), math.radians(lat2)

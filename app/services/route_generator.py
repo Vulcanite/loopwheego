@@ -15,17 +15,14 @@ Strategy:
     - angular spread of anchors
 - Hard reject candidates that are too far from target
 
-Primary engine: OSRM /route
-Fallback      : small geometric triangle loop
+Primary engine: OSRM /trip and /route
 """
 
 from __future__ import annotations
 
 import asyncio
-import json
 import math
 import os
-from pathlib import Path
 from typing import Any
 
 import httpx
@@ -87,18 +84,6 @@ def _offset_point(lat: float, lng: float, north_m: float, east_m: float) -> tupl
     out_lat = lat + (north_m / m_per_deg_lat)
     out_lng = lng + (east_m / m_per_deg_lng)
     return out_lat, out_lng
-
-
-def _merge_polylines(polylines: list[list[list[float]]]) -> list[list[float]]:
-    out: list[list[float]] = []
-    for poly in polylines:
-        for pt in poly:
-            lng = float(pt[0])
-            lat = float(pt[1])
-            if out and abs(out[-1][0] - lng) < 1e-9 and abs(out[-1][1] - lat) < 1e-9:
-                continue
-            out.append([lng, lat])
-    return out
 
 
 def _max_segment_km(polyline: list[list[float]]) -> float:
@@ -349,34 +334,6 @@ def _candidate_anchor_pairs(
 
     pairs.sort(key=lambda x: x[2])
     return [(a, b) for a, b, _ in pairs[:_MAX_PAIR_CANDIDATES]]
-
-# ─────────────────────────────────────────────────────────────
-# Fallback
-# ─────────────────────────────────────────────────────────────
-
-def _fallback_triangle_loop(
-    start_lat: float,
-    start_lng: float,
-    distance_km: float,
-) -> dict[str, Any]:
-    d = max(distance_km, _MIN_LOOP_KM)
-    side_km = d / 3.0
-    side_m = side_km * 1000.0
-
-    p0 = [start_lng, start_lat]
-    lat1, lng1 = _offset_point(start_lat, start_lng, 0.87 * side_m, 0.50 * side_m)
-    lat2, lng2 = _offset_point(start_lat, start_lng, 0.05 * side_m, -0.70 * side_m)
-    p1 = [lng1, lat1]
-    p2 = [lng2, lat2]
-    poly = [p0, p1, p2, p0]
-
-    return {
-        "polyline": poly,
-        "distance_km": round(d, 2),
-        "duration_minutes": int(round((d / 4.5) * 60)),
-        "source": "fallback_triangle",
-    }
-
 
 # ─────────────────────────────────────────────────────────────
 # Scoring
