@@ -12,7 +12,6 @@ from app.models.route import GPXRequest, MultiRouteResponse, POIDiscoveryRequest
 from app.models.poi import POI
 
 from app.services import overpass
-from app.services import cached_places
 from app.services.elevation_service import enrich_routes_with_effort
 from app.services import route_generator
 
@@ -417,60 +416,41 @@ async def _build_pois(
         
     return pois_out
 
-def _explorer_poi_score(places: list[dict]) -> float:
-    if not places:
-        return 0.0
 
-    prominence = sum(float(place.get("_prominence", 0)) for place in places)
-    diversity = len({str(place.get("category", "")) for place in places})
-    corridor_penalty = sum(float(place.get("_route_dist_km", 0.0)) for place in places)
-    return prominence + diversity * 2.0 - corridor_penalty * 8.0
-
-
-def _build_explorer_route_pois(
+async def _build_explorer_route_pois(
     routes: list[dict],
     poi_categories: list[str] | None,
     *,
     loop_mode: bool = False,
 ) -> tuple[list[dict], list[list[POI]]]:
-    ranked_routes: list[tuple[float, dict, list[POI]]] = []
-    nearby_corridor_km = 0.25
+    if not routes:
+        return [], []
 
-    for route in routes:
+    categories = poi_categories or []
+    corridor_km = 0.6 if loop_mode else 0.35
+    per_route_pois = await overpass.fetch_pois_for_explorer_routes(
+        routes,
+        categories=categories,
+        max_per_route=8,
+        corridor_km=corridor_km,
+    )
+
+    ranked: list[tuple[float, dict, list[POI]]] = []
+    for route, pois in zip(routes, per_route_pois):
         source = str(route.get("source", "unknown"))
-        polyline = route.get("polyline") or []
-        if loop_mode:
-            nearby_places = cached_places.pick_places_for_loop_area(
-                polyline,
-                categories=poi_categories,
-                limit=8,
-            )
-        else:
-            nearby_places = cached_places.pick_places_along_polyline(
-                polyline,
-                categories=poi_categories,
-                limit=8,
-                corridor_km=nearby_corridor_km,
-            )
-        combined = cached_places.places_to_pois(nearby_places)
-        score = _explorer_poi_score(nearby_places)
+        score = float(len(pois)) + len({p.category for p in pois}) * 0.5
         print(
             "explorer_route_pois: "
             f"source={source} "
             f"mode={'loop_area' if loop_mode else 'route_corridor'} "
-            f"nearby={[place['name'] for place in nearby_places]} "
-            f"total={len(combined)} "
+            f"pois={[p.name for p in pois]} "
+            f"total={len(pois)} "
             f"score={score:.2f}"
         )
-        ranked_routes.append((score, route, combined))
+        ranked.append((score, route, pois))
 
-    ranked_routes.sort(
-        key=lambda item: (
-            -item[0],
-            abs(float(item[1].get("distance_km", 0.0))),
-        )
-    )
-    return [route for _, route, _ in ranked_routes], [pois for _, _, pois in ranked_routes]
+    ranked.sort(key=lambda item: (-item[0], abs(float(item[1].get("distance_km", 0.0)))))
+    return [route for _, route, _ in ranked], [pois for _, _, pois in ranked]
 
 
 async def _generate_explorer_loop_routes(
@@ -480,14 +460,17 @@ async def _generate_explorer_loop_routes(
     mode: str,
     poi_categories: list[str] | None,
     user_waypoints: list[tuple[float, float]] | None,
+    max_routes: int = 3,
 ) -> tuple[list[dict], list[list[POI]]]:
+    strict = max_routes > 1
     routes = await route_generator.generate_loop_variants(
         start_lng,
         start_lat,
         float(target_distance_km),
-        count=3,
+        count=max_routes,
         mode=mode,
         waypoints=user_waypoints,
+        strict_distance=strict,
     )
     sources = [route.get("source", "unknown") for route in routes]
     print(
@@ -496,7 +479,7 @@ async def _generate_explorer_loop_routes(
         f"user_waypoints={0 if not user_waypoints else len(user_waypoints)} "
         f"sources={sources}"
     )
-    ranked_routes, route_pois = _build_explorer_route_pois(routes, poi_categories, loop_mode=True)
+    ranked_routes, route_pois = await _build_explorer_route_pois(routes, poi_categories, loop_mode=True)
     print(
         "explorer_loop_routes_ranked: "
         f"routes={len(ranked_routes)} "
@@ -513,6 +496,7 @@ async def _generate_explorer_a2b_routes(
     mode: str,
     poi_categories: list[str] | None,
     user_waypoints: list[tuple[float, float]] | None,
+    max_routes: int = 3,
 ) -> tuple[list[dict], list[list[POI]]]:
     routes = await route_generator.generate_a2b(
         start_lng,
@@ -528,7 +512,7 @@ async def _generate_explorer_a2b_routes(
         f"user_waypoints={0 if not user_waypoints else len(user_waypoints)} "
         f"sources={[route.get('source', 'unknown') for route in routes]}"
     )
-    ranked_routes, route_pois = _build_explorer_route_pois(routes, poi_categories, loop_mode=False)
+    ranked_routes, route_pois = await _build_explorer_route_pois(routes, poi_categories, loop_mode=False)
     print(
         "explorer_a2b_routes_ranked: "
         f"routes={len(ranked_routes)} "
@@ -630,6 +614,7 @@ async def generate_route_variants(
                     mode=mode,
                     poi_categories=body.poi_categories,
                     user_waypoints=body.waypoints,
+                    max_routes=body.max_routes or 3,
                 )
             else:
                 routes = await route_generator.generate_a2b(
@@ -651,6 +636,7 @@ async def generate_route_variants(
                 mode=mode,
                 poi_categories=body.poi_categories,
                 user_waypoints=body.waypoints,
+                max_routes=body.max_routes or 3,
             )
             
     except HTTPException:

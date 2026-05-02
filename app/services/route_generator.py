@@ -482,6 +482,7 @@ async def _build_waypoint_loop_candidate(
     target_distance_km: float,
     mode: str = "walk",
     waypoints: list[tuple[float, float]] | None = None,
+    strict_distance: bool = True,
 ) -> dict[str, Any] | None:
     if not waypoints:
         return None
@@ -540,20 +541,21 @@ async def _build_waypoint_loop_candidate(
                 )
                 return None
 
-            if total_distance < 0.70 * target_distance_km:
-                print(
-                    "loop_waypoint_attempt: rejected too_short "
-                    f"distance_km={total_distance:.2f} "
-                    f"target_km={target_distance_km:.2f}"
-                )
-                return None
-            if total_distance > 1.35 * target_distance_km:
-                print(
-                    "loop_waypoint_attempt: rejected too_long "
-                    f"distance_km={total_distance:.2f} "
-                    f"target_km={target_distance_km:.2f}"
-                )
-                return None
+            if strict_distance:
+                if total_distance < 0.70 * target_distance_km:
+                    print(
+                        "loop_waypoint_attempt: rejected too_short "
+                        f"distance_km={total_distance:.2f} "
+                        f"target_km={target_distance_km:.2f}"
+                    )
+                    return None
+                if total_distance > 1.35 * target_distance_km:
+                    print(
+                        "loop_waypoint_attempt: rejected too_long "
+                        f"distance_km={total_distance:.2f} "
+                        f"target_km={target_distance_km:.2f}"
+                    )
+                    return None
 
             print(
                 "loop_waypoint_attempt: success "
@@ -584,7 +586,8 @@ async def generate_loop_variants(
     distance_km: float,
     count: int = 3,
     mode: str = "walk",
-    waypoints: list[tuple[float, float]] | None = None
+    waypoints: list[tuple[float, float]] | None = None,
+    strict_distance: bool = True,
 ) -> list[dict[str, Any]]:
     target = max(distance_km, _MIN_LOOP_KM)
     anchors = _generate_candidate_anchors(start_lat, start_lng, target)
@@ -603,7 +606,7 @@ async def generate_loop_variants(
         ]
         if waypoints:
             pair_tasks.append(
-                _build_waypoint_loop_candidate(client, start_lng, start_lat, target, mode, waypoints)
+                _build_waypoint_loop_candidate(client, start_lng, start_lat, target, mode, waypoints, strict_distance=strict_distance)
             )
         results = await asyncio.gather(*pair_tasks, return_exceptions=False)
 

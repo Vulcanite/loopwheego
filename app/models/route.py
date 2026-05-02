@@ -20,6 +20,7 @@ class RouteRequest(BaseModel):
     end_lat: Optional[float] = None
     waypoints: Optional[List[Tuple[float, float]]] = None
     poi_categories: Optional[List[str]] = None
+    max_routes: Optional[int] = None
 
 
 class RouteResponse(BaseModel):
