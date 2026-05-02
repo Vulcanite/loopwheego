@@ -16,6 +16,7 @@ export interface RouteRequest {
   end_lat?: number | null
   waypoints?: [number, number][]
   poi_categories?: string[]
+  max_routes?: number
 }
 
 export interface RouteResponse {

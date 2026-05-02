@@ -5,12 +5,13 @@ import type { RouteResponse } from "@/types/route"
 
 interface NarrationPanelProps {
   routeData: RouteResponse
-  selectedPOI: string | null // REVERTED
+  selectedPOI: string | null
   onSelectPOI: (id: string) => void
-  onAddWaypoint?: (lng: number, lat: number) => void
+  onAddWaypoint?: (lng: number, lat: number, poiId: string) => void
+  addedPOIIds?: Set<string>
 }
 
-export function NarrationPanel({ routeData, selectedPOI, onSelectPOI, onAddWaypoint }: NarrationPanelProps): JSX.Element {
+export function NarrationPanel({ routeData, selectedPOI, onSelectPOI, onAddWaypoint, addedPOIIds }: NarrationPanelProps): JSX.Element {
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   // Optional: Keep auto-scroll so when you click a map marker, it scrolls to the card
@@ -28,12 +29,13 @@ export function NarrationPanel({ routeData, selectedPOI, onSelectPOI, onAddWaypo
       ) : (
         routeData.pois.map((poi, i) => (
           <div key={poi.id} ref={(el) => { cardRefs.current[poi.id] = el }}>
-            <POICard 
-              poi={poi} 
-              index={i} 
-              isSelected={selectedPOI === poi.id} // REVERTED
-              onSelect={onSelectPOI} 
-              onAddWaypoint={onAddWaypoint} 
+            <POICard
+              poi={poi}
+              index={i}
+              isSelected={selectedPOI === poi.id}
+              onSelect={onSelectPOI}
+              onAddWaypoint={onAddWaypoint}
+              addedPOIIds={addedPOIIds}
             />
           </div>
         ))

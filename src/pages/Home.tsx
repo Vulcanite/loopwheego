@@ -24,6 +24,10 @@ type RouteSession = {
   target_duration_minutes?: number
   poi_categories?: string[]
   waypoints?: [number, number][]
+  start_lng: number
+  start_lat: number
+  end_lng?: number | null
+  end_lat?: number | null
 }
 
 const EXPLORER_CATEGORY_OPTIONS = [
@@ -68,6 +72,11 @@ export function Home(): JSX.Element {
 
   // Mobile bottom sheet state
   const [sheetState, setSheetState] = useState<SheetState>("idle")
+
+  // Active session — stored for waypoint-add re-generation
+  const [activeSession, setActiveSession] = useState<RouteSession | null>(null)
+  const [addedPOIIds, setAddedPOIIds] = useState<Set<string>>(new Set())
+  const [fitTrigger, setFitTrigger] = useState(0)
 
 
   const haversineMeters = (a: SuggestedPlace, b: SuggestedPlace): number => {
@@ -211,9 +220,47 @@ export function Home(): JSX.Element {
     setPlannedStops(session?.waypoints ?? [])
     setActiveRouteIdx(0)
     setSelectedPOI(null)
-    // On mobile, snap sheet to route cards view after generation
+    setActiveSession(session ?? null)
+    setAddedPOIIds(new Set())
     setSheetState("routes")
   }
+
+  const handleAddWaypointToRoute = useCallback(async (lng: number, lat: number, poiId: string): Promise<void> => {
+    if (!activeSession || activeAppMode !== "explorer") return
+    const newWaypoints: [number, number][] = [...(activeSession.waypoints ?? []), [lng, lat]]
+    const updatedSession: RouteSession = { ...activeSession, waypoints: newWaypoints }
+    setIsLoading(true)
+    try {
+      const result = await api.generateRouteVariants({
+        start_lng: updatedSession.start_lng,
+        start_lat: updatedSession.start_lat,
+        end_lng: updatedSession.end_lng,
+        end_lat: updatedSession.end_lat,
+        appMode: updatedSession.appMode,
+        mode: updatedSession.mode,
+        routeType: updatedSession.routeType,
+        distance_km: updatedSession.distance_km,
+        target_duration_minutes: updatedSession.target_duration_minutes,
+        poi_categories: updatedSession.poi_categories,
+        waypoints: newWaypoints,
+        max_routes: 1,
+      })
+      if (result.routes.length === 0) {
+        toast({ title: "Could not add stop", description: "No route found through that point.", variant: "destructive" })
+        return
+      }
+      setRoutes(result.routes)
+      setActiveRouteIdx(0)
+      setSelectedPOI(null)
+      setPlannedStops(newWaypoints)
+      setActiveSession(updatedSession)
+      setAddedPOIIds((prev) => new Set([...prev, poiId]))
+    } catch (e) {
+      toast({ title: "Could not add stop", description: formatAxiosError(e), variant: "destructive" })
+    } finally {
+      setIsLoading(false)
+    }
+  }, [activeSession, activeAppMode, toast])
 
   const handleAppModeChange = useCallback((mode: AppMode) => {
     if (mode === activeAppMode) return
@@ -318,6 +365,9 @@ export function Home(): JSX.Element {
           onSelectPOI={handleSelectPOI}
           onMapTap={handleMobileMapTap}
           fitPadding={mobileFitPadding}
+          fitTrigger={fitTrigger}
+          onAddWaypoint={activeAppMode === "explorer" ? (lng, lat, poiId) => void handleAddWaypointToRoute(lng, lat, poiId) : undefined}
+          addedPOIIds={addedPOIIds}
         />
 
         {activeAppMode === "explorer" && !activeRoute && explorerMapCategories.length > 0 && (
@@ -383,6 +433,25 @@ export function Home(): JSX.Element {
         )}
 
         <LoadingOverlay visible={isLoading} />
+
+        {/* Zoom-out button — shown when zoomed past route level */}
+        {activeRoute && !isLoading && (explorerViewport?.zoom ?? 0) > 14 && (
+          <button
+            type="button"
+            onClick={() => setFitTrigger((n) => n + 1)}
+            className="absolute right-4 z-20 flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold backdrop-blur-sm animate-fade-up"
+            style={{
+              top: "calc(env(safe-area-inset-top, 0px) + 16px)",
+              background: "var(--map-float-bg)",
+              border: "1px solid var(--map-float-border)",
+              color: "var(--map-float-fg)",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.18)",
+            }}
+          >
+            <MapPin size={13} style={{ color: "var(--red)" }} />
+            Show Route
+          </button>
+        )}
 
         {/* FAB — shown when sheet is idle */}
         {sheetState === "idle" && !isLoading && (
@@ -496,6 +565,8 @@ export function Home(): JSX.Element {
               routeData={activeRoute}
               selectedPOI={selectedPOI}
               onSelectPOI={handleSelectPOI}
+              onAddWaypoint={(lng, lat, poiId) => void handleAddWaypointToRoute(lng, lat, poiId)}
+              addedPOIIds={addedPOIIds}
             />
           </div>
         )}
@@ -573,6 +644,8 @@ export function Home(): JSX.Element {
           onViewportChange={setExplorerViewport}
           selectedPOI={selectedPOI}
           onSelectPOI={handleSelectPOI}
+          onAddWaypoint={activeAppMode === "explorer" ? (lng, lat, poiId) => void handleAddWaypointToRoute(lng, lat, poiId) : undefined}
+          addedPOIIds={addedPOIIds}
         />
       </main>
 

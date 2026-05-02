@@ -8,10 +8,12 @@ interface POICardProps {
   index: number
   isSelected: boolean
   onSelect: (id: string) => void
-  onAddWaypoint?: (lng: number, lat: number) => void
+  onAddWaypoint?: (lng: number, lat: number, poiId: string) => void
+  addedPOIIds?: Set<string>
 }
 
-export function POICard({ poi, index, isSelected, onSelect, onAddWaypoint }: POICardProps): JSX.Element {
+export function POICard({ poi, index, isSelected, onSelect, onAddWaypoint, addedPOIIds }: POICardProps): JSX.Element {
+  const alreadyAdded = addedPOIIds?.has(poi.id) ?? false
   const color = getPOICategoryColor(poi.category)
 
   return (
@@ -61,19 +63,28 @@ export function POICard({ poi, index, isSelected, onSelect, onAddWaypoint }: POI
         </div>
       </div>
 
-      {isSelected && onAddWaypoint && (
+      {isSelected && (
         <div className="mt-4 ml-10 pt-3 animate-fade-up" style={{ borderTop: "1px solid var(--border)" }}>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation()
-              onAddWaypoint(poi.lng, poi.lat)
-            }}
-            className="flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-md transition-all hover:opacity-80"
-            style={{ background: "var(--red)", color: "white" }}
-          >
-            <Plus size={12} /> Add to Route
-          </button>
+          {alreadyAdded ? (
+            <span
+              className="flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-md w-fit"
+              style={{ background: "color-mix(in srgb, var(--green) 12%, transparent)", color: "var(--green)" }}
+            >
+              ✓ Added to Route
+            </span>
+          ) : onAddWaypoint ? (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                onAddWaypoint(poi.lng, poi.lat, poi.id)
+              }}
+              className="flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-md transition-all hover:opacity-80"
+              style={{ background: "var(--red)", color: "white" }}
+            >
+              <Plus size={12} /> Add to Route
+            </button>
+          ) : null}
         </div>
       )}
     </div>

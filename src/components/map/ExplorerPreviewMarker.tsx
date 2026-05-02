@@ -44,7 +44,7 @@ export function ExplorerPreviewMarker({ map, poi }: ExplorerPreviewMarkerProps):
     badge.style.color = getPOICategoryColor(poi.category)
 
     const body = document.createElement("div")
-    body.textContent = poi.narration || "Cached Explorer place."
+    body.textContent = poi.narration || ""
     body.style.fontSize = "12px"
     body.style.lineHeight = "1.45"
     body.style.color = "#334155"

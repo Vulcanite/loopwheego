@@ -31,6 +31,10 @@ type StopDraft = {
 }
 type RouteControlsSession = Pick<RouteRequest, "mode" | "routeType" | "distance_km" | "target_duration_minutes" | "poi_categories" | "waypoints"> & {
   appMode: AppMode
+  start_lng: number
+  start_lat: number
+  end_lng?: number | null
+  end_lat?: number | null
 }
 
 const MAX_WALK_KM = 50
@@ -266,6 +270,10 @@ export function RouteControls({
         target_duration_minutes: shouldSendExplorerDuration ? durationMin : undefined,
         poi_categories: explorerCategories,
         waypoints: selectedStops.length > 0 ? selectedStops : undefined,
+        start_lng: startLng,
+        start_lat: startLat,
+        end_lng: endLng,
+        end_lat: endLat,
       }
       const result = await api.generateRouteVariants({
         start_lng: startLng,

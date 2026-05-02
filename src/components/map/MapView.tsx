@@ -26,6 +26,9 @@ interface MapViewProps {
   onSelectPOI: (id: string) => void
   onMapTap?: () => void
   fitPadding?: { top: number; right: number; bottom: number; left: number }
+  fitTrigger?: number
+  onAddWaypoint?: (lng: number, lat: number, poiId: string) => void
+  addedPOIIds?: Set<string>
 }
 
 const SINGAPORE_BOUNDS: [[number, number], [number, number]] = [
@@ -63,6 +66,9 @@ export function MapView({
   onSelectPOI,
   onMapTap,
   fitPadding,
+  fitTrigger,
+  onAddWaypoint,
+  addedPOIIds,
 }: MapViewProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
@@ -181,6 +187,15 @@ export function MapView({
     map.fitBounds(b, { padding: fitPaddingRef.current ?? 80, duration: 900 })
   }, [map, routeData])
 
+  // External fit-route trigger (zoom-out button)
+  useEffect(() => {
+    if (!map || !routeData?.polyline.length || fitTrigger === undefined) return
+    const coords = routeData.polyline
+    const b = new maplibregl.LngLatBounds(coords[0], coords[0])
+    coords.forEach(([lng, lat]) => { b.extend([lng, lat]) })
+    map.fitBounds(b, { padding: fitPaddingRef.current ?? 80, duration: 700 })
+  }, [fitTrigger, map, routeData])
+
   useEffect(() => {
     if (!map || routeData || !focusLocation) return
     map.flyTo({
@@ -222,7 +237,10 @@ export function MapView({
           ))}
           {routeData?.pois.map((poi, i) => (
             <POIMarker key={poi.id} map={map} poi={poi} index={i}
-              isSelected={selectedPOI === poi.id} onSelect={handleSelect} />
+              isSelected={selectedPOI === poi.id} onSelect={handleSelect}
+              onAddWaypoint={onAddWaypoint}
+              isAdded={addedPOIIds?.has(poi.id) ?? false}
+            />
           ))}
         </>
       ) : null}
