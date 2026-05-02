@@ -150,11 +150,13 @@ export function Home(): JSX.Element {
       duration_suggested_minutes: 15,
     }))
   }, [activeAppMode, activeRoute, cachedExplorerPlaces, explorerPreviewCategories, explorerViewport])
-  const mobileFitPadding = sheetState === "controls"
-    ? { top: 92, right: 28, bottom: 380, left: 28 }
-    : sheetState === "routes"
-      ? { top: 92, right: 28, bottom: 250, left: 28 }
-      : { top: 92, right: 28, bottom: 120, left: 28 }
+  const mobileFitPadding = useMemo(() => (
+    sheetState === "controls"
+      ? { top: 92, right: 28, bottom: 380, left: 28 }
+      : sheetState === "routes"
+        ? { top: 92, right: 28, bottom: 250, left: 28 }
+        : { top: 92, right: 28, bottom: 120, left: 28 }
+  ), [sheetState])
 
   useEffect(() => {
     isMountedRef.current = true

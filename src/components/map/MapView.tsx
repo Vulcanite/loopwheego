@@ -167,13 +167,19 @@ export function MapView({
     }
   }, [onMapTap])
 
+  const fitPaddingRef = useRef(fitPadding)
+  fitPaddingRef.current = fitPadding
+
+  const prevRouteRef = useRef<RouteResponse | null>(null)
   useEffect(() => {
     if (!map || !routeData?.polyline.length) return
+    if (prevRouteRef.current === routeData) return
+    prevRouteRef.current = routeData
     const coords = routeData.polyline
     const b = new maplibregl.LngLatBounds(coords[0], coords[0])
     coords.forEach(([lng, lat]) => { b.extend([lng, lat]) })
-    map.fitBounds(b, { padding: fitPadding ?? 80, duration: 900 })
-  }, [fitPadding, map, routeData])
+    map.fitBounds(b, { padding: fitPaddingRef.current ?? 80, duration: 900 })
+  }, [map, routeData])
 
   useEffect(() => {
     if (!map || routeData || !focusLocation) return
