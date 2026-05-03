@@ -132,9 +132,9 @@ services:
       OVERPASS_DIFF_URL: "http://download.geofabrik.de/asia/malaysia-singapore-brunei-updates/"
       OVERPASS_UPDATE_SLEEP: "3600"
       OVERPASS_USE_AREAS: "false"
-      OVERPASS_PLANET_PREPROCESS: "mv /db/planet.osm.bz2 /db/planet.osm.pbf && osmium cat -o /db/planet.osm.bz2 /db/planet.osm.pbf && rm /db/planet.osm.pbf"
+      OVERPASS_PLANET_PREPROCESS: "chmod 755 /db && mv /db/planet.osm.bz2 /db/planet.osm.pbf && osmium cat -o /db/planet.osm.bz2 /db/planet.osm.pbf && rm /db/planet.osm.pbf"
     healthcheck:
-      test: ["CMD-SHELL", "curl --noproxy '*' -qfg 'http://localhost/api/interpreter?data=[out:json];node(1);out;' | grep -q Overpass || exit 1"]
+      test: ["CMD-SHELL", "curl --noproxy '*' -qfg 'http://localhost/api/status' | grep -q 'Connected as' || exit 1"]
       interval: 1m
       timeout: 30s
       retries: 20
