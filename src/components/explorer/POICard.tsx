@@ -57,9 +57,6 @@ export function POICard({ poi, index, isSelected, onSelect, onAddWaypoint, added
               {poi.narration}
             </p>
           )}
-          <p className="text-[11px] mt-1.5" style={{ color: "var(--fg-faint)" }}>
-            ~{poi.duration_suggested_minutes} min suggested
-          </p>
         </div>
       </div>
 

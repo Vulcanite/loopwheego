@@ -27,7 +27,9 @@ interface MapViewProps {
   onMapTap?: () => void
   fitPadding?: { top: number; right: number; bottom: number; left: number }
   fitTrigger?: number
-  onAddWaypoint?: (lng: number, lat: number, poiId: string) => void
+  poiPopupMode?: "none" | "hover" | "sticky"
+  minRoutePoiZoom?: number
+  selectedPOIFocusOffset?: [number, number]
   addedPOIIds?: Set<string>
 }
 
@@ -67,7 +69,9 @@ export function MapView({
   onMapTap,
   fitPadding,
   fitTrigger,
-  onAddWaypoint,
+  poiPopupMode = "sticky",
+  minRoutePoiZoom = 12,
+  selectedPOIFocusOffset = [0, 0],
   addedPOIIds,
 }: MapViewProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -75,7 +79,9 @@ export function MapView({
   const [map, setMap] = useState<maplibregl.Map | null>(null)
   const [styleEpoch, setStyleEpoch] = useState(0)
   const [initError, setInitError] = useState<string | null>(null)
+  const [routePOIsVisible, setRoutePOIsVisible] = useState(true)
   const { theme } = useTheme()
+  const [selectedPOIFocusOffsetX, selectedPOIFocusOffsetY] = selectedPOIFocusOffset
 
   const handleSelect = useCallback((id: string) => { onSelectPOI(id) }, [onSelectPOI])
 
@@ -166,6 +172,24 @@ export function MapView({
 
   useEffect(() => {
     const m = mapRef.current
+    if (!m) return
+
+    const updateRoutePOIVisibility = (): void => {
+      setRoutePOIsVisible(m.getZoom() >= minRoutePoiZoom)
+    }
+
+    updateRoutePOIVisibility()
+    m.on("zoom", updateRoutePOIVisibility)
+    m.on("zoomend", updateRoutePOIVisibility)
+
+    return () => {
+      m.off("zoom", updateRoutePOIVisibility)
+      m.off("zoomend", updateRoutePOIVisibility)
+    }
+  }, [map, minRoutePoiZoom])
+
+  useEffect(() => {
+    const m = mapRef.current
     if (!m || !onMapTap) return
     m.on("click", onMapTap)
     return () => {
@@ -207,10 +231,16 @@ export function MapView({
 
   useEffect(() => {
     if (!map || !routeData || !selectedPOI) return
-    const poi = routeData.pois.find((p) => p.id === selectedPOI)
+    const poi = routeData.pois.find((item) => item.id === selectedPOI)
     if (!poi) return
-    map.flyTo({ center: [poi.lng, poi.lat], zoom: Math.max(map.getZoom(), 15), duration: 700 })
-  }, [map, routeData, selectedPOI])
+    map.easeTo({
+      center: [poi.lng, poi.lat],
+      zoom: map.getZoom(),
+      offset: [selectedPOIFocusOffsetX, selectedPOIFocusOffsetY],
+      duration: 450,
+      essential: true,
+    })
+  }, [map, routeData, selectedPOI, selectedPOIFocusOffsetX, selectedPOIFocusOffsetY])
 
   const coords = routeData?.polyline ?? []
 
@@ -235,10 +265,10 @@ export function MapView({
           {!routeData && explorerPreviewPOIs.map((poi) => (
             <ExplorerPreviewMarker key={`preview-${poi.id}`} map={map} poi={poi} />
           ))}
-          {routeData?.pois.map((poi, i) => (
+          {routePOIsVisible && routeData?.pois.map((poi, i) => (
             <POIMarker key={poi.id} map={map} poi={poi} index={i}
               isSelected={selectedPOI === poi.id} onSelect={handleSelect}
-              onAddWaypoint={onAddWaypoint}
+              popupMode={poiPopupMode}
               isAdded={addedPOIIds?.has(poi.id) ?? false}
             />
           ))}

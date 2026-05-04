@@ -218,6 +218,26 @@ html, body, #root {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 2px; }
 
+.poi-carousel-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--red) 70%, var(--border-mid)) color-mix(in srgb, var(--surface) 70%, transparent);
+}
+.poi-carousel-scroll::-webkit-scrollbar {
+  height: 5px;
+}
+.poi-carousel-scroll::-webkit-scrollbar-track {
+  margin-inline: 16px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--pill-bg) 70%, transparent);
+}
+.poi-carousel-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--red) 72%, var(--border-mid));
+}
+.poi-carousel-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--red);
+}
+
 /* animations */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }

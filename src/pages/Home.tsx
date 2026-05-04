@@ -1,8 +1,8 @@
 // app/pages/Home.tsx
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Download, Clock, MapPin, ChevronDown } from "lucide-react"
+import { Download, Clock, MapPin, ChevronDown, Plus, X } from "lucide-react"
 
-import { NarrationPanel } from "@/components/explorer/NarrationPanel"
+import { DesktopExplorerOverlay } from "@/components/explorer/DesktopExplorerOverlay"
 import { MapView } from "@/components/map/MapView"
 import { LoadingOverlay } from "@/components/shared/LoadingOverlay"
 import { RouteControls } from "@/components/shared/RouteControls"
@@ -115,6 +115,10 @@ export function Home(): JSX.Element {
   }
 
   const activeRoute = routes[activeRouteIdx] ?? null
+  const selectedRoutePOI = useMemo(
+    () => activeRoute?.pois.find((poi) => poi.id === selectedPOI) ?? null,
+    [activeRoute, selectedPOI]
+  )
   const availableExplorerCategories = useMemo(
     () => {
       if (cachedExplorerPlaces.length === 0) return EXPLORER_CATEGORY_OPTIONS
@@ -166,6 +170,12 @@ export function Home(): JSX.Element {
         ? { top: 92, right: 28, bottom: 250, left: 28 }
         : { top: 92, right: 28, bottom: 120, left: 28 }
   ), [sheetState])
+  const desktopExplorerOverlayVisible = Boolean(activeRoute && activeRoute.pois.length > 0 && activeAppMode === "explorer" && !isLoading)
+  const desktopFitPadding = useMemo(() => (
+    desktopExplorerOverlayVisible
+      ? { top: 70, right: 80, bottom: 150, left: 80 }
+      : { top: 70, right: 80, bottom: 70, left: 80 }
+  ), [desktopExplorerOverlayVisible])
 
   useEffect(() => {
     isMountedRef.current = true
@@ -303,6 +313,7 @@ export function Home(): JSX.Element {
   }
 
   const handleMobileMapTap = () => {
+    setSelectedPOI(null)
     if (routes.length > 0 && sheetState !== "routes") {
       setSheetState("routes")
     }
@@ -366,9 +377,82 @@ export function Home(): JSX.Element {
           onMapTap={handleMobileMapTap}
           fitPadding={mobileFitPadding}
           fitTrigger={fitTrigger}
-          onAddWaypoint={activeAppMode === "explorer" ? (lng, lat, poiId) => void handleAddWaypointToRoute(lng, lat, poiId) : undefined}
+          poiPopupMode="none"
           addedPOIIds={addedPOIIds}
         />
+
+        {activeAppMode === "explorer" && activeRoute && selectedRoutePOI && (
+          <div
+            className="absolute left-4 right-4 z-30 animate-fade-up"
+            style={{ bottom: sheetState === "routes" ? "200px" : "96px" }}
+          >
+            <div
+              className="rounded-3xl border p-4 shadow-2xl backdrop-blur-md"
+              style={{
+                background: "color-mix(in srgb, var(--surface) 92%, transparent)",
+                borderColor: "var(--border-mid)",
+                boxShadow: "0 18px 48px rgba(0,0,0,0.34)",
+              }}
+            >
+              <div className="mb-3 flex items-start gap-3">
+                <span
+                  className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+                  style={{ background: "var(--red)" }}
+                >
+                  {activeRoute.pois.findIndex((poi) => poi.id === selectedRoutePOI.id) + 1}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1 flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-base font-semibold leading-tight" style={{ color: "var(--fg)" }}>
+                        {selectedRoutePOI.name}
+                      </p>
+                      <span
+                        className="mt-2 inline-flex rounded-full px-2.5 py-1 text-[11px] font-medium"
+                        style={{ background: "var(--pill-bg)", color: "var(--fg-muted)" }}
+                      >
+                        {formatPOICategory(selectedRoutePOI.category)}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedPOI(null)}
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors"
+                      style={{ background: "var(--pill-bg)", color: "var(--fg-muted)" }}
+                      aria-label="Close point details"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                  {selectedRoutePOI.narration ? (
+                    <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--fg-muted)" }}>
+                      {selectedRoutePOI.narration}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+
+              {addedPOIIds.has(selectedRoutePOI.id) ? (
+                <span
+                  className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold"
+                  style={{ background: "color-mix(in srgb, var(--green) 12%, transparent)", color: "var(--green)" }}
+                >
+                  ✓ Added to Route
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => void handleAddWaypointToRoute(selectedRoutePOI.lng, selectedRoutePOI.lat, selectedRoutePOI.id)}
+                  className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white"
+                  style={{ background: "var(--red)", boxShadow: "0 8px 24px var(--red-glow)" }}
+                >
+                  <Plus size={14} />
+                  Add to Route
+                </button>
+              )}
+            </div>
+          </div>
+        )}
 
         {activeAppMode === "explorer" && !activeRoute && explorerMapCategories.length > 0 && (
           <div className="absolute left-4 top-4 z-20">
@@ -435,7 +519,7 @@ export function Home(): JSX.Element {
         <LoadingOverlay visible={isLoading} />
 
         {/* Zoom-out button — shown when zoomed past route level */}
-        {activeRoute && !isLoading && (explorerViewport?.zoom ?? 0) > 14 && (
+        {activeRoute && !isLoading && !selectedRoutePOI && (explorerViewport?.zoom ?? 0) > 14 && (
           <button
             type="button"
             onClick={() => setFitTrigger((n) => n + 1)}
@@ -558,18 +642,6 @@ export function Home(): JSX.Element {
           </div>
         )}
 
-        {/* POI NARRATION PANEL */}
-        {activeRoute && activeRoute.pois.length > 0 && activeAppMode === "explorer" && !isLoading && (
-          <div className="animate-fade-up">
-            <NarrationPanel
-              routeData={activeRoute}
-              selectedPOI={selectedPOI}
-              onSelectPOI={handleSelectPOI}
-              onAddWaypoint={(lng, lat, poiId) => void handleAddWaypointToRoute(lng, lat, poiId)}
-              addedPOIIds={addedPOIIds}
-            />
-          </div>
-        )}
       </aside>
 
       {/* MAP — desktop only (mobile has its own full-screen map above) */}
@@ -644,9 +716,22 @@ export function Home(): JSX.Element {
           onViewportChange={setExplorerViewport}
           selectedPOI={selectedPOI}
           onSelectPOI={handleSelectPOI}
-          onAddWaypoint={activeAppMode === "explorer" ? (lng, lat, poiId) => void handleAddWaypointToRoute(lng, lat, poiId) : undefined}
+          fitPadding={desktopFitPadding}
+          poiPopupMode="none"
+          selectedPOIFocusOffset={desktopExplorerOverlayVisible ? [0, -68] : [0, 0]}
           addedPOIIds={addedPOIIds}
         />
+        {activeRoute && activeRoute.pois.length > 0 && activeAppMode === "explorer" && !isLoading && (
+          <DesktopExplorerOverlay
+            routeData={activeRoute}
+            selectedPOI={selectedPOI}
+            plannedStopsCount={plannedStops.length}
+            onSelectPOI={handleSelectPOI}
+            onAddWaypoint={(lng, lat, poiId) => void handleAddWaypointToRoute(lng, lat, poiId)}
+            onExport={() => void handleExport()}
+            addedPOIIds={addedPOIIds}
+          />
+        )}
       </main>
 
 
