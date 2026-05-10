@@ -107,7 +107,7 @@ export function MobileRouteCards({
       <div
         className="rounded-2xl px-5 py-4 flex items-center gap-5"
         style={{
-          background: "var(--card)",
+          background: "var(--app-card)",
           border: "1.5px solid var(--red)",
           boxShadow: "0 0 0 4px color-mix(in srgb, var(--red) 12%, transparent)",
         }}

@@ -13,6 +13,7 @@ interface DesktopExplorerOverlayProps {
   onAddWaypoint?: (lng: number, lat: number, poiId: string) => void
   onExport: () => void
   addedPOIIds?: Set<string>
+  canAddWaypoint?: boolean
 }
 
 export function DesktopExplorerOverlay({
@@ -23,6 +24,7 @@ export function DesktopExplorerOverlay({
   onAddWaypoint,
   onExport,
   addedPOIIds,
+  canAddWaypoint = true,
 }: DesktopExplorerOverlayProps): JSX.Element {
   const selectedIndex = Math.max(0, routeData.pois.findIndex((poi) => poi.id === selectedPOI))
   const activePOI = routeData.pois[selectedIndex] ?? routeData.pois[0] ?? null
@@ -87,6 +89,7 @@ export function DesktopExplorerOverlay({
             index={index}
             selected={activePOI?.id === poi.id}
             alreadyAdded={addedPOIIds?.has(poi.id) ?? false}
+            canAddWaypoint={canAddWaypoint}
             onSelect={() => onSelectPOI(poi.id)}
             onAddWaypoint={onAddWaypoint}
           />
@@ -112,6 +115,7 @@ function POICarouselCard({
   index,
   selected,
   alreadyAdded,
+  canAddWaypoint,
   onSelect,
   onAddWaypoint,
 }: {
@@ -120,6 +124,7 @@ function POICarouselCard({
   index: number
   selected: boolean
   alreadyAdded: boolean
+  canAddWaypoint: boolean
   onSelect: () => void
   onAddWaypoint?: (lng: number, lat: number, poiId: string) => void
 }): JSX.Element {
@@ -138,7 +143,7 @@ function POICarouselCard({
       className="grid h-[84px] w-[236px] shrink-0 grid-rows-[auto_1fr] gap-1.5 rounded-md p-2.5 text-left transition-colors"
       style={{
         scrollSnapAlign: "center",
-        background: selected ? "color-mix(in srgb, var(--red) 13%, var(--card))" : "var(--card)",
+        background: selected ? "color-mix(in srgb, var(--red) 13%, var(--app-card))" : "var(--app-card)",
         border: selected ? "1px solid color-mix(in srgb, var(--red) 42%, transparent)" : "1px solid var(--border-mid)",
       }}
     >
@@ -177,15 +182,17 @@ function POICarouselCard({
         ) : onAddWaypoint ? (
           <button
             type="button"
+            disabled={!canAddWaypoint}
             onClick={(event) => {
               event.stopPropagation()
+              if (!canAddWaypoint) return
               onAddWaypoint(poi.lng, poi.lat, poi.id)
             }}
-            className="inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-[11px] font-semibold text-white"
-            style={{ background: "var(--red)", boxShadow: "0 8px 18px var(--red-glow)" }}
+            className="inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-[11px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+            style={{ background: "var(--red)", boxShadow: canAddWaypoint ? "0 8px 18px var(--red-glow)" : "none" }}
           >
             <Plus size={11} />
-            Add
+            {canAddWaypoint ? "Add" : "Full"}
           </button>
         ) : null}
       </span>

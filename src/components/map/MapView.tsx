@@ -247,7 +247,7 @@ export function MapView({
   if (initError) {
     return (
       <div className="flex h-full w-full items-center justify-center text-center" style={{ background: "var(--bg)" }}>
-        <div className="max-w-sm p-6 rounded-xl" style={{ background: "var(--card)", border: "1px solid var(--border-mid)" }}>
+        <div className="max-w-sm p-6 rounded-xl" style={{ background: "var(--app-card)", border: "1px solid var(--border-mid)" }}>
           <p className="font-semibold mb-2" style={{ color: "var(--red)" }}>Map Error</p>
           <p className="text-sm" style={{ color: "var(--fg-muted)" }}>{initError}</p>
         </div>

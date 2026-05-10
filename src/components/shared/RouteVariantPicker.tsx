@@ -12,7 +12,7 @@ export function RouteVariantPicker({ routes, activeIdx, appMode, onSelect }: Rou
   return (
     <div
       className="px-4 pt-3 pb-4"
-      style={{ borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}
+      style={{ borderTop: "1px solid var(--app-border)", borderBottom: "1px solid var(--app-border)" }}
     >
       <p className="text-[11px] uppercase tracking-widest mb-2.5 font-semibold" style={{ color: "var(--fg-faint)" }}>
         {routes.length === 1 ? "Selected Route" : "Choose a Route"}

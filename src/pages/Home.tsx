@@ -5,7 +5,14 @@ import { Download, Clock, MapPin, ChevronDown, Plus, X } from "lucide-react"
 import { DesktopExplorerOverlay } from "@/components/explorer/DesktopExplorerOverlay"
 import { MapView } from "@/components/map/MapView"
 import { LoadingOverlay } from "@/components/shared/LoadingOverlay"
-import { RouteControls } from "@/components/shared/RouteControls"
+import {
+  RouteControls,
+  createDefaultRouteControlsState,
+  isWithinSingaporeBounds,
+  MAX_ROUTE_WAYPOINTS,
+  SG_CENTER,
+  type RouteControlsState,
+} from "@/components/shared/RouteControls"
 import { RouteVariantPicker } from "@/components/shared/RouteVariantPicker"
 import { BottomSheet, type SheetState } from "@/components/mobile/BottomSheet"
 import { MobileRouteCards } from "@/components/mobile/MobileRouteCards"
@@ -47,6 +54,11 @@ export function Home(): JSX.Element {
   const { toast } = useToast()
   const isMountedRef = useRef(false)
   const explorerPlacesRequestRef = useRef<Promise<void> | null>(null)
+  const geolocationRequestedRef = useRef(false)
+  const [plannerState, setPlannerState] = useState<RouteControlsState>(() => createDefaultRouteControlsState())
+  const [gpsLoading, setGpsLoading] = useState(false)
+  const [outsideSingapore, setOutsideSingapore] = useState(false)
+  const [showRegionModal, setShowRegionModal] = useState(false)
   const [plannedStops, setPlannedStops] = useState<[number, number][]>([])
   const [startLocation, setStartLocation] = useState<[number, number] | null>(null)
   const [cachedExplorerPlaces, setCachedExplorerPlaces] = useState<SuggestedPlace[]>([])
@@ -176,6 +188,55 @@ export function Home(): JSX.Element {
       ? { top: 70, right: 80, bottom: 150, left: 80 }
       : { top: 70, right: 80, bottom: 70, left: 80 }
   ), [desktopExplorerOverlayVisible])
+  const activeWaypointCount = activeSession?.waypoints?.length ?? plannedStops.length
+  const canAddRouteWaypoint = activeWaypointCount < MAX_ROUTE_WAYPOINTS
+
+  const setPlannerStart = useCallback((lng: number, lat: number, label: string): void => {
+    setPlannerState((prev) => ({
+      ...prev,
+      startLng: lng,
+      startLat: lat,
+      startLabel: label,
+    }))
+    setStartLocation([lng, lat])
+  }, [])
+
+  const useDefaultStart = useCallback((): void => {
+    setPlannerStart(SG_CENTER.lng, SG_CENTER.lat, SG_CENTER.label)
+  }, [setPlannerStart])
+
+  const applyGeolocationPosition = useCallback((position: GeolocationPosition): void => {
+    const { latitude, longitude } = position.coords
+    if (isWithinSingaporeBounds(latitude, longitude)) {
+      setOutsideSingapore(false)
+      setPlannerStart(longitude, latitude, `My Location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`)
+      return
+    }
+    setOutsideSingapore(true)
+    setShowRegionModal(true)
+    useDefaultStart()
+  }, [setPlannerStart, useDefaultStart])
+
+  const handleUseGPS = useCallback((): void => {
+    if (!navigator.geolocation) {
+      toast({ title: "GPS unavailable", description: "Your browser doesn't support geolocation.", variant: "destructive" })
+      return
+    }
+    if (outsideSingapore) return
+    setGpsLoading(true)
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        applyGeolocationPosition(position)
+        setGpsLoading(false)
+      },
+      () => {
+        useDefaultStart()
+        toast({ title: "Location denied", description: "Using Singapore City Centre as start point.", variant: "destructive" })
+        setGpsLoading(false)
+      },
+      { timeout: 8000 }
+    )
+  }, [applyGeolocationPosition, outsideSingapore, toast, useDefaultStart])
 
   useEffect(() => {
     isMountedRef.current = true
@@ -183,6 +244,24 @@ export function Home(): JSX.Element {
       isMountedRef.current = false
     }
   }, [])
+
+  useEffect(() => {
+    if (geolocationRequestedRef.current) return
+    geolocationRequestedRef.current = true
+    if (!navigator.geolocation) {
+      useDefaultStart()
+      return
+    }
+    navigator.geolocation.getCurrentPosition(
+      applyGeolocationPosition,
+      useDefaultStart,
+      { timeout: 8000 }
+    )
+  }, [applyGeolocationPosition, useDefaultStart])
+
+  useEffect(() => {
+    setSelectedExplorerCategories(plannerState.appMode === "explorer" ? plannerState.selectedCategories : [])
+  }, [plannerState.appMode, plannerState.selectedCategories])
 
   useEffect(() => {
     if (activeAppMode !== "explorer") return
@@ -238,6 +317,14 @@ export function Home(): JSX.Element {
   const handleAddWaypointToRoute = useCallback(async (lng: number, lat: number, poiId: string): Promise<void> => {
     if (!activeSession || activeAppMode !== "explorer") return
     const newWaypoints: [number, number][] = [...(activeSession.waypoints ?? []), [lng, lat]]
+    if (newWaypoints.length > MAX_ROUTE_WAYPOINTS) {
+      toast({
+        title: "Stop limit reached",
+        description: `Routes can include up to ${MAX_ROUTE_WAYPOINTS} stops.`,
+        variant: "destructive",
+      })
+      return
+    }
     const updatedSession: RouteSession = { ...activeSession, waypoints: newWaypoints }
     setIsLoading(true)
     try {
@@ -276,10 +363,6 @@ export function Home(): JSX.Element {
     if (mode === activeAppMode) return
     resetRouteState(mode)
   }, [activeAppMode])
-
-  const handleExplorerCategoriesChange = useCallback((categories: string[]) => {
-    setSelectedExplorerCategories(categories)
-  }, [])
 
   const toggleExplorerPreviewCategory = (category: string) => {
     setExplorerPreviewCategories((prev) => {
@@ -443,11 +526,12 @@ export function Home(): JSX.Element {
                 <button
                   type="button"
                   onClick={() => void handleAddWaypointToRoute(selectedRoutePOI.lng, selectedRoutePOI.lat, selectedRoutePOI.id)}
-                  className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white"
-                  style={{ background: "var(--red)", boxShadow: "0 8px 24px var(--red-glow)" }}
+                  disabled={!canAddRouteWaypoint}
+                  className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+                  style={{ background: "var(--red)", boxShadow: canAddRouteWaypoint ? "0 8px 24px var(--red-glow)" : "none" }}
                 >
                   <Plus size={14} />
-                  Add to Route
+                  {canAddRouteWaypoint ? "Add to Route" : "Stop Limit Reached"}
                 </button>
               )}
             </div>
@@ -561,9 +645,15 @@ export function Home(): JSX.Element {
               onRoutesGenerated={handleRoutesGenerated}
               onLoopStopsPlanned={setPlannedStops}
               onAppModeChange={handleAppModeChange}
-              onExplorerCategoriesChange={handleExplorerCategoriesChange}
               onStartLocationChange={setStartLocation}
               availableExplorerCategories={availableExplorerCategories}
+              state={plannerState}
+              onStateChange={setPlannerState}
+              gpsLoading={gpsLoading}
+              outsideSingapore={outsideSingapore}
+              showRegionModal={showRegionModal}
+              onUseGPS={handleUseGPS}
+              onDismissRegionModal={() => setShowRegionModal(false)}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
               hasRoutes={routes.length > 0}
@@ -592,9 +682,15 @@ export function Home(): JSX.Element {
           onRoutesGenerated={handleRoutesGenerated}
           onLoopStopsPlanned={setPlannedStops}
           onAppModeChange={handleAppModeChange}
-          onExplorerCategoriesChange={handleExplorerCategoriesChange}
           onStartLocationChange={setStartLocation}
           availableExplorerCategories={availableExplorerCategories}
+          state={plannerState}
+          onStateChange={setPlannerState}
+          gpsLoading={gpsLoading}
+          outsideSingapore={outsideSingapore}
+          showRegionModal={showRegionModal}
+          onUseGPS={handleUseGPS}
+          onDismissRegionModal={() => setShowRegionModal(false)}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
           hasRoutes={routes.length > 0}
@@ -613,7 +709,7 @@ export function Home(): JSX.Element {
 
         {/* STATS BAR */}
         {activeRoute && !isLoading && (
-          <div className="px-5 py-3 flex items-center gap-4 animate-fade-up" style={{ background: "var(--scrim)", borderTop: "1px solid var(--border)" }}>
+          <div className="px-5 py-3 flex items-center gap-4 animate-fade-up" style={{ background: "var(--scrim)", borderTop: "1px solid var(--app-border)" }}>
             <div className="flex items-center gap-1.5 text-xs" style={{ color: "var(--fg-muted)" }}>
               <MapPin size={12} style={{ color: "var(--red)" }} />
               <span className="font-semibold" style={{ color: "var(--fg)" }}>{activeRoute.distance_km.toFixed(1)}</span> km
@@ -730,6 +826,7 @@ export function Home(): JSX.Element {
             onAddWaypoint={(lng, lat, poiId) => void handleAddWaypointToRoute(lng, lat, poiId)}
             onExport={() => void handleExport()}
             addedPOIIds={addedPOIIds}
+            canAddWaypoint={canAddRouteWaypoint}
           />
         )}
       </main>

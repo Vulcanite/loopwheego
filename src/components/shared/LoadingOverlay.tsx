@@ -35,7 +35,7 @@ export function LoadingOverlay({ visible, timeoutSecs = 60, label = "Generating 
     >
       <div
         className="rounded-xl border px-5 py-4 shadow-2xl min-w-[220px]"
-        style={{ background: "var(--card)", borderColor: "color-mix(in srgb, var(--red) 35%, transparent)" }}
+        style={{ background: "var(--app-card)", borderColor: "color-mix(in srgb, var(--red) 35%, transparent)" }}
       >
         <div className="flex items-center gap-3 mb-3">
           <Loader2 className="h-4 w-4 animate-spin shrink-0" style={{ color: "var(--red)" }} aria-hidden />

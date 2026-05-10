@@ -248,7 +248,7 @@ export function PlaceSearch({
               return (
                 <li
                   key={`${item.place_id}-${item.lat}-${item.lon}`}
-                  style={{ borderBottom: "1px solid var(--border)" }}
+                  style={{ borderBottom: "1px solid var(--app-border)" }}
                 >
                   <button
                     type="button"

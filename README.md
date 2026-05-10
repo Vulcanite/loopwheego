@@ -7,7 +7,6 @@ React + TypeScript frontend for LoopWheeGo, a walking and cycling route generati
 - **React 18** + TypeScript + Vite
 - **MapLibre GL JS** — map rendering
 - **shadcn/ui** + Tailwind CSS — UI components
-- **React Query** — API caching
 - **Axios** — HTTP client
 
 ## Prerequisites
@@ -56,7 +55,7 @@ npm run preview     # preview production build locally
 - **Loop routing** — generate circular routes by target distance
 - **A-to-B routing** — point-to-point with alternative variants
 - **Route variants** — pick from up to 3 generated options
-- **POI discovery** — find landmarks along the active route (lazy-loaded, cached per variant)
-- **Waypoint injection** — reroute through a selected POI
+- **Explorer POIs** — preview cached regional places and rank route-specific POIs
+- **Waypoint injection** — reroute through a selected POI, up to the backend waypoint limit
 - **GPX export** — download route with POI waypoints for Strava, Garmin, etc.
 - **Dark / light theme** — persisted via localStorage

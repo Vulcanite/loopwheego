@@ -1,10 +1,10 @@
 import { Loader2, MapPin, Navigation, Bike, Footprints, RotateCcw, ArrowRight, Plus, X } from "lucide-react"
-import { useState, useCallback, useEffect, useMemo } from "react"
+import { useEffect, useMemo } from "react"
 
 import { PlaceSearch } from "@/components/shared/PlaceSearch"
 import { Slider } from "@/components/ui/slider"
 import { api, formatAxiosError } from "@/services/api"
-import type { RouteRequest, RouteResponse } from "@/types/route"
+import type { AppMode, RouteRequest, RouteResponse, RouteType, TransportMode } from "@/types/route"
 import { useToast } from "@/components/ui/use-toast"
 import { formatPOICategory } from "@/lib/poiPresentation"
 
@@ -12,24 +12,43 @@ interface RouteControlsProps {
   onRoutesGenerated: (routes: RouteResponse[], appMode: AppMode, session: RouteControlsSession) => void
   onLoopStopsPlanned: (stops: [number, number][]) => void
   onAppModeChange?: (mode: AppMode) => void
-  onExplorerCategoriesChange?: (categories: string[]) => void
   onStartLocationChange?: (location: [number, number]) => void
   availableExplorerCategories?: string[]
+  state: RouteControlsState
+  onStateChange: React.Dispatch<React.SetStateAction<RouteControlsState>>
+  gpsLoading: boolean
+  outsideSingapore: boolean
+  showRegionModal: boolean
+  onUseGPS: () => void
+  onDismissRegionModal: () => void
   isLoading: boolean
   setIsLoading: (v: boolean) => void
   hasRoutes: boolean
 }
 
-type AppMode = "fitness" | "explorer"
-type TransportMode = "walk" | "cycle"
-type RouteType = "loop" | "a2b"
 type ExplorerTargetMode = "distance" | "time"
-type StopDraft = {
+export type StopDraft = {
   query: string
   lng: number | null
   lat: number | null
 }
-type RouteControlsSession = Pick<RouteRequest, "mode" | "routeType" | "distance_km" | "target_duration_minutes" | "poi_categories" | "waypoints"> & {
+export type RouteControlsState = {
+  appMode: AppMode
+  transport: TransportMode
+  routeType: RouteType
+  startLng: number | null
+  startLat: number | null
+  startLabel: string
+  endLng: number | null
+  endLat: number | null
+  endLabel: string
+  distanceKm: number
+  durationMin: number
+  explorerTargetMode: ExplorerTargetMode
+  stops: StopDraft[]
+  selectedCategories: string[]
+}
+export type RouteControlsSession = Pick<RouteRequest, "mode" | "routeType" | "distance_km" | "target_duration_minutes" | "poi_categories" | "waypoints"> & {
   appMode: AppMode
   start_lng: number
   start_lat: number
@@ -43,7 +62,8 @@ const MIN_DISTANCE_KM = 3
 const DEFAULT_DISTANCE_KM = 5
 const MAX_WALK_DURATION = 300
 const MAX_CYCLE_DURATION = 360
-const SG_CENTER = { lng: 103.8198, lat: 1.3521, label: "Singapore City Centre" }
+export const MAX_ROUTE_WAYPOINTS = 5
+export const SG_CENTER = { lng: 103.8198, lat: 1.3521, label: "Singapore City Centre" }
 const EXPLORER_CATEGORY_OPTIONS = [
   "parks",
   "nature",
@@ -63,13 +83,32 @@ const SG_BOUNDS = {
   maxLat: 1.48,
 }
 
-function isWithinSingaporeBounds(lat: number, lng: number): boolean {
+export function isWithinSingaporeBounds(lat: number, lng: number): boolean {
   return (
     lng >= SG_BOUNDS.minLng &&
     lng <= SG_BOUNDS.maxLng &&
     lat >= SG_BOUNDS.minLat &&
     lat <= SG_BOUNDS.maxLat
   )
+}
+
+export function createDefaultRouteControlsState(): RouteControlsState {
+  return {
+    appMode: "fitness",
+    transport: "walk",
+    routeType: "loop",
+    startLng: null,
+    startLat: null,
+    startLabel: "Detecting current location...",
+    endLng: null,
+    endLat: null,
+    endLabel: "",
+    distanceKm: DEFAULT_DISTANCE_KM,
+    durationMin: 60,
+    explorerTargetMode: "distance",
+    stops: [],
+    selectedCategories: [],
+  }
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }): JSX.Element {
@@ -105,9 +144,15 @@ export function RouteControls({
   onRoutesGenerated,
   onLoopStopsPlanned,
   onAppModeChange,
-  onExplorerCategoriesChange,
   onStartLocationChange,
   availableExplorerCategories,
+  state,
+  onStateChange,
+  gpsLoading,
+  outsideSingapore,
+  showRegionModal,
+  onUseGPS,
+  onDismissRegionModal,
   isLoading,
   setIsLoading,
   hasRoutes,
@@ -115,25 +160,31 @@ export function RouteControls({
   const { toast } = useToast()
   const disabled = isLoading
 
-  const [appMode, setAppMode] = useState<AppMode>("fitness")
-  const [transport, setTransport] = useState<TransportMode>("walk")
-  const [routeType, setRouteType] = useState<RouteType>("loop")
-
-  const [startLng, setStartLng] = useState<number | null>(null)
-  const [startLat, setStartLat] = useState<number | null>(null)
-  const [startLabel, setStartLabel] = useState("Detecting current location…")
-  const [endLng, setEndLng] = useState<number | null>(null)
-  const [endLat, setEndLat] = useState<number | null>(null)
-  const [endLabel, setEndLabel] = useState("")
-  const [gpsLoading, setGpsLoading] = useState(false)
-  const [outsideSingapore, setOutsideSingapore] = useState(false)
-  const [showRegionModal, setShowRegionModal] = useState(false)
-
-  const [distanceKm, setDistanceKm] = useState(DEFAULT_DISTANCE_KM)
-  const [durationMin, setDurationMin] = useState(60)
-  const [explorerTargetMode, setExplorerTargetMode] = useState<ExplorerTargetMode>("distance")
-  const [stops, setStops] = useState<StopDraft[]>([])
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const {
+    appMode,
+    transport,
+    routeType,
+    startLng,
+    startLat,
+    startLabel,
+    endLng,
+    endLat,
+    endLabel,
+    distanceKm,
+    durationMin,
+    explorerTargetMode,
+    stops,
+    selectedCategories,
+  } = state
+  const updateState = (patch: Partial<RouteControlsState>): void => {
+    onStateChange((prev) => ({ ...prev, ...patch }))
+  }
+  const updateStops = (updater: (prev: StopDraft[]) => StopDraft[]): void => {
+    onStateChange((prev) => ({ ...prev, stops: updater(prev.stops) }))
+  }
+  const updateSelectedCategories = (updater: (prev: string[]) => string[]): void => {
+    onStateChange((prev) => ({ ...prev, selectedCategories: updater(prev.selectedCategories) }))
+  }
   const availableCategories = useMemo(
     () => (availableExplorerCategories && availableExplorerCategories.length > 0
       ? availableExplorerCategories
@@ -144,93 +195,8 @@ export function RouteControls({
   const maxDuration = transport === "walk" ? MAX_WALK_DURATION : MAX_CYCLE_DURATION
 
   useEffect(() => {
-    if (!navigator.geolocation) {
-      setStartLat(SG_CENTER.lat)
-      setStartLng(SG_CENTER.lng)
-      setStartLabel(SG_CENTER.label)
-      onStartLocationChange?.([SG_CENTER.lng, SG_CENTER.lat])
-      return
-    }
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords
-        if (isWithinSingaporeBounds(latitude, longitude)) {
-          setStartLat(latitude)
-          setStartLng(longitude)
-          setStartLabel(`My Location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`)
-          setOutsideSingapore(false)
-          onStartLocationChange?.([longitude, latitude])
-          return
-        }
-        setOutsideSingapore(true)
-        setShowRegionModal(true)
-        setStartLat(SG_CENTER.lat)
-        setStartLng(SG_CENTER.lng)
-        setStartLabel(SG_CENTER.label)
-        onStartLocationChange?.([SG_CENTER.lng, SG_CENTER.lat])
-      },
-      (err) => {
-        if (err.code === err.PERMISSION_DENIED) {
-          setStartLat(SG_CENTER.lat)
-          setStartLng(SG_CENTER.lng)
-          setStartLabel(SG_CENTER.label)
-          onStartLocationChange?.([SG_CENTER.lng, SG_CENTER.lat])
-        }
-      },
-      { timeout: 8000 }
-    )
-  }, [onStartLocationChange])
-
-  useEffect(() => {
-    if (appMode !== "explorer") return
-    onExplorerCategoriesChange?.(selectedCategories)
-  }, [appMode, onExplorerCategoriesChange, selectedCategories])
-
-
-  useEffect(() => {
-    setSelectedCategories((prev) => prev.filter((category) => availableCategories.includes(category)))
+    updateSelectedCategories((prev) => prev.filter((category) => availableCategories.includes(category)))
   }, [availableCategories])
-
-  const handleGPS = useCallback(async () => {
-    if (!navigator.geolocation) {
-      toast({ title: "GPS unavailable", description: "Your browser doesn't support geolocation.", variant: "destructive" })
-      return
-    }
-    if (outsideSingapore) return
-    setGpsLoading(true)
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords
-        if (!isWithinSingaporeBounds(latitude, longitude)) {
-          setOutsideSingapore(true)
-          setShowRegionModal(true)
-          setStartLat(SG_CENTER.lat)
-          setStartLng(SG_CENTER.lng)
-          setStartLabel(SG_CENTER.label)
-          onStartLocationChange?.([SG_CENTER.lng, SG_CENTER.lat])
-          setGpsLoading(false)
-          return
-        }
-        setStartLat(latitude)
-        setStartLng(longitude)
-        setStartLabel(`My Location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`)
-        setOutsideSingapore(false)
-        onStartLocationChange?.([longitude, latitude])
-        setGpsLoading(false)
-      },
-      (err) => {
-        if (err.code === err.PERMISSION_DENIED) {
-          setStartLat(SG_CENTER.lat)
-          setStartLng(SG_CENTER.lng)
-          setStartLabel(SG_CENTER.label)
-          onStartLocationChange?.([SG_CENTER.lng, SG_CENTER.lat])
-        }
-        toast({ title: "Location denied", description: "Using Singapore City Centre as start point.", variant: "destructive" })
-        setGpsLoading(false)
-      },
-      { timeout: 8000 }
-    )
-  }, [onStartLocationChange, outsideSingapore, toast])
 
   const handleGenerate = async (): Promise<void> => {
     if (startLng == null || startLat == null) {
@@ -306,7 +272,7 @@ export function RouteControls({
   }
 
   const toggleCategory = (category: string): void => {
-    setSelectedCategories((prev) =>
+    updateSelectedCategories((prev) =>
       prev.includes(category)
         ? prev.filter((value) => value !== category)
         : [...prev, category]
@@ -315,15 +281,15 @@ export function RouteControls({
 
   const handleAddStop = (): void => {
     if (stops.length >= 3) return
-    setStops((prev) => [...prev, { query: "", lng: null, lat: null }])
+    updateStops((prev) => [...prev, { query: "", lng: null, lat: null }])
   }
 
   const handleRemoveStop = (idx: number): void => {
-    setStops((prev) => prev.filter((_, currentIdx) => currentIdx !== idx))
+    updateStops((prev) => prev.filter((_, currentIdx) => currentIdx !== idx))
   }
 
   const handleStopQueryChange = (idx: number, query: string): void => {
-    setStops((prev) =>
+    updateStops((prev) =>
       prev.map((stop, currentIdx) =>
         currentIdx === idx
           ? { query, lng: null, lat: null }
@@ -333,7 +299,7 @@ export function RouteControls({
   }
 
   const handleStopSelected = (idx: number, lng: number, lat: number, label: string): void => {
-    setStops((prev) =>
+    updateStops((prev) =>
       prev.map((stop, currentIdx) =>
         currentIdx === idx
           ? { query: label, lng, lat }
@@ -354,8 +320,7 @@ export function RouteControls({
             disabled={disabled}
             onClick={() => {
               if (m === appMode) return
-              setAppMode(m)
-              setStops([])
+              updateState({ appMode: m, stops: [] })
               onAppModeChange?.(m)
             }}
             className={`mode-tab border disabled:opacity-40 disabled:cursor-not-allowed`}
@@ -375,9 +340,9 @@ export function RouteControls({
         <SectionLabel>Transport</SectionLabel>
         <div className="flex gap-2">
           <TransportBtn active={transport === "walk"} icon={Footprints} label="Walk" disabled={disabled}
-            onClick={() => { setTransport("walk"); setDistanceKm(Math.max(MIN_DISTANCE_KM, Math.min(distanceKm, MAX_WALK_KM))) }} />
+            onClick={() => { updateState({ transport: "walk", distanceKm: Math.max(MIN_DISTANCE_KM, Math.min(distanceKm, MAX_WALK_KM)) }) }} />
           <TransportBtn active={transport === "cycle"} icon={Bike} label="Cycle" disabled={disabled}
-            onClick={() => { setTransport("cycle"); setDistanceKm(Math.max(MIN_DISTANCE_KM, Math.min(distanceKm, MAX_CYCLE_KM))) }} />
+            onClick={() => { updateState({ transport: "cycle", distanceKm: Math.max(MIN_DISTANCE_KM, Math.min(distanceKm, MAX_CYCLE_KM)) }) }} />
         </div>
       </div>
 
@@ -388,7 +353,7 @@ export function RouteControls({
             {selectedCategories.length > 0 && (
               <button
                 type="button"
-                onClick={() => setSelectedCategories([])}
+                onClick={() => updateState({ selectedCategories: [] })}
                 className="text-[11px] transition-colors"
                 style={{ color: "var(--red)" }}
               >
@@ -429,7 +394,7 @@ export function RouteControls({
               key={val}
               type="button"
               disabled={disabled}
-              onClick={() => setRouteType(val)}
+              onClick={() => updateState({ routeType: val })}
               className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg border text-sm font-medium transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
               style={{
                 background: routeType === val ? "var(--red)" : "transparent",
@@ -451,7 +416,7 @@ export function RouteControls({
           {!outsideSingapore && (
             <button
               type="button"
-              onClick={() => void handleGPS()}
+              onClick={onUseGPS}
               disabled={gpsLoading || disabled}
               className="flex items-center gap-1 text-[11px] transition-colors disabled:opacity-40"
               style={{ color: "var(--red)" }}
@@ -463,12 +428,10 @@ export function RouteControls({
         </div>
         <PlaceSearch
           query={startLabel}
-          onQueryChange={setStartLabel}
+          onQueryChange={(startLabel) => updateState({ startLabel, startLng: null, startLat: null })}
           disabled={disabled}
           onPlaceSelected={(lng, lat, label) => {
-            setStartLng(lng)
-            setStartLat(lat)
-            setStartLabel(label)
+            updateState({ startLng: lng, startLat: lat, startLabel: label })
             onStartLocationChange?.([lng, lat])
           }}
           placeholder="Search address or place…"
@@ -481,9 +444,9 @@ export function RouteControls({
           <SectionLabel>End Point</SectionLabel>
           <PlaceSearch
             query={endLabel}
-            onQueryChange={setEndLabel}
+            onQueryChange={(endLabel) => updateState({ endLabel, endLng: null, endLat: null })}
             disabled={disabled}
-            onPlaceSelected={(lng, lat, label) => { setEndLng(lng); setEndLat(lat); setEndLabel(label) }}
+            onPlaceSelected={(lng, lat, label) => { updateState({ endLng: lng, endLat: lat, endLabel: label }) }}
             placeholder="Search destination…"
           />
         </div>
@@ -512,7 +475,7 @@ export function RouteControls({
           ) : (
             <div className="flex flex-col gap-2.5">
               {stops.map((stop, idx) => (
-                <div key={idx} className="rounded-xl p-3" style={{ background: "var(--card)", border: "1px solid var(--border-mid)" }}>
+                <div key={idx} className="rounded-xl p-3" style={{ background: "var(--app-card)", border: "1px solid var(--border-mid)" }}>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[11px] uppercase tracking-widest font-semibold" style={{ color: "var(--fg-faint)" }}>
                       Stop {idx + 1}
@@ -552,7 +515,7 @@ export function RouteControls({
             </span>
           </div>
           <Slider min={MIN_DISTANCE_KM} max={maxKm} step={0.5} value={[distanceKm]} disabled={disabled}
-            onValueChange={(v) => { const val = v[0]; if (val !== undefined) setDistanceKm(val) }} />
+            onValueChange={(v) => { const val = v[0]; if (val !== undefined) updateState({ distanceKm: val }) }} />
           <div className="flex justify-between mt-1 text-[10px]" style={{ color: "var(--fg-faint)" }}>
             <span>{MIN_DISTANCE_KM} km</span><span>{maxKm} km</span>
           </div>
@@ -577,7 +540,7 @@ export function RouteControls({
                 key={value}
                 type="button"
                 disabled={disabled}
-                onClick={() => setExplorerTargetMode(value)}
+                onClick={() => updateState({ explorerTargetMode: value })}
                 className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg border text-sm font-medium transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
                 style={{
                   background: explorerTargetMode === value ? "var(--red)" : "transparent",
@@ -599,7 +562,7 @@ export function RouteControls({
                 </span>
               </div>
               <Slider min={MIN_DISTANCE_KM} max={maxKm} step={0.5} value={[distanceKm]} disabled={disabled}
-                onValueChange={(v) => { const val = v[0]; if (val !== undefined) setDistanceKm(val) }} />
+                onValueChange={(v) => { const val = v[0]; if (val !== undefined) updateState({ distanceKm: val }) }} />
               <div className="flex justify-between mt-1 text-[10px]" style={{ color: "var(--fg-faint)" }}>
                 <span>{MIN_DISTANCE_KM} km</span><span>{maxKm} km</span>
               </div>
@@ -613,7 +576,7 @@ export function RouteControls({
                 </span>
               </div>
               <Slider min={15} max={maxDuration} step={15} value={[durationMin]} disabled={disabled}
-                onValueChange={(v) => { const val = v[0]; if (val !== undefined) setDurationMin(val) }} />
+                onValueChange={(v) => { const val = v[0]; if (val !== undefined) updateState({ durationMin: val }) }} />
               <div className="flex justify-between mt-1 text-[10px]" style={{ color: "var(--fg-faint)" }}>
                 <span>15 min</span><span>{Math.floor(maxDuration / 60)} hr</span>
               </div>
@@ -643,7 +606,7 @@ export function RouteControls({
         <div
           className="fixed inset-0 z-50 flex items-center justify-center px-4"
           style={{ background: "rgba(0,0,0,0.45)" }}
-          onClick={() => setShowRegionModal(false)}
+          onClick={onDismissRegionModal}
         >
           <div
             className="w-full max-w-sm rounded-xl p-5 border text-center"
