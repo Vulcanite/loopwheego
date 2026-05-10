@@ -1,5 +1,6 @@
 // App.tsx
 import { useState } from "react"
+import { Analytics } from "@vercel/analytics/react"
 import { Home } from "@/pages/Home"
 import { ThemeSwitch } from "@/components/shared/ThemeSwitch"
 
@@ -39,6 +40,7 @@ export default function App(): JSX.Element {
       
       {/* Home must be flex-1 to fill the remaining height */}
       <Home />
+      <Analytics />
 
       {aboutOpen && (
         <div
