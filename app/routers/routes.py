@@ -1,5 +1,6 @@
 import asyncio
 import io
+import logging
 import os
 import uuid
 
@@ -8,13 +9,12 @@ import gpxpy.gpx
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
-from app.models.route import GPXRequest, MultiRouteResponse, POIDiscoveryRequest, RouteRequest, RouteResponse
 from app.models.poi import POI
-
-from app.services import overpass
+from app.models.route import GPXRequest, MultiRouteResponse, POIDiscoveryRequest, RouteRequest, RouteResponse
+from app.services import overpass, route_generator
 from app.services.elevation_service import enrich_routes_with_effort
-from app.services import route_generator
 
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
 ENABLE_POIS = os.getenv("ENABLE_POIS", "false").lower() == "true"
@@ -209,15 +209,14 @@ def _pick_route_pairs(
             if len(selected) >= limit:
                 break
 
-    print(
+    logger.info(
         "fitness_route_ranking: "
-        f"requested_km={requested_distance_km:.2f} "
-        f"candidates={len(scored)} "
-        f"shortlist={shortlist_size} "
-        f"distance_tolerance_km={distance_tolerance_km:.2f} "
-        f"acceptable={len(acceptable)} "
-        f"diversity_rejected={diversity_rejected} "
-        f"top={[{'distance_km': round(float(route['distance_km']), 2), 'score': round(selection_score, 2)} for route, _, selection_score in scored[:min(5, len(scored))]]}"
+        "requested_km=%.2f candidates=%d shortlist=%d "
+        "distance_tolerance_km=%.2f acceptable=%d diversity_rejected=%d "
+        "top=%s",
+        requested_distance_km, len(scored), shortlist_size,
+        distance_tolerance_km, len(acceptable), diversity_rejected,
+        [{"distance_km": round(float(route["distance_km"]), 2), "score": round(selection_score, 2)} for route, _, selection_score in scored[:min(5, len(scored))]],
     )
     return selected[:limit]
 
@@ -262,9 +261,9 @@ def _apply_relative_effort_labels(
         labels_by_idx[idx] = (elevation_gain_m, label)
 
     labeled = [labels_by_idx[idx] for idx in range(len(routes))]
-    print(
-        "fitness_relative_effort_labels: "
-        f"scores={[round(score, 2) for _, score, _ in ranked]}"
+    logger.info(
+        "fitness_relative_effort_labels: scores=%s",
+        [round(score, 2) for _, score, _ in ranked],
     )
     return labeled
 
@@ -322,14 +321,12 @@ async def _generate_fitness_loop_routes(
     selected_efforts = [effort for _, effort in selected_pairs]
     relabeled_efforts = _apply_relative_effort_labels(selected_routes, selected_efforts, mode)
     selected_routes, relabeled_efforts = _sort_routes_by_effort(selected_routes, relabeled_efforts, mode)
-    print(
-        "fitness_loop_routes_selected: "
-        f"requested_km={distance_km:.2f} "
-        f"raw_candidates={len(raw_candidates)} "
-        f"candidates={len(candidates)} "
-        f"selected={len(selected_routes)} "
-        f"distances={[round(float(route['distance_km']), 2) for route in selected_routes]} "
-        f"labels={[label for _, label in relabeled_efforts]}"
+    logger.info(
+        "fitness_loop_routes_selected: requested_km=%.2f raw_candidates=%d "
+        "candidates=%d selected=%d distances=%s labels=%s",
+        distance_km, len(raw_candidates), len(candidates), len(selected_routes),
+        [round(float(route["distance_km"]), 2) for route in selected_routes],
+        [label for _, label in relabeled_efforts],
     )
     return selected_routes, relabeled_efforts
 
@@ -350,13 +347,12 @@ async def _build_route_responses(
         pois = route_pois[idx - 1] if route_pois and idx - 1 < len(route_pois) else []
         response_elevation_gain_m = None if app_mode == "explorer" else elevation_gain_m
         response_effort_label = None if app_mode == "explorer" else effort_label
-        print(
-            "Generated route "
-            f"{idx}: source={source} "
-            f"distance_km={distance_km:.2f} "
-            f"duration_minutes={duration_minutes} "
-            f"elevation_gain_m={'None' if response_elevation_gain_m is None else round(float(response_elevation_gain_m), 1)} "
-            f"label={response_effort_label}"
+        logger.info(
+            "Generated route %d: source=%s distance_km=%.2f duration_minutes=%d "
+            "elevation_gain_m=%s label=%s",
+            idx, source, distance_km, duration_minutes,
+            "None" if response_elevation_gain_m is None else round(float(response_elevation_gain_m), 1),
+            response_effort_label,
         )
         out.append(
             RouteResponse(
@@ -381,7 +377,7 @@ async def _build_pois(
         return []
 
     raw_pois = await overpass.fetch_pois_along_route(polyline, max_pois=5)
-    print(f"-> Overpass returned {len(raw_pois)} raw POIs.")
+    logger.info("Overpass returned %d raw POIs.", len(raw_pois))
 
     if not raw_pois:
         return []
@@ -439,13 +435,10 @@ async def _build_explorer_route_pois(
     for route, pois in zip(routes, per_route_pois):
         source = str(route.get("source", "unknown"))
         score = float(len(pois)) + len({p.category for p in pois}) * 0.5
-        print(
-            "explorer_route_pois: "
-            f"source={source} "
-            f"mode={'loop_area' if loop_mode else 'route_corridor'} "
-            f"pois={[p.name for p in pois]} "
-            f"total={len(pois)} "
-            f"score={score:.2f}"
+        logger.info(
+            "explorer_route_pois: source=%s mode=%s pois=%s total=%d score=%.2f",
+            source, "loop_area" if loop_mode else "route_corridor",
+            [p.name for p in pois], len(pois), score,
         )
         ranked.append((score, route, pois))
 
@@ -473,17 +466,14 @@ async def _generate_explorer_loop_routes(
         strict_distance=strict,
     )
     sources = [route.get("source", "unknown") for route in routes]
-    print(
-        "explorer_loop_routes: "
-        f"categories={poi_categories} "
-        f"user_waypoints={0 if not user_waypoints else len(user_waypoints)} "
-        f"sources={sources}"
+    logger.info(
+        "explorer_loop_routes: categories=%s user_waypoints=%d sources=%s",
+        poi_categories, 0 if not user_waypoints else len(user_waypoints), sources,
     )
     ranked_routes, route_pois = await _build_explorer_route_pois(routes, poi_categories, loop_mode=True)
-    print(
-        "explorer_loop_routes_ranked: "
-        f"routes={len(ranked_routes)} "
-        f"poi_count={sum(len(pois) for pois in route_pois)}"
+    logger.info(
+        "explorer_loop_routes_ranked: routes=%d poi_count=%d",
+        len(ranked_routes), sum(len(pois) for pois in route_pois),
     )
     return ranked_routes, route_pois
 
@@ -506,29 +496,25 @@ async def _generate_explorer_a2b_routes(
         mode=mode,
         waypoints=user_waypoints,
     )
-    print(
-        "explorer_a2b_routes: "
-        f"categories={poi_categories} "
-        f"user_waypoints={0 if not user_waypoints else len(user_waypoints)} "
-        f"sources={[route.get('source', 'unknown') for route in routes]}"
+    logger.info(
+        "explorer_a2b_routes: categories=%s user_waypoints=%d sources=%s",
+        poi_categories, 0 if not user_waypoints else len(user_waypoints),
+        [route.get("source", "unknown") for route in routes],
     )
     ranked_routes, route_pois = await _build_explorer_route_pois(routes, poi_categories, loop_mode=False)
-    print(
-        "explorer_a2b_routes_ranked: "
-        f"routes={len(ranked_routes)} "
-        f"poi_count={sum(len(pois) for pois in route_pois)}"
+    logger.info(
+        "explorer_a2b_routes_ranked: routes=%d poi_count=%d",
+        len(ranked_routes), sum(len(pois) for pois in route_pois),
     )
     return ranked_routes, route_pois
 
 
 @router.post("/discover-pois", response_model=list[POI])
-async def discover_pois(
-    body: POIDiscoveryRequest,
-) -> list[POI]:
+async def discover_pois(body: POIDiscoveryRequest) -> list[POI]:
+    if not ENABLE_POIS:
+        return []
     try:
-        pois = await _build_pois(
-            polyline=body.polyline,
-        )
+        pois = await _build_pois(polyline=body.polyline)
         return pois
     except Exception as exc:
         raise HTTPException(
@@ -542,9 +528,9 @@ async def generate_route_variants(
 ) -> MultiRouteResponse:
     try:
         # 1. Branching based on Route Type
-        route_type = getattr(body, "routeType", "loop")
-        mode = getattr(body, "mode", "walk")
-        app_mode = getattr(body, "appMode", "fitness")
+        route_type = body.routeType
+        mode = body.mode
+        app_mode = body.appMode
         route_pois: list[list[POI]] | None = None
 
         target_distance_km = body.distance_km
@@ -575,10 +561,9 @@ async def generate_route_variants(
                         detail=f"distance_km cannot exceed {max_distance:g} for mode={mode}.",
                     )
             elif body.distance_km is not None or body.target_duration_minutes is not None:
-                print(
-                    "explorer_a2b_target_ignored: "
-                    f"distance_km={body.distance_km} "
-                    f"target_duration_minutes={body.target_duration_minutes}"
+                logger.info(
+                    "explorer_a2b_target_ignored: distance_km=%s target_duration_minutes=%s",
+                    body.distance_km, body.target_duration_minutes,
                 )
         elif route_type != "a2b":
             if target_distance_km is None:
@@ -600,8 +585,8 @@ async def generate_route_variants(
 
         if route_type == "a2b":
             # For A to B, we need end coordinates
-            end_lng = getattr(body, "end_lng", None)
-            end_lat = getattr(body, "end_lat", None)
+            end_lng = body.end_lng
+            end_lat = body.end_lat
             if end_lng is None or end_lat is None:
                 raise HTTPException(status_code=400, detail="A to B requires an end point.")
 
@@ -638,30 +623,35 @@ async def generate_route_variants(
                 user_waypoints=body.waypoints,
                 max_routes=body.max_routes or 3,
             )
-            
+
+        if effort_results is None:
+            if app_mode == "explorer":
+                effort_results = [(None, "Balanced") for _ in routes]
+            else:
+                effort_results = await enrich_routes_with_effort(routes, mode=mode)
+                effort_results = _apply_relative_effort_labels(routes, effort_results, mode)
+
+        return MultiRouteResponse(
+            routes=await _build_route_responses(
+                routes,
+                effort_results,
+                route_pois=route_pois,
+                app_mode=app_mode,
+            )
+        )
     except HTTPException:
         raise
+    except route_generator.OSRMServiceUnavailable as exc:
+        logger.warning("route_generation_osrm_unavailable: %r", exc)
+        raise HTTPException(
+            status_code=502,
+            detail="Routing service unavailable. Check local OSRM containers.",
+        ) from exc
     except Exception as exc:
         raise HTTPException(
             status_code=502,
             detail="Route generation failed. Try again.",
         ) from exc
-
-    if effort_results is None:
-        if app_mode == "explorer":
-            effort_results = [(None, "Balanced") for _ in routes]
-        else:
-            effort_results = await enrich_routes_with_effort(routes, mode=mode)
-            effort_results = _apply_relative_effort_labels(routes, effort_results, mode)
-
-    return MultiRouteResponse(
-        routes=await _build_route_responses(
-            routes,
-            effort_results,
-            route_pois=route_pois,
-            app_mode=app_mode,
-        )
-    )
 
 
 @router.post("/export/gpx")

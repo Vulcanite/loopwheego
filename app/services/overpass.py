@@ -1,4 +1,4 @@
-import math
+import logging
 import os
 import uuid
 from typing import Any
@@ -6,6 +6,9 @@ from typing import Any
 import httpx
 
 from app.models.poi import POI
+from app.utils.geo import haversine_km, haversine_m, point_to_segment_km
+
+logger = logging.getLogger(__name__)
 
 OVERPASS_URL = os.getenv("OVERPASS_URL", "http://localhost:12345/api/interpreter")
 
@@ -72,43 +75,15 @@ def _osm_tags_to_category(tags: dict[str, str], requested: set[str]) -> str | No
 
 def _osm_prominence(tags: dict[str, str]) -> float:
     score = 5.0
-    if tags.get("wikipedia"):  score += 3.0
-    if tags.get("wikidata"):   score += 2.0
-    if tags.get("heritage"):   score += 1.5
-    if tags.get("tourism") in ("attraction", "museum", "viewpoint"): score += 1.0
+    if tags.get("wikipedia"):
+        score += 3.0
+    if tags.get("wikidata"):
+        score += 2.0
+    if tags.get("heritage"):
+        score += 1.5
+    if tags.get("tourism") in ("attraction", "museum", "viewpoint"):
+        score += 1.0
     return min(score, 10.0)
-
-
-def _haversine_km(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
-    r = 6371.0
-    p1, p2 = math.radians(lat1), math.radians(lat2)
-    dphi = math.radians(lat2 - lat1)
-    dlmb = math.radians(lng2 - lng1)
-    a = math.sin(dphi / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dlmb / 2) ** 2
-    return 2 * r * math.asin(min(1.0, math.sqrt(a)))
-
-
-def _haversine_m(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
-    return _haversine_km(lat1, lng1, lat2, lng2) * 1000.0
-
-
-def _point_to_segment_km(
-    lat: float, lng: float,
-    a_lat: float, a_lng: float,
-    b_lat: float, b_lng: float,
-) -> float:
-    mean_lat = math.radians((a_lat + b_lat + lat) / 3.0)
-    sx = 111.320 * math.cos(mean_lat)
-    sy = 110.574
-    px, py = lng * sx, lat * sy
-    ax, ay = a_lng * sx, a_lat * sy
-    bx, by = b_lng * sx, b_lat * sy
-    abx, aby = bx - ax, by - ay
-    ab2 = abx * abx + aby * aby
-    if ab2 <= 1e-9:
-        return math.sqrt((px - ax) ** 2 + (py - ay) ** 2)
-    t = max(0.0, min(1.0, ((px - ax) * abx + (py - ay) * aby) / ab2))
-    return math.sqrt((px - ax - t * abx) ** 2 + (py - ay - t * aby) ** 2)
 
 
 def _distance_to_polyline_km(
@@ -118,7 +93,7 @@ def _distance_to_polyline_km(
     if len(polyline) < 2:
         return float("inf")
     return min(
-        _point_to_segment_km(
+        point_to_segment_km(
             lat, lng,
             float(polyline[i][1]), float(polyline[i][0]),
             float(polyline[i + 1][1]), float(polyline[i + 1][0]),
@@ -133,27 +108,25 @@ def _select_spatially_distributed(
     if len(candidates) <= max_n:
         return candidates
     selected: list[dict[str, Any]] = [candidates[0]]
-    remaining = candidates[1:]
+    remaining = list(candidates[1:])
     while len(selected) < max_n and remaining:
-        best: dict[str, Any] | None = None
+        best_idx: int | None = None
         best_score = -1.0
-        for c in remaining:
-            # Skip if too close to any already-selected
-            min_d = min(_haversine_km(c["lat"], c["lng"], s["lat"], s["lng"]) for s in selected)
+        for i, c in enumerate(remaining):
+            min_d = min(haversine_km(c["lat"], c["lng"], s["lat"], s["lng"]) for s in selected)
             if min_d < min_spacing_km:
                 continue
             score = c.get("_score", 0.0)
             if score > best_score:
                 best_score = score
-                best = c
-        if best is None:
-            # Relax spacing: just pick highest score remaining
+                best_idx = i
+        if best_idx is None:
             remaining.sort(key=lambda x: -x.get("_score", 0.0))
             selected.append(remaining[0])
             remaining = remaining[1:]
         else:
-            selected.append(best)
-            remaining = [x for x in remaining if x is not best]
+            selected.append(remaining[best_idx])
+            remaining.pop(best_idx)
     return selected
 
 
@@ -210,7 +183,6 @@ async def fetch_pois_for_explorer_routes(
         return [[] for _ in routes]
 
     min_lat, min_lng, max_lat, max_lng = _polyline_bbox(combined_poly, buffer_deg=0.012)
-    # Clamp to Singapore bounds — no query ever escapes SG
     sg_min_lat, sg_min_lng, sg_max_lat, sg_max_lng = _SG_BBOX
     min_lat = max(min_lat, sg_min_lat)
     min_lng = max(min_lng, sg_min_lng)
@@ -233,7 +205,7 @@ async def fetch_pois_for_explorer_routes(
             resp.raise_for_status()
             payload = resp.json()
         except Exception as ex:
-            print(f"-> Overpass explorer fetch error: {repr(ex)}")
+            logger.warning("Overpass explorer fetch error: %r", ex)
             return [[] for _ in routes]
 
     seen_ids: set[int] = set()
@@ -245,7 +217,6 @@ async def fetch_pois_for_explorer_routes(
         name = tags.get("name")
         if not name:
             continue
-        # node: lat/lon direct; way: center.lat / center.lon
         lat = el.get("lat") or (el.get("center") or {}).get("lat")
         lng = el.get("lon") or (el.get("center") or {}).get("lon")
         if lat is None or lng is None:
@@ -265,9 +236,8 @@ async def fetch_pois_for_explorer_routes(
             "_prominence": _osm_prominence(tags),
         })
 
-    print(f"-> Overpass explorer: {len(raw_pool)} named POIs in bbox for categories={categories}")
+    logger.info("Overpass explorer: %d named POIs in bbox for categories=%s", len(raw_pool), categories)
 
-    # Per-route assignment: score each POI against each route's polyline
     result: list[list[POI]] = []
     for route in routes:
         polyline = route.get("polyline") or []
@@ -299,9 +269,9 @@ async def fetch_pois_for_explorer_routes(
             ))
         result.append(pois)
 
-    print(
-        "-> Overpass explorer per-route POI counts: "
-        + str([len(pois) for pois in result])
+    logger.info(
+        "Overpass explorer per-route POI counts: %s",
+        [len(pois) for pois in result],
     )
     return result
 
@@ -314,7 +284,6 @@ async def fetch_suggested_places() -> list[dict[str, Any]]:
     min_lat, min_lng, max_lat, max_lng = _SG_BBOX
     bbox = f"{min_lat},{min_lng},{max_lat},{max_lng}"
 
-    # Way queries only for area-type categories — nodes cover most point features
     _WAY_CATS = {"parks", "nature", "heritage", "arts"}
 
     parts: list[str] = []
@@ -341,7 +310,7 @@ async def fetch_suggested_places() -> list[dict[str, Any]]:
             resp.raise_for_status()
             payload = resp.json()
         except Exception as ex:
-            print(f"-> Overpass suggested places error: {repr(ex)}")
+            logger.warning("Overpass suggested places error: %r", ex)
             return []
 
     requested_set = set(ALL_EXPLORER_CATEGORIES)
@@ -374,7 +343,7 @@ async def fetch_suggested_places() -> list[dict[str, Any]]:
             "_prominence": _osm_prominence(tags),
         })
 
-    print(f"-> Overpass suggested places: {len(out)} results")
+    logger.info("Overpass suggested places: %d results", len(out))
     return out
 
 
@@ -441,7 +410,7 @@ async def fetch_pois_along_route(
                     "tags": {k: str(v) for k, v in tags.items()},
                 }
         except Exception as ex:
-            print(f"-> Overpass Fetch Error: {repr(ex)}")
+            logger.warning("Overpass fetch error: %r", ex)
             return []
 
     candidates = list(seen.values())
@@ -454,7 +423,7 @@ async def fetch_pois_along_route(
         best: dict[str, Any] | None = None
         best_score = -1.0
         for c in remaining:
-            score = min(_haversine_m(c["lat"], c["lng"], s["lat"], s["lng"]) for s in selected)
+            score = min(haversine_m(c["lat"], c["lng"], s["lat"], s["lng"]) for s in selected)
             if score > best_score:
                 best_score = score
                 best = c

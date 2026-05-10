@@ -21,6 +21,7 @@ Primary engine: OSRM /trip and /route
 from __future__ import annotations
 
 import asyncio
+import logging
 import math
 import os
 from typing import Any
@@ -33,6 +34,9 @@ from app.services.external_endpoints import (
     mark_base_url_unhealthy,
     should_fallback_on_error,
 )
+from app.utils.geo import haversine_km as _haversine_km
+
+logger = logging.getLogger(__name__)
 
 ROUTE_TIMEOUT_S = float(os.getenv("ROUTE_TIMEOUT_S", "30"))
 
@@ -42,23 +46,13 @@ _MAX_PAIR_CANDIDATES = 40
 _MIN_ANGULAR_SEP_DEG = 35.0
 
 
+class OSRMServiceUnavailable(RuntimeError):
+    """Raised when no configured OSRM service can answer a routing request."""
+
+
 # ─────────────────────────────────────────────────────────────
 # Geometry helpers
 # ─────────────────────────────────────────────────────────────
-
-def _haversine_km(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
-    r = 6371.0
-    p1 = math.radians(lat1)
-    p2 = math.radians(lat2)
-    dphi = math.radians(lat2 - lat1)
-    dlmb = math.radians(lng2 - lng1)
-
-    a = (
-        math.sin(dphi / 2) ** 2
-        + math.cos(p1) * math.cos(p2) * math.sin(dlmb / 2) ** 2
-    )
-    return 2 * r * math.asin(min(1.0, math.sqrt(a)))
-
 
 def _bearing_deg(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
     p1 = math.radians(lat1)
@@ -376,7 +370,13 @@ async def _request_osrm_json(
     path_builder,
     mode: str,
 ) -> dict[str, Any] | None:
-    for base_url, profile in get_osrm_candidates(mode):
+    candidates = get_osrm_candidates(mode)
+    if not candidates:
+        raise OSRMServiceUnavailable(f"No OSRM endpoints configured for mode={mode}.")
+
+    last_service_error: Exception | None = None
+    saw_osrm_response = False
+    for base_url, profile in candidates:
         url = path_builder(base_url, profile)
         try:
             response = await client.get(url)
@@ -387,17 +387,28 @@ async def _request_osrm_json(
                 data["_resolved_base_url"] = base_url
                 return data
             if isinstance(data, dict):
-                print(
+                saw_osrm_response = True
+                logger.warning(
                     "osrm_request_non_ok: "
-                    f"mode={mode} profile={profile} "
-                    f"base_url={base_url} code={data.get('code')} "
-                    f"message={data.get('message')}"
+                    "mode=%s profile=%s "
+                    "base_url=%s code=%s "
+                    "message=%s",
+                    mode, profile, base_url, data.get("code"), data.get("message"),
                 )
         except Exception as exc:
             if should_fallback_on_error(exc):
                 mark_base_url_unhealthy(base_url)
+                last_service_error = exc
                 continue
+            logger.warning(
+                "osrm_request_failed: mode=%s profile=%s base_url=%s error=%r",
+                mode, profile, base_url, exc,
+            )
             break
+    if last_service_error is not None and not saw_osrm_response:
+        raise OSRMServiceUnavailable(
+            f"OSRM unavailable for mode={mode}: {last_service_error!r}"
+        )
     return None
 
 async def _build_one_candidate(
@@ -445,11 +456,12 @@ async def _build_one_candidate(
             max_segment_km = _max_segment_km(polyline)
             max_segment_threshold_km = _max_segment_threshold_km(mode, target_distance_km)
             if max_segment_km > max_segment_threshold_km:
-                print(
+                logger.warning(
                     "loop_candidate_rejected: suspicious_jump "
-                    f"mode={mode} distance_km={total_distance:.2f} "
-                    f"max_segment_km={max_segment_km:.2f} "
-                    f"threshold_km={max_segment_threshold_km:.2f}"
+                    "mode=%s distance_km=%.2f "
+                    "max_segment_km=%.2f "
+                    "threshold_km=%.2f",
+                    mode, total_distance, max_segment_km, max_segment_threshold_km,
                 )
                 return None
 
@@ -471,7 +483,10 @@ async def _build_one_candidate(
                 "_score": score,
                 "_anchors": [a["name"], b["name"]],
             }
-        except Exception:
+        except OSRMServiceUnavailable:
+            raise
+        except Exception as exc:
+            logger.warning("loop_candidate_failed: error=%r", exc)
             return None
 
 
@@ -506,7 +521,7 @@ async def _build_waypoint_loop_candidate(
             )
 
             if not data or not data.get("routes"):
-                print("loop_waypoint_attempt: no OSRM route result")
+                logger.warning("loop_waypoint_attempt: no OSRM route result")
                 return None
 
             route = data["routes"][0]
@@ -517,11 +532,12 @@ async def _build_waypoint_loop_candidate(
             max_segment_km = _max_segment_km(polyline)
             max_segment_threshold_km = _max_segment_threshold_km(mode, target_distance_km)
             if max_segment_km > max_segment_threshold_km:
-                print(
+                logger.warning(
                     "loop_waypoint_attempt: rejected suspicious_jump "
-                    f"distance_km={total_distance:.2f} "
-                    f"max_segment_km={max_segment_km:.2f} "
-                    f"threshold_km={max_segment_threshold_km:.2f}"
+                    "distance_km=%.2f "
+                    "max_segment_km=%.2f "
+                    "threshold_km=%.2f",
+                    total_distance, max_segment_km, max_segment_threshold_km,
                 )
                 return None
 
@@ -535,33 +551,32 @@ async def _build_waypoint_loop_candidate(
                     missed_waypoints.append(f"{waypoint_lng:.5f},{waypoint_lat:.5f}({dist_km:.2f}km)")
 
             if missed_waypoints:
-                print(
-                    "loop_waypoint_attempt: rejected missed_waypoints "
-                    f"missed={missed_waypoints}"
+                logger.warning(
+                    "loop_waypoint_attempt: rejected missed_waypoints missed=%s",
+                    missed_waypoints,
                 )
                 return None
 
             if strict_distance:
                 if total_distance < 0.70 * target_distance_km:
-                    print(
+                    logger.warning(
                         "loop_waypoint_attempt: rejected too_short "
-                        f"distance_km={total_distance:.2f} "
-                        f"target_km={target_distance_km:.2f}"
+                        "distance_km=%.2f target_km=%.2f",
+                        total_distance, target_distance_km,
                     )
                     return None
                 if total_distance > 1.35 * target_distance_km:
-                    print(
+                    logger.warning(
                         "loop_waypoint_attempt: rejected too_long "
-                        f"distance_km={total_distance:.2f} "
-                        f"target_km={target_distance_km:.2f}"
+                        "distance_km=%.2f target_km=%.2f",
+                        total_distance, target_distance_km,
                     )
                     return None
 
-            print(
+            logger.info(
                 "loop_waypoint_attempt: success "
-                f"distance_km={total_distance:.2f} "
-                f"target_km={target_distance_km:.2f} "
-                f"waypoints={len(waypoints)}"
+                "distance_km=%.2f target_km=%.2f waypoints=%d",
+                total_distance, target_distance_km, len(waypoints),
             )
 
             return {
@@ -572,7 +587,9 @@ async def _build_waypoint_loop_candidate(
                 "_score": abs(total_distance - target_distance_km),
             }
         except Exception as exc:
-            print(f"loop_waypoint_attempt: failed error={exc!r}")
+            if isinstance(exc, OSRMServiceUnavailable):
+                raise
+            logger.warning("loop_waypoint_attempt: failed error=%r", exc)
             return None
 
 
@@ -593,10 +610,9 @@ async def generate_loop_variants(
     anchors = _generate_candidate_anchors(start_lat, start_lng, target)
     pairs = _candidate_anchor_pairs(start_lat, start_lng, anchors, target)
 
-    print(
-        "generate_loop_variants: "
-        f"target_km={target:.2f} mode={mode} waypoints={0 if not waypoints else len(waypoints)} "
-        f"anchors={len(anchors)} pairs={len(pairs)}"
+    logger.info(
+        "generate_loop_variants: target_km=%.2f mode=%s waypoints=%d anchors=%d pairs=%d",
+        target, mode, 0 if not waypoints else len(waypoints), len(anchors), len(pairs),
     )
 
     async with httpx.AsyncClient(timeout=ROUTE_TIMEOUT_S) as client:
@@ -625,9 +641,9 @@ async def generate_loop_variants(
         return [_fmt(r) for r in valid_pairs[: max(1, count)]]
 
     if waypoints:
-        print("generate_loop_variants: no waypoint-respecting loop found")
+        logger.warning("generate_loop_variants: no waypoint-respecting loop found")
     else:
-        print("generate_loop_variants: all candidate loops rejected, returning no routes")
+        logger.warning("generate_loop_variants: all candidate loops rejected, returning no routes")
     return []
 
 async def generate_a2b(
@@ -667,11 +683,12 @@ async def generate_a2b(
                 max_segment_km = _max_segment_km(polyline)
                 max_segment_threshold_km = _max_segment_threshold_km(mode, dist_km)
                 if max_segment_km > max_segment_threshold_km:
-                    print(
+                    logger.warning(
                         "a2b_candidate_rejected: suspicious_jump "
-                        f"mode={mode} distance_km={dist_km:.2f} "
-                        f"max_segment_km={max_segment_km:.2f} "
-                        f"threshold_km={max_segment_threshold_km:.2f}"
+                        "mode=%s distance_km=%.2f "
+                        "max_segment_km=%.2f "
+                        "threshold_km=%.2f",
+                        mode, dist_km, max_segment_km, max_segment_threshold_km,
                     )
                     continue
 
@@ -682,5 +699,8 @@ async def generate_a2b(
                     "source": f"osrm_{data['_resolved_profile']}_a2b",
                 })
             return out
-        except Exception:
+        except OSRMServiceUnavailable:
+            raise
+        except Exception as exc:
+            logger.warning("a2b_route_failed: error=%r", exc)
             return []

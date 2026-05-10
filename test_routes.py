@@ -66,7 +66,8 @@ async def test_health(client):
         fail(f"HTTP {r.status_code}: {r.text}")
         return False
     except Exception as e:
-        fail(f"{e}"); return False
+        fail(f"{e}")
+        return False
 
 
 async def test_local_dependencies(client):
@@ -197,7 +198,8 @@ async def test_places(client):
         fail(f"HTTP {r.status_code}: {r.text[:200]}")
         return False
     except Exception as e:
-        fail(f"{e}"); return False
+        fail(f"{e}")
+        return False
 
 
 async def test_generate(client):

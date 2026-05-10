@@ -12,9 +12,10 @@ None when the API is unreachable.
 import asyncio
 import logging
 import os
-from typing import Optional
 
 import httpx
+
+from app.utils.geo import haversine_m
 
 ELEVATION_API_URL = os.getenv("ELEVATION_API_URL", "http://localhost:2999/v1/srtm30m")
 ELEVATION_TIMEOUT_S = float(os.getenv("ELEVATION_TIMEOUT_S", "5.0"))
@@ -23,23 +24,6 @@ ELEVATION_BATCH_SIZE = int(os.getenv("ELEVATION_BATCH_SIZE", "80"))
 ELEVATION_GAIN_THRESHOLD_M = float(os.getenv("ELEVATION_GAIN_THRESHOLD_M", "1.5"))
 
 logger = logging.getLogger(__name__)
-
-
-def _haversine_m(
-    lng1: float,
-    lat1: float,
-    lng2: float,
-    lat2: float,
-) -> float:
-    from math import asin, cos, radians, sin, sqrt
-
-    radius_m = 6_371_000.0
-    lat1_rad = radians(lat1)
-    lat2_rad = radians(lat2)
-    dlat = radians(lat2 - lat1)
-    dlng = radians(lng2 - lng1)
-    a = sin(dlat / 2) ** 2 + cos(lat1_rad) * cos(lat2_rad) * sin(dlng / 2) ** 2
-    return 2 * radius_m * asin(min(1.0, sqrt(a)))
 
 
 def _resample_polyline(
@@ -61,7 +45,7 @@ def _resample_polyline(
     for current_end in coords[1:]:
         start_lng, start_lat = current_start
         end_lng, end_lat = current_end
-        segment_len_m = _haversine_m(start_lng, start_lat, end_lng, end_lat)
+        segment_len_m = haversine_m(start_lat, start_lng, end_lat, end_lng)
 
         if segment_len_m <= 0.01:
             current_start = current_end
@@ -91,9 +75,6 @@ async def _fetch_elevation_batch(
     client: httpx.AsyncClient,
     points: list[tuple[float, float]],
 ) -> list[float] | None:
-    if not points:
-        return []
-
     """
     Query OpenTopoData with a batch of (lng, lat) points.
 
@@ -102,6 +83,9 @@ async def _fetch_elevation_batch(
 
     Returns list of elevation values in metres, or None on any failure.
     """
+    if not points:
+        return []
+
     locations = "|".join(f"{lat:.5f},{lng:.5f}" for lng, lat in points)
     try:
         resp = await client.get(
@@ -189,12 +173,12 @@ def _classify_effort(
         return "Hard"
 
 
-async def enrich_route_with_effort(
+async def _enrich_route_with_effort(
     client: httpx.AsyncClient,
     polyline: list,
     distance_km: float,
     mode: str,
-) -> tuple[Optional[float], str]:
+) -> tuple[float | None, str]:
     """
     Returns (elevation_gain_m, effort_label).
 
@@ -205,7 +189,6 @@ async def enrich_route_with_effort(
     elevations = await _fetch_elevations(client, sampled)
 
     if elevations is None:
-        # Graceful degradation: classify from distance only
         label = _classify_effort(distance_km, 0.0, mode)
         return None, label
 
@@ -218,7 +201,7 @@ async def enrich_route_with_effort(
 async def enrich_routes_with_effort(
     routes: list[dict],
     mode: str,
-) -> list[tuple[Optional[float], str]]:
+) -> list[tuple[float | None, str]]:
     """
     Enrich multiple routes concurrently.
 
@@ -229,7 +212,7 @@ async def enrich_routes_with_effort(
     """
     async with httpx.AsyncClient(timeout=ELEVATION_TIMEOUT_S) as client:
         tasks = [
-            enrich_route_with_effort(client, r["polyline"], float(r["distance_km"]), mode)
+            _enrich_route_with_effort(client, r["polyline"], float(r["distance_km"]), mode)
             for r in routes
         ]
         return list(await asyncio.gather(*tasks))

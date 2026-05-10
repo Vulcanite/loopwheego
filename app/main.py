@@ -1,13 +1,13 @@
 import os
 
 from dotenv import load_dotenv
-
-load_dotenv()
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers import geocode, places, routes
+
+load_dotenv()
+
 
 def _parse_origins() -> list[str]:
     raw = os.getenv("CORS_ORIGINS", "http://localhost:5173")
