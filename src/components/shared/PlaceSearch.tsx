@@ -208,7 +208,7 @@ export function PlaceSearch({
         placeholder={placeholder}
         disabled={disabled}
         autoComplete="off"
-        className="w-full px-3 py-2.5 rounded-lg text-sm outline-none transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+        className="w-full px-3 py-2.5 rounded-lg text-base md:text-sm outline-none transition-all disabled:opacity-40 disabled:cursor-not-allowed"
         style={{
           background: "var(--input-bg)",
           border: "1px solid var(--border-mid)",
