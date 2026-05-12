@@ -221,7 +221,7 @@ export function PlaceSearch({
 
       {showDropdown ? (
         <ul
-          className="absolute mt-1 w-full overflow-auto rounded-lg shadow-2xl"
+          className="mt-1 w-full overflow-auto rounded-lg shadow-2xl md:absolute md:left-0 md:top-full"
           style={{
             background: "var(--surface)",
             border: "1px solid var(--border-mid)",

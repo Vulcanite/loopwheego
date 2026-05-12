@@ -600,8 +600,6 @@ export function Home(): JSX.Element {
           </div>
         )}
 
-        <LoadingOverlay visible={isLoading} />
-
         {/* Zoom-out button — shown when zoomed past route level */}
         {activeRoute && !isLoading && !selectedRoutePOI && (explorerViewport?.zoom ?? 0) > 14 && (
           <button
