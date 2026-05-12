@@ -645,12 +645,12 @@ async def generate_route_variants(
         logger.warning("route_generation_osrm_unavailable: %r", exc)
         raise HTTPException(
             status_code=502,
-            detail="Routing service unavailable. Check local OSRM containers.",
+            detail="Routing service unavailable. Kindly try again later.",
         ) from exc
     except Exception as exc:
         raise HTTPException(
             status_code=502,
-            detail="Route generation failed. Try again.",
+            detail="Route generation failed. Kindly try again later.",
         ) from exc
 
 
