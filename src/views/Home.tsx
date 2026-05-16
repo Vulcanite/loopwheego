@@ -1,4 +1,4 @@
-// app/pages/Home.tsx
+// app/views/Home.tsx
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Download, Clock, MapPin, ChevronDown, Plus, X } from "lucide-react"
 

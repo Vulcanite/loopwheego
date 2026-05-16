@@ -1,5 +1,4 @@
 import maplibregl from "maplibre-gl"
-import "maplibre-gl/dist/maplibre-gl.css"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import { ExplorerPreviewMarker } from "@/components/map/ExplorerPreviewMarker"
@@ -38,7 +37,7 @@ const SINGAPORE_BOUNDS: [[number, number], [number, number]] = [
   [104.05, 1.48] // Northeast coordinates
 ];
 
-const MAPTILER_KEY = (import.meta.env.VITE_MAPTILER_KEY ?? "").trim()
+const MAPTILER_KEY = (process.env.NEXT_PUBLIC_MAPTILER_KEY ?? "").trim()
 
 function getStyleUrl(theme: "dark" | "light"): string {
   const mapId = theme === "dark" ? "dataviz-dark" : "streets-v2"
@@ -93,7 +92,7 @@ export function MapView({
 
   useEffect(() => {
     if (!MAPTILER_KEY) {
-      setInitError("MapTiler key missing. Set VITE_MAPTILER_KEY in your frontend env.")
+      setInitError("MapTiler key missing. Set NEXT_PUBLIC_MAPTILER_KEY in your frontend env.")
       return
     }
     setInitError(null)

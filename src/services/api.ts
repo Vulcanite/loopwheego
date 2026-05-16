@@ -3,8 +3,7 @@ import type { GPXRequest, RouteRequest, MultiRouteResponse, POIDiscoveryRequest 
 import type { SuggestedPlace } from "@/types/place"
 import { POI } from "@/types/poi"
 
-const baseURL = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/$/, "")
-const client = axios.create({ baseURL, headers: { "Content-Type": "application/json" } })
+const client = axios.create({ baseURL: "/api", headers: { "Content-Type": "application/json" } })
 
 const ROUTE_TIMEOUT_MS = 60_000
 

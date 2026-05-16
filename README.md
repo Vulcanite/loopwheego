@@ -1,17 +1,17 @@
 # LoopWheeGo — Frontend
 
-React + TypeScript frontend for LoopWheeGo, a walking and cycling route generation and discovery platform. Renders routes on a MapLibre/MapTiler map, supports POI discovery, variant picking, and GPX export.
+Next.js + TypeScript frontend for LoopWheeGo, a walking and cycling route generation and discovery platform. Renders routes on a MapLibre/MapTiler map, proxies API requests to FastAPI, supports POI discovery, variant picking, and GPX export.
 
 ## Tech Stack
 
-- **React 18** + TypeScript + Vite
+- **Next.js 16** + **React 19** + TypeScript
 - **MapLibre GL JS** — map rendering
 - **shadcn/ui** + Tailwind CSS — UI components
 - **Axios** — HTTP client
 
 ## Prerequisites
 
-- Node.js 18+
+- Node.js 20.9+
 - A [MapTiler](https://www.maptiler.com/) API key
 - LoopWheeGo backend running (see backend README)
 
@@ -24,8 +24,9 @@ npm install
 Create a `.env` file in this directory:
 
 ```env
-VITE_MAPTILER_KEY=your_maptiler_key_here
-VITE_API_BASE_URL=http://localhost:8000
+NEXT_PUBLIC_MAPTILER_KEY=your_maptiler_key_here
+BACKEND_API_BASE_URL=http://localhost:8000
+API_PROXY_SECRET=use_the_same_secret_as_fastapi
 ```
 
 ## Development
@@ -34,21 +35,22 @@ VITE_API_BASE_URL=http://localhost:8000
 npm run dev
 ```
 
-Runs on `http://localhost:5173` by default.
+Runs on `http://localhost:3000` by default.
 
 ## Build
 
 ```bash
-npm run build       # production build → dist/
-npm run preview     # preview production build locally
+npm run build
+npm run start
 ```
 
 ## Environment Variables
 
-| Variable            | Description                 |
-|---------------------|-----------------------------|
-| `VITE_MAPTILER_KEY` | MapTiler API key (required) |
-| `VITE_API_BASE_URL` | Backend API base URL        |
+| Variable | Description |
+|---|---|
+| `NEXT_PUBLIC_MAPTILER_KEY` | Browser-visible MapTiler key. Restrict it by domain in MapTiler. |
+| `BACKEND_API_BASE_URL` | FastAPI base URL, used only by Next.js route handlers. |
+| `API_PROXY_SECRET` | Shared secret sent from Next.js to FastAPI. Must match backend. |
 
 ## Features
 

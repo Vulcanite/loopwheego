@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss"
 import animate from "tailwindcss-animate"
 
 export default {
-  content: ["./index.html", "./src/**/*.{ts,tsx}"],
+  content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       fontFamily: {

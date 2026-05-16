@@ -13,9 +13,14 @@ const ThemeContext = createContext<ThemeContextValue>({
 })
 
 export function ThemeProvider({ children }: { children: ReactNode }): JSX.Element {
-  const [theme, setTheme] = useState<Theme>(() => {
-    return (localStorage.getItem("loopwheego-theme") as Theme) ?? "dark"
-  })
+  const [theme, setTheme] = useState<Theme>("dark")
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem("loopwheego-theme")
+    if (storedTheme === "dark" || storedTheme === "light") {
+      setTheme(storedTheme)
+    }
+  }, [])
 
   useEffect(() => {
     const root = document.documentElement

@@ -1,14 +1,14 @@
-// App.tsx
+"use client"
+
 import { useState } from "react"
 import { Analytics } from "@vercel/analytics/react"
-import { Home } from "@/pages/Home"
+import { Home } from "@/views/Home"
 import { ThemeSwitch } from "@/components/shared/ThemeSwitch"
 
 export default function App(): JSX.Element {
   const [aboutOpen, setAboutOpen] = useState(false)
 
   return (
-    /* CHANGE: h-screen instead of min-h-screen, add flex-col and overflow-hidden */
     <div className="h-[100dvh] flex flex-col overflow-hidden font-body" style={{ background: "var(--bg)" }}>
       <header
         className="flex-shrink-0 flex items-center justify-between px-4 md:px-6 py-3 md:py-4"
@@ -38,7 +38,6 @@ export default function App(): JSX.Element {
         </div>
       </header>
       
-      {/* Home must be flex-1 to fill the remaining height */}
       <Home />
       <Analytics />
 
