@@ -29,6 +29,8 @@ OSRM_BIKE_URL = os.getenv("OSRM_BIKE_URL", "http://localhost:5001")
 NOMINATIM_BASE_URL = os.getenv("NOMINATIM_BASE_URL", "http://localhost:8080").rstrip("/")
 ELEVATION_API_URL = os.getenv("ELEVATION_API_URL", "http://localhost:2999/v1/srtm30m").rstrip("/")
 OVERPASS_URL = os.getenv("OVERPASS_URL", "http://localhost:12345/api/interpreter").rstrip("/")
+API_PROXY_SECRET = os.getenv("API_PROXY_SECRET", "").strip()
+API_AUTH_HEADERS = {"X-LoopWheeGo-Proxy-Token": API_PROXY_SECRET} if API_PROXY_SECRET else {}
 
 ROUTE_TIMEOUT_S = float(os.getenv("ROUTE_TIMEOUT_S", "45"))
 CLIENT_TIMEOUT_S = ROUTE_TIMEOUT_S + 15
@@ -71,7 +73,7 @@ async def test_health(client):
 
 
 async def test_local_dependencies(client):
-    section("2. Local Routing/Geo Containers")
+    section("3. Local Routing/Geo Containers")
     radius_m = (TEST_DISTANCE_KM / (2 * math.pi)) * 1000
     m_per_deg = 111_320.0
     wps = []
@@ -159,7 +161,7 @@ async def test_local_dependencies(client):
 
 
 async def test_overpass(client):
-    section("3. Overpass API (POIs)")
+    section("4. Overpass API (POIs)")
     query = (f"[out:json][timeout:10];\n"
              f"(node[\"tourism\"](around:300,{TEST_LAT},{TEST_LNG});"
              f"node[\"historic\"](around:300,{TEST_LAT},{TEST_LNG}););\nout body;")
@@ -186,9 +188,9 @@ async def test_overpass(client):
 
 
 async def test_places(client):
-    section("4. GET /places/suggested")
+    section("5. GET /places/suggested")
     try:
-        r = await client.get("/places/suggested", timeout=5)
+        r = await client.get("/places/suggested", headers=API_AUTH_HEADERS, timeout=5)
         if r.status_code == 200:
             places = r.json()
             ok(f"Returned {len(places)} places")
@@ -203,7 +205,7 @@ async def test_places(client):
 
 
 async def test_generate(client):
-    section("5. POST /routes/generate-variants (SCENARIO MATRIX)")
+    section("6. POST /routes/generate-variants (SCENARIO MATRIX)")
     info(f"Using client timeout: {CLIENT_TIMEOUT_S:.0f}s  (ROUTE_TIMEOUT_S={ROUTE_TIMEOUT_S:.0f}s from .env)")
     scenarios = [
         (
@@ -263,6 +265,7 @@ async def test_generate(client):
             r = await client.post(
                 "/routes/generate-variants",
                 json=payload,
+                headers=API_AUTH_HEADERS,
                 timeout=CLIENT_TIMEOUT_S,
             )
             elapsed = time.monotonic() - t0
@@ -300,6 +303,26 @@ async def test_generate(client):
     return all_ok
 
 
+async def test_proxy_auth(client):
+    section("2. FastAPI Proxy Auth")
+    if not API_PROXY_SECRET:
+        warn("API_PROXY_SECRET is not set; protected endpoint auth is disabled outside production.")
+        return True
+
+    unauthenticated = await client.get("/places/suggested", timeout=5)
+    if unauthenticated.status_code != 401:
+        fail(f"Expected unauthenticated /places/suggested to return 401, got {unauthenticated.status_code}")
+        return False
+
+    authenticated = await client.get("/places/suggested", headers=API_AUTH_HEADERS, timeout=5)
+    if authenticated.status_code != 200:
+        fail(f"Expected authenticated /places/suggested to return 200, got {authenticated.status_code}")
+        return False
+
+    ok("Protected endpoints require the proxy secret.")
+    return True
+
+
 async def main():
     print(f"\n{BOLD}LoopWheeGo API Test Suite{RESET}")
     print("FastAPI app    : in-process ASGI")
@@ -319,6 +342,10 @@ async def main():
         alive = await test_health(app_client)
         if not alive:
             print(f"\n{RED}FastAPI app failed to load in-process.{RESET}\n")
+            sys.exit(1)
+
+        auth_ok = await test_proxy_auth(app_client)
+        if not auth_ok:
             sys.exit(1)
 
         dependencies_ok = await test_local_dependencies(network_client)

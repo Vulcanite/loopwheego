@@ -25,26 +25,30 @@ mkdir osrm-data && cd osrm-data
 wget http://download.geofabrik.de/asia/malaysia-singapore-brunei-latest.osm.pbf
 
 # Foot profile
-docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-extract -p /opt/foot.lua /data/malaysia-singapore-brunei-latest.osm.pbf
-docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-partition /data/malaysia-singapore-brunei-latest.osrm
-docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-customize /data/malaysia-singapore-brunei-latest.osrm
+docker run -t -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend:v6.0.0 osrm-extract -p /opt/foot.lua /data/malaysia-singapore-brunei-latest.osm.pbf
+docker run -t -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend:v6.0.0 osrm-partition /data/malaysia-singapore-brunei-latest.osrm
+docker run -t -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend:v6.0.0 osrm-customize /data/malaysia-singapore-brunei-latest.osrm
 
 # Bicycle profile (copy pbf, process separately)
 cp malaysia-singapore-brunei-latest.osm.pbf bike.osm.pbf
-docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-extract -p /opt/bicycle.lua /data/bike.osm.pbf
-docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-partition /data/bike.osrm
-docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-customize /data/bike.osrm
+docker run -t -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend:v6.0.0 osrm-extract -p /opt/bicycle.lua /data/bike.osm.pbf
+docker run -t -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend:v6.0.0 osrm-partition /data/bike.osrm
+docker run -t -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend:v6.0.0 osrm-customize /data/bike.osrm
 ```
 
 ## Setup & Start
 
 ```bash
 chmod +x setup.sh
-./setup.sh             # starts OSRM containers, venv, and FastAPI
+./setup.sh             # starts OSRM + Nominatim via Docker Compose, venv, and FastAPI
 ./setup.sh --no-reload # production mode (no hot reload)
+./setup.sh --no-docker # skip Docker services if they are already managed separately
+./setup.sh --with-elevation # also start OpenTopoData
+./setup.sh --with-overpass  # also start Overpass
 ```
 
 The script is idempotent — safe to re-run. It will skip steps already completed.
+By default it starts only the core local services. OpenTopoData and Overpass are compose profiles because their imports/builds are heavier.
 
 ### Environment Variables
 
@@ -58,9 +62,12 @@ Copy and edit `.env` before running (auto-created with defaults by `setup.sh` if
 | `NOMINATIM_BASE_URL` | `http://localhost:8080`                  | Local Nominatim container        |
 | `ELEVATION_API_URL`  | `http://localhost:2999/v1/srtm30m`       | Local OpenTopoData endpoint      |
 | `ENABLE_POIS`        | `true`                                   | Enable legacy Overpass discovery |
-| `CORS_ORIGINS`       | `http://localhost:5173`                  | Allowed frontend origins         |
+| `CORS_ORIGINS`       | `http://localhost:3000`                  | Allowed frontend origins         |
+| `CONTAINER_DATA_DIR` | `/home/ubuntu/container-data`            | Docker bind-mount root for OSRM/OpenTopoData data |
 | `ROUTE_TIMEOUT_S`    | `60`                                     | OSRM request timeout             |
 | `OVERPASS_URL`       | `http://localhost:12345/api/interpreter` | Local Overpass endpoint          |
+| `API_PROXY_SECRET`   | _(empty)_                                | Shared secret required by protected API routers |
+| `APP_ENV`            | `development`                            | Set to `production` to require `API_PROXY_SECRET` at startup |
 
 ## API Endpoints
 
@@ -71,6 +78,8 @@ Copy and edit `.env` before running (auto-created with defaults by `setup.sh` if
 | `POST` | `/routes/discover-pois` | Discover POIs along a route |
 | `POST` | `/routes/export/gpx` | Export route + POIs as GPX |
 | `GET` | `/places/suggested` | List suggested places for the region |
+
+All endpoints except `/health` require `X-LoopWheeGo-Proxy-Token` when `API_PROXY_SECRET` is configured. In production, set `APP_ENV=production` and configure the same `API_PROXY_SECRET` in the Next.js frontend.
 
 ## Refreshing Cached Explorer Places
 

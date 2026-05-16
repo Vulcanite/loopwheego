@@ -4,7 +4,7 @@ services:
     container_name: osrm-download
     user: "0:0"
     volumes:
-      - /home/amish/container-data/osrm-data:/data
+      - ${CONTAINER_DATA_DIR:-/home/ubuntu/container-data}/osrm-data:/data
     command:
       - sh
       - -c
@@ -17,17 +17,17 @@ services:
     restart: "no"
 
   osrm-foot-prepare:
-    image: osrm/osrm-backend
+    image: ghcr.io/project-osrm/osrm-backend:v6.0.0
     container_name: osrm-foot-prepare
     user: "0:0"
     depends_on:
       osrm-download:
         condition: service_completed_successfully
     volumes:
-      - /home/amish/container-data/osrm-data:/data
+      - ${CONTAINER_DATA_DIR:-/home/ubuntu/container-data}/osrm-data:/data
     command:
-      - bash
-      - -lc
+      - sh
+      - -c
       - |
         set -e
         osrm-extract -p /opt/foot.lua /data/malaysia-singapore-brunei-latest.osm.pbf
@@ -36,17 +36,17 @@ services:
     restart: "no"
 
   osrm-bike-prepare:
-    image: osrm/osrm-backend
+    image: ghcr.io/project-osrm/osrm-backend:v6.0.0
     container_name: osrm-bike-prepare
     user: "0:0"
     depends_on:
       osrm-foot-prepare:
         condition: service_completed_successfully
     volumes:
-      - /home/amish/container-data/osrm-data:/data
+      - ${CONTAINER_DATA_DIR:-/home/ubuntu/container-data}/osrm-data:/data
     command:
-      - bash
-      - -lc
+      - sh
+      - -c
       - |
         set -e
         osrm-extract -p /opt/bicycle.lua /data/bike-singapore.osm.pbf
@@ -55,16 +55,16 @@ services:
     restart: "no"
 
   osrm-foot:
-    image: osrm/osrm-backend
+    image: ghcr.io/project-osrm/osrm-backend:v6.0.0
     container_name: osrm-foot
     user: "0:0"
     depends_on:
       osrm-bike-prepare:
         condition: service_completed_successfully
     ports:
-      - "5000:5000"
+      - "127.0.0.1:5000:5000"
     volumes:
-      - /home/amish/container-data/osrm-data:/data
+      - ${CONTAINER_DATA_DIR:-/home/ubuntu/container-data}/osrm-data:/data
     command:
       - osrm-routed
       - --algorithm
@@ -75,16 +75,16 @@ services:
     restart: unless-stopped
 
   osrm-bike:
-    image: osrm/osrm-backend
+    image: ghcr.io/project-osrm/osrm-backend:v6.0.0
     container_name: osrm-bike
     user: "0:0"
     depends_on:
       osrm-foot:
         condition: service_started
     ports:
-      - "5001:5000"
+      - "127.0.0.1:5001:5000"
     volumes:
-      - /home/amish/container-data/osrm-data:/data
+      - ${CONTAINER_DATA_DIR:-/home/ubuntu/container-data}/osrm-data:/data
     command:
       - osrm-routed
       - --algorithm
@@ -97,12 +97,11 @@ services:
   nominatim:
     image: mediagis/nominatim:5.3
     container_name: nominatim-sg
-    depends_on:
-      osrm-bike:
-        condition: service_started
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - nominatim-data:/var/lib/postgresql/16/main
     shm_size: "1gb"
     environment:
       PBF_URL: https://download.geofabrik.de/asia/malaysia-singapore-brunei-latest.osm.pbf
@@ -115,14 +114,13 @@ services:
       start_period: 10m
 
   overpass:
-    image: wiktorn/overpass-api:0.7.62
+    image: wiktorn/overpass-api:v0.7.62.9
     container_name: overpass
-    depends_on:
-      nominatim:
-        condition: service_started
+    profiles:
+      - overpass
     restart: unless-stopped
     ports:
-      - "12345:80"
+      - "127.0.0.1:12345:80"
     volumes:
       - overpass-db:/db
     environment:
@@ -143,9 +141,11 @@ services:
   opentopodata-prepare:
     image: alpine:3.20
     container_name: opentopodata-prepare
+    profiles:
+      - elevation
     user: "0:0"
     volumes:
-      - /home/amish/container-data/opentopodata:/data
+      - ${CONTAINER_DATA_DIR:-/home/ubuntu/container-data}/opentopodata:/data
     command:
       - sh
       - -c
@@ -174,19 +174,21 @@ services:
 
   opentopodata:
     image: opentopodata
+    profiles:
+      - elevation
     build:
       context: https://github.com/ajnisbet/opentopodata.git
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/apple-silicon.Dockerfile
     container_name: opentopodata
     depends_on:
       opentopodata-prepare:
         condition: service_completed_successfully
     restart: unless-stopped
     ports:
-      - "2999:5000"
+      - "127.0.0.1:2999:5000"
     volumes:
-      - /home/amish/container-data/opentopodata/config.yaml:/app/config.yaml:ro
-      - /home/amish/container-data/opentopodata/data:/app/data:ro
+      - ${CONTAINER_DATA_DIR:-/home/ubuntu/container-data}/opentopodata/config.yaml:/app/config.yaml:ro
+      - ${CONTAINER_DATA_DIR:-/home/ubuntu/container-data}/opentopodata/data:/app/data:ro
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000/health', timeout=5).read()\" || exit 1"]
       interval: 30s
@@ -195,4 +197,5 @@ services:
       start_period: 60s
 
 volumes:
+  nominatim-data:
   overpass-db:

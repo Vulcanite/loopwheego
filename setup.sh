@@ -1,23 +1,91 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────
 # LoopWheeGo Backend Setup & Start Script
-# Tested on: RHEL / Rocky / AlmaLinux
+# Tested on: Ubuntu / RHEL / Rocky / AlmaLinux
 # Usage:
 #   ./setup.sh              # start everything
 #   ./setup.sh --no-reload  # start without uvicorn --reload
+#   ./setup.sh --no-docker  # skip local Docker services
+#   ./setup.sh --with-elevation
+#   ./setup.sh --with-overpass
 # ─────────────────────────────────────────────────────────────
 set -euo pipefail
 
-# ── Config (override via env vars) ───────────────────────────
-OSRM_DATA_DIR="${OSRM_DATA_DIR:-/root/osrm-data}"
-FOOT_DATA="${FOOT_DATA:-malaysia-singapore-brunei-latest.osrm}"
-BIKE_DATA="${BIKE_DATA:-bike-singapore.osrm}"
-BACKEND_PORT="${BACKEND_PORT:-8000}"
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VENV_DIR="${SCRIPT_DIR}/.venv"
+
+# ── Config (override via env vars or .env) ───────────────────
+if [[ -z "${CONTAINER_DATA_DIR:-}" && -f "${SCRIPT_DIR}/.env" ]]; then
+    ENV_CONTAINER_DATA_DIR="$(grep -E '^CONTAINER_DATA_DIR=' "${SCRIPT_DIR}/.env" | tail -n 1 | cut -d= -f2- || true)"
+    [[ -n "${ENV_CONTAINER_DATA_DIR}" ]] && CONTAINER_DATA_DIR="${ENV_CONTAINER_DATA_DIR}"
+fi
+CONTAINER_DATA_DIR="${CONTAINER_DATA_DIR:-/home/ubuntu/container-data}"
+BACKEND_PORT="${BACKEND_PORT:-8000}"
+
 RELOAD=true
-[[ "${1:-}" == "--no-reload" ]] && RELOAD=false
+START_DOCKER=true
+COMPOSE_PROFILE_NAMES=()
+
+usage() {
+    cat <<EOF
+Usage: ./setup.sh [options]
+
+Options:
+  --no-reload        Start FastAPI without uvicorn reload
+  --no-docker        Skip Docker compose services
+  --with-elevation   Also start OpenTopoData via compose profile
+  --with-overpass    Also start Overpass via compose profile
+  -h, --help         Show this help
+
+Environment:
+  CONTAINER_DATA_DIR  Docker data root (default: /home/ubuntu/container-data)
+  BACKEND_PORT        FastAPI port (default: 8000)
+  COMPOSE_PROFILES    Comma-separated extra profiles, e.g. elevation,overpass
+EOF
+}
+
+add_profile() {
+    local profile=$1
+    [[ -n "${profile}" ]] || return 0
+    local existing
+    for existing in "${COMPOSE_PROFILE_NAMES[@]}"; do
+        [[ "${existing}" == "${profile}" ]] && return 0
+    done
+    COMPOSE_PROFILE_NAMES+=("${profile}")
+}
+
+if [[ -n "${COMPOSE_PROFILES:-}" ]]; then
+    IFS=',' read -r -a _env_profiles <<< "${COMPOSE_PROFILES}"
+    for _profile in "${_env_profiles[@]}"; do
+        add_profile "${_profile}"
+    done
+fi
+
+for arg in "$@"; do
+    case "${arg}" in
+        --no-reload)
+            RELOAD=false
+            ;;
+        --no-docker)
+            START_DOCKER=false
+            ;;
+        --with-elevation)
+            add_profile "elevation"
+            ;;
+        --with-overpass)
+            add_profile "overpass"
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            usage
+            echo "Unknown option: ${arg}" >&2
+            exit 1
+            ;;
+    esac
+done
 
 # ── Colours ───────────────────────────────────────────────────
 GREEN='\033[0;32m'; YELLOW='\033[1;33m'; RED='\033[0;31m'; CYAN='\033[0;36m'; NC='\033[0m'
@@ -32,69 +100,82 @@ section() { echo -e "\n${CYAN}── $* ──${NC}"; }
 # ─────────────────────────────────────────────────────────────
 section "Checking prerequisites"
 
-command -v docker  &>/dev/null || fail "Docker not found. Install: dnf install docker-ce"
 command -v python3 &>/dev/null || fail "python3 not found. Install: dnf install python3"
+if [[ "${START_DOCKER}" == true ]]; then
+    command -v docker &>/dev/null || fail "Docker not found. Install Docker first."
+    docker compose version &>/dev/null || fail "Docker Compose v2 not found. Install the Docker compose plugin."
+fi
 
 PYTHON_VER=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
 info "Python ${PYTHON_VER} found"
 
-if [[ ! -d "${OSRM_DATA_DIR}" ]]; then
-    fail "OSRM data directory not found: ${OSRM_DATA_DIR}\nSet OSRM_DATA_DIR env var to the correct path."
+# ─────────────────────────────────────────────────────────────
+# 2. .env
+# ─────────────────────────────────────────────────────────────
+section ".env"
+
+if [[ ! -f "${SCRIPT_DIR}/.env" ]]; then
+    warn ".env not found — creating with defaults"
+    cat > "${SCRIPT_DIR}/.env" <<EOF
+CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+APP_ENV=development
+API_PROXY_SECRET=
+CONTAINER_DATA_DIR=${CONTAINER_DATA_DIR}
+OSRM_FOOT_URL=http://localhost:5000
+OSRM_BIKE_URL=http://localhost:5001
+ALLOW_PUBLIC_OSRM_FALLBACK=false
+NOMINATIM_BASE_URL=http://localhost:8080
+ELEVATION_API_URL=http://localhost:2999/v1/srtm30m
+ROUTE_TIMEOUT_S=60
+ENABLE_POIS=true
+OVERPASS_URL=http://localhost:12345/api/interpreter
+EOF
+    ok "Created .env — edit it to configure CORS, auth, routing, and POI discovery."
+else
+    ok ".env exists"
 fi
-ok "OSRM data directory: ${OSRM_DATA_DIR}"
-
-for f in "${FOOT_DATA}" "${BIKE_DATA}"; do
-    [[ -f "${OSRM_DATA_DIR}/${f}" ]] || fail "OSRM data file missing: ${OSRM_DATA_DIR}/${f}"
-done
-ok "OSRM data files present"
 
 # ─────────────────────────────────────────────────────────────
-# 2. OSRM containers
+# 3. Docker services
 # ─────────────────────────────────────────────────────────────
-section "OSRM containers"
+section "Docker services"
 
-start_osrm_container() {
-    local name=$1 host_port=$2 data_file=$3 profile=$4
+if [[ "${START_DOCKER}" == true ]]; then
+    export CONTAINER_DATA_DIR
+    mkdir -p "${CONTAINER_DATA_DIR}/osrm-data"
 
-    if docker ps --format '{{.Names}}' | grep -q "^${name}$"; then
-        ok "${name} already running on port ${host_port}"
-        return
-    fi
+    COMPOSE_ARGS=()
+    COMPOSE_SERVICES=(osrm-foot osrm-bike nominatim)
 
-    # Remove stopped container if it exists
-    if docker ps -a --format '{{.Names}}' | grep -q "^${name}$"; then
-        info "Removing stopped container: ${name}"
-        docker rm "${name}" &>/dev/null
-    fi
-
-    info "Starting ${name} on port ${host_port}..."
-    docker run -d \
-        --name "${name}" \
-        --restart unless-stopped \
-        -p "${host_port}:5000" \
-        -v "${OSRM_DATA_DIR}:/data" \
-        osrm/osrm-backend \
-        osrm-routed --algorithm mld "/data/${data_file}" \
-        &>/dev/null
-
-    # Wait for container to be healthy
-    local attempts=0
-    while (( attempts < 10 )); do
-        if docker ps --format '{{.Names}}' | grep -q "^${name}$"; then
-            ok "${name} started"
-            return
-        fi
-        sleep 1
-        (( attempts++ ))
+    for profile in "${COMPOSE_PROFILE_NAMES[@]}"; do
+        case "${profile}" in
+            elevation)
+                COMPOSE_ARGS+=(--profile elevation)
+                COMPOSE_SERVICES+=(opentopodata)
+                ;;
+            overpass)
+                COMPOSE_ARGS+=(--profile overpass)
+                COMPOSE_SERVICES+=(overpass)
+                ;;
+            *)
+                warn "Ignoring unknown compose profile: ${profile}"
+                ;;
+        esac
     done
-    warn "${name} may not have started — check: docker logs ${name}"
-}
 
-start_osrm_container "osrm-foot" 5000 "${FOOT_DATA}" "foot"
-start_osrm_container "osrm-bike" 5001 "${BIKE_DATA}" "bicycle"
+    info "Using container data dir: ${CONTAINER_DATA_DIR}"
+    info "Starting compose services: ${COMPOSE_SERVICES[*]}"
+    (
+        cd "${SCRIPT_DIR}"
+        docker compose "${COMPOSE_ARGS[@]}" up -d "${COMPOSE_SERVICES[@]}"
+    )
+    ok "Docker services requested"
+else
+    warn "Skipping Docker services (--no-docker)"
+fi
 
 # ─────────────────────────────────────────────────────────────
-# 3. Python venv + dependencies
+# 4. Python venv + dependencies
 # ─────────────────────────────────────────────────────────────
 section "Python environment"
 
@@ -110,29 +191,6 @@ info "Installing dependencies..."
 "${VENV_DIR}/bin/pip" install -q --upgrade pip
 "${VENV_DIR}/bin/pip" install -q -r "${SCRIPT_DIR}/requirements.txt"
 ok "Dependencies installed"
-
-# ─────────────────────────────────────────────────────────────
-# 4. .env
-# ─────────────────────────────────────────────────────────────
-section ".env"
-
-if [[ ! -f "${SCRIPT_DIR}/.env" ]]; then
-    warn ".env not found — creating with defaults"
-    cat > "${SCRIPT_DIR}/.env" <<EOF
-CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
-OSRM_FOOT_URL=http://localhost:5000
-OSRM_BIKE_URL=http://localhost:5001
-ALLOW_PUBLIC_OSRM_FALLBACK=false
-NOMINATIM_BASE_URL=http://localhost:8080
-ELEVATION_API_URL=http://localhost:2999/v1/srtm30m
-ROUTE_TIMEOUT_S=60
-ENABLE_POIS=true
-OVERPASS_URL=http://localhost:12345/api/interpreter
-EOF
-    ok "Created .env — edit it to configure CORS, routing, and POI discovery."
-else
-    ok ".env exists"
-fi
 
 # ─────────────────────────────────────────────────────────────
 # 5. Start FastAPI
