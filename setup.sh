@@ -21,6 +21,7 @@ if [[ -z "${CONTAINER_DATA_DIR:-}" && -f "${SCRIPT_DIR}/.env" ]]; then
 fi
 CONTAINER_DATA_DIR="${CONTAINER_DATA_DIR:-/home/ubuntu/container-data}"
 BACKEND_PORT="${BACKEND_PORT:-8000}"
+BACKEND_HOST="${BACKEND_HOST:-0.0.0.0}"
 
 RELOAD=true
 START_DOCKER=true
@@ -39,6 +40,7 @@ Options:
 
 Environment:
   CONTAINER_DATA_DIR  Docker data root (default: /home/ubuntu/container-data)
+  BACKEND_HOST        FastAPI bind host (default: 0.0.0.0)
   BACKEND_PORT        FastAPI port (default: 8000)
   COMPOSE_PROFILES    Comma-separated extra profiles, e.g. elevation,overpass
 EOF
@@ -199,12 +201,12 @@ section "Starting FastAPI"
 
 UVICORN_ARGS=(
     app.main:app
-    --host 0.0.0.0
+    --host "${BACKEND_HOST}"
     --port "${BACKEND_PORT}"
 )
 [[ "${RELOAD}" == true ]] && UVICORN_ARGS+=(--reload)
 
-info "Listening on http://0.0.0.0:${BACKEND_PORT}  (reload=${RELOAD})"
+info "Listening on http://${BACKEND_HOST}:${BACKEND_PORT}  (reload=${RELOAD})"
 echo ""
 
 cd "${SCRIPT_DIR}"
