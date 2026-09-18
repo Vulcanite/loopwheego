@@ -64,7 +64,7 @@ Copy and edit `.env` before running (auto-created with defaults by `setup.sh` if
 | `ENABLE_POIS`        | `true`                                   | Enable legacy Overpass discovery |
 | `CORS_ORIGINS`       | `http://localhost:3000`                  | Allowed frontend origins         |
 | `CONTAINER_DATA_DIR` | `/home/ubuntu/container-data`            | Docker bind-mount root for OSRM/OpenTopoData data |
-| `ROUTE_TIMEOUT_S`    | `60`                                     | OSRM request timeout             |
+| `ROUTE_TIMEOUT_S`    | `45`                                     | OSRM request timeout (seconds)   |
 | `OVERPASS_URL`       | `http://localhost:12345/api/interpreter` | Local Overpass endpoint          |
 | `API_PROXY_SECRET`   | _(empty)_                                | Shared secret required by protected API routers |
 | `APP_ENV`            | `development`                            | Set to `production` to require `API_PROXY_SECRET` at startup |

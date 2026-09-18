@@ -38,7 +38,7 @@ from app.utils.geo import haversine_km as _haversine_km
 
 logger = logging.getLogger(__name__)
 
-ROUTE_TIMEOUT_S = float(os.getenv("ROUTE_TIMEOUT_S", "30"))
+ROUTE_TIMEOUT_S = float(os.getenv("ROUTE_TIMEOUT_S", "45"))
 
 _MIN_LOOP_KM = 0.8
 _MAX_ANCHORS = 16

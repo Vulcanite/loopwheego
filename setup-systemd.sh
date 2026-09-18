@@ -55,7 +55,7 @@ ALLOW_PUBLIC_OSRM_FALLBACK=false
 NOMINATIM_BASE_URL=http://localhost:8080
 ELEVATION_API_URL=http://localhost:2999/v1/srtm30m
 ENABLE_POIS=true
-ROUTE_TIMEOUT_S=60
+ROUTE_TIMEOUT_S=45
 OVERPASS_URL=http://localhost:12345/api/interpreter
 EOF
     fi

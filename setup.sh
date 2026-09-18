@@ -128,7 +128,7 @@ OSRM_BIKE_URL=http://localhost:5001
 ALLOW_PUBLIC_OSRM_FALLBACK=false
 NOMINATIM_BASE_URL=http://localhost:8080
 ELEVATION_API_URL=http://localhost:2999/v1/srtm30m
-ROUTE_TIMEOUT_S=60
+ROUTE_TIMEOUT_S=45
 ENABLE_POIS=true
 OVERPASS_URL=http://localhost:12345/api/interpreter
 EOF
