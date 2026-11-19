@@ -1,0 +1,83 @@
+# Publishes this repository into the public read-only mirror
+# github.com/Vulcanite/loopwheego under frontend/, keeping every commit (git subtree).
+# New commits are scanned for secrets first; nothing is published if the scan fails.
+# Needs the MIRROR_TOKEN secret: a fine-grained token with Contents read/write on
+# Vulcanite/loopwheego only.
+name: Mirror to public repo
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mirror-loopwheego-frontend
+  cancel-in-progress: false
+
+env:
+  GITLEAKS_VERSION: 8.21.2
+  MIRROR_REPO: Vulcanite/loopwheego
+  MIRROR_PREFIX: frontend
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out this repository (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          path: src
+          persist-credentials: false
+
+      - name: Install gitleaks (pinned, checksum verified)
+        run: |
+          set -euo pipefail
+          base="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}"
+          tarball="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          curl -sSfL -o "$tarball" "$base/$tarball"
+          curl -sSfL -o checksums.txt "$base/gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+          grep " $tarball$" checksums.txt | sha256sum -c -
+          tar -xzf "$tarball" gitleaks
+
+      - name: Scan the new commits for secrets
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          # Push: scan only what this push adds. Manual run or new branch: scan the latest commit.
+          if [ -n "${BEFORE:-}" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+            range="$BEFORE..$GITHUB_SHA"
+          else
+            range="$GITHUB_SHA~1..$GITHUB_SHA"
+          fi
+          echo "Scanning $range"
+          ./gitleaks git --redact --no-banner --exit-code 1 --log-opts="$range" src
+
+      - name: Sync into the public mirror
+        env:
+          MIRROR_TOKEN: ${{ secrets.MIRROR_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${MIRROR_TOKEN}" ]; then echo "MIRROR_TOKEN secret is not set"; exit 1; fi
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3; do
+            rm -rf mirror
+            git clone --quiet "https://x-access-token:${MIRROR_TOKEN}@github.com/${MIRROR_REPO}.git" mirror
+            cd mirror
+            git subtree pull --prefix="${MIRROR_PREFIX}" ../src HEAD \
+              -m "Sync ${MIRROR_PREFIX} from ${GITHUB_REPOSITORY}@${GITHUB_SHA::7}"
+            if git push --quiet origin HEAD:main; then
+              echo "Mirror updated"
+              exit 0
+            fi
+            cd ..
+            echo "Push rejected (the other repo may have synced at the same time); retrying"
+            sleep $((attempt * 10))
+          done
+          echo "Could not update the mirror after 3 attempts"
+          exit 1
