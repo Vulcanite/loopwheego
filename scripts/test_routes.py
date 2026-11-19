@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """
-LoopWheeGo Route Generation Test Script
-Run from the backend directory: python test_routes.py
+LoopWheeGo route-generation deploy smoke script.
+
+Run from the backend directory after local OSRM/Nominatim/Overpass/OpenTopoData
+containers are up:
+
+    python scripts/test_routes.py
 
 The FastAPI app is loaded in-process; no separate uvicorn server is required.
 Local container checks still use network clients.

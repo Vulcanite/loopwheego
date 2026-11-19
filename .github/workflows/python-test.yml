@@ -1,13 +1,14 @@
-name: Python Compile Check
+name: Python Tests
 
 on:
   push:
     branches:
       - master
+  pull_request:
   workflow_dispatch:
 
 jobs:
-  compile:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,6 +20,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Compile backend Python files
-        working-directory: .
-        run: python -m compileall -q app scripts test_routes.py
+      - name: Install dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Run unit tests
+        run: python -m pytest

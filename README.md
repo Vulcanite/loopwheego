@@ -1,6 +1,6 @@
 # LoopWheeGo — Backend
 
-FastAPI backend for LoopWheeGo, a walking and cycling route generation and discovery platform. Handles loop/A-to-B routing via OSRM, POI discovery via Overpass, and GPX export.
+FastAPI backend for LoopWheeGo, a walking and cycling route planner for Singapore. It generates closed-loop and A-to-B routes via self-hosted OSRM, ranks nearby POIs from OpenStreetMap, and exports GPX. Bounds checks, the places cache, and hawker-centre categories are Singapore-specific by design — this is not a general-purpose worldwide router.
 
 ## Tech Stack
 
@@ -64,7 +64,7 @@ Copy and edit `.env` before running (auto-created with defaults by `setup.sh` if
 | `ENABLE_POIS`        | `true`                                   | Enable legacy Overpass discovery |
 | `CORS_ORIGINS`       | `http://localhost:3000`                  | Allowed frontend origins         |
 | `CONTAINER_DATA_DIR` | `/home/ubuntu/container-data`            | Docker bind-mount root for OSRM/OpenTopoData data |
-| `ROUTE_TIMEOUT_S`    | `60`                                     | OSRM request timeout             |
+| `ROUTE_TIMEOUT_S`    | `45`                                     | OSRM request timeout (seconds)   |
 | `OVERPASS_URL`       | `http://localhost:12345/api/interpreter` | Local Overpass endpoint          |
 | `API_PROXY_SECRET`   | _(empty)_                                | Shared secret required by protected API routers |
 | `APP_ENV`            | `development`                            | Set to `production` to require `API_PROXY_SECRET` at startup |
@@ -105,13 +105,18 @@ Notes:
 
 ## Running Tests
 
-The test script loads FastAPI in-process; no separate `uvicorn` server is required. It checks the expected local OSRM Foot, OSRM Cycle, Nominatim, Overpass, and OpenTopoData containers before route scenarios.
+Unit tests cover the pure scoring and geometry helpers in `route_generator.py` (overlap, bearing-bucket dedup, segment-jump rejection, loop score). They need no Docker services:
 
 ```bash
-python test_routes.py
+python -m pip install -r requirements-dev.txt
+python -m pytest
 ```
 
-Tests cover: health check, OSRM engines, Overpass, suggested places, and route generation.
+The deploy smoke script loads FastAPI in-process and checks the local OSRM Foot, OSRM Cycle, Nominatim, Overpass, and OpenTopoData containers before exercising route scenarios. Run it from the backend root after those services are up:
+
+```bash
+python scripts/test_routes.py
+```
 
 ## Development Checks
 
@@ -119,5 +124,5 @@ Install the development tools when you want linting in addition to runtime depen
 
 ```bash
 python -m pip install -r requirements-dev.txt
-ruff check app scripts test_routes.py
+ruff check app scripts tests
 ```
