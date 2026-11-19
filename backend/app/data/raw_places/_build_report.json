@@ -1,0 +1,19 @@
+{
+  "built_at": "2026-04-26T03:36:57.413061+00:00",
+  "raw_dir": "/home/amish/map-router/backend/app/data/raw_places",
+  "output_path": "/home/amish/map-router/backend/app/data/singapore_places_cached.json.tmp",
+  "dedupe_radius_km": 0.18,
+  "category_counts_pre_limit": {
+    "parks": 1028,
+    "nature": 66,
+    "waterfront": 500,
+    "monuments": 867,
+    "heritage": 31,
+    "museums": 124,
+    "arts": 328,
+    "viewpoints": 95,
+    "hawker_centres": 686,
+    "cafes": 1902
+  },
+  "total_after_build": 1802
+}

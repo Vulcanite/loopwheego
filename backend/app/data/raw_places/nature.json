@@ -1,0 +1,1165 @@
+{
+  "category": "nature",
+  "fetched_at": "2026-04-26T03:34:04.683587+00:00",
+  "bbox": "1.13,103.6,1.48,104.05",
+  "limit": 120,
+  "clauses": [
+    "nwr[\"leisure\"=\"nature_reserve\"]({bbox});",
+    "nwr[\"boundary\"=\"protected_area\"]({bbox});",
+    "nwr[\"natural\"=\"wood\"][\"name\"]({bbox});",
+    "nwr[\"landuse\"=\"forest\"][\"name\"]({bbox});",
+    "nwr[\"natural\"=\"wetland\"][\"name\"]({bbox});",
+    "nwr[\"natural\"=\"heath\"][\"name\"]({bbox});",
+    "nwr[\"natural\"=\"scrub\"][\"name\"]({bbox});"
+  ],
+  "raw_total": 73,
+  "unique_total": 66,
+  "endpoints_used": [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter"
+  ],
+  "clause_errors": [],
+  "places": [
+    {
+      "id": "bukit-batok-nature-park-13500-1037655",
+      "name": "Bukit Batok Nature Park",
+      "lat": 1.350012,
+      "lng": 103.765475,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 12,
+      "_tags": {
+        "access": "yes",
+        "designation": "Bukit Batok Nature Park",
+        "dog": "leashed",
+        "fishing": "no",
+        "leisure": "nature_reserve",
+        "name": "Bukit Batok Nature Park",
+        "name:en": "Bukit Batok Nature Park",
+        "name:ms": "Taman Alam Semula Jadi Bukit Batok",
+        "name:zh": "\u6b66\u5409\u5df4\u7763\u81ea\u7136\u516c\u56ed",
+        "opening_hours": "24/7",
+        "operator": "National Parks Board",
+        "operator:short": "NParks",
+        "operator:type": "government",
+        "operator:wikidata": "Q6974762",
+        "source": "Yahoo images",
+        "website": "https://www.nparks.gov.sg/visit/parks/park-detail/bukit-batok-nature-park",
+        "wheelchair": "limited",
+        "wikidata": "Q4986869",
+        "wikimedia_commons": "Category:Bukit Batok Nature Park",
+        "wikipedia": "en:Bukit Batok Nature Park"
+      }
+    },
+    {
+      "id": "bukit-timah-nature-reserve-13543-1037793",
+      "name": "Bukit Timah Nature Reserve",
+      "lat": 1.354265,
+      "lng": 103.779254,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 12,
+      "_tags": {
+        "addr:country": "SG",
+        "leisure": "nature_reserve",
+        "name": "Bukit Timah Nature Reserve",
+        "name:ms": "Hutan Simpanan Bukit Timah",
+        "name:ms-Arab": "\u0647\u0648\u062a\u0646 \u0633\u064a\u0645\u06a4\u0646\u0646 \u0628\u0648\u06a9\u064a\u062a \u062a\u064a\u0645\u0647",
+        "name:zh": "\u6b66\u5409\u77e5\u9a6c\u81ea\u7136\u4fdd\u62a4\u533a",
+        "opening_hours": "Mo-Su 7:00-19:00",
+        "operator": "National Parks Board",
+        "operator:short": "NParks",
+        "operator:type": "government",
+        "operator:wikidata": "Q6974762",
+        "smoking": "no",
+        "type": "multipolygon",
+        "website": "https://www.nparks.gov.sg/gardens-parks-and-nature/parks-and-nature-reserves/bukit-timah-nature-reserve",
+        "wikidata": "Q385725",
+        "wikipedia": "en:Bukit Timah Nature Reserve"
+      }
+    },
+    {
+      "id": "kranji-marshes-14192-1037273",
+      "name": "Kranji Marshes",
+      "lat": 1.419215,
+      "lng": 103.727277,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 12,
+      "_tags": {
+        "leisure": "nature_reserve",
+        "name": "Kranji Marshes",
+        "name:zh": "\u514b\u5170\u829d\u6cbc\u6cfd",
+        "opening_hours": "Mo-Su, PH 07:00-19:00",
+        "operator": "National Parks Board",
+        "operator:short": "NParks",
+        "operator:type": "government",
+        "operator:wikidata": "Q6974762",
+        "pet": "no",
+        "smoking": "no",
+        "type": "multipolygon",
+        "website": "https://www.nparks.gov.sg/gardens-parks-and-nature/parks-and-nature-reserves/kranji-marshes",
+        "wheelchair": "yes",
+        "wikidata": "Q49996435",
+        "wikipedia": "en:Kranji Marshes"
+      }
+    },
+    {
+      "id": "rifle-range-nature-park-13464-1037820",
+      "name": "Rifle Range Nature Park",
+      "lat": 1.346392,
+      "lng": 103.781988,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 12,
+      "_tags": {
+        "access": "yes",
+        "addr:housenumber": "126",
+        "addr:street": "Rifle Range Road",
+        "dog": "no",
+        "leisure": "nature_reserve",
+        "name": "Rifle Range Nature Park",
+        "name:ms": "Taman Alam Semula Jadi Rifle Range",
+        "name:zh": "\u5c04\u9776\u573a\u81ea\u7136\u516c\u56ed",
+        "opening_hours": "07:00-19:00",
+        "operator": "National Parks Board",
+        "operator:short": "NParks",
+        "operator:type": "government",
+        "operator:wikidata": "Q6974762",
+        "operator:wikipedia": "en:National Parks Board",
+        "type": "multipolygon",
+        "website": "https://www.nparks.gov.sg/visit/parks/park-detail/rifle-range-nature-park",
+        "wheelchair": "partial",
+        "wikidata": "Q123111983",
+        "wikipedia": "en:Rifle Range Nature Park"
+      }
+    },
+    {
+      "id": "sungei-buloh-wetland-reserve-14449-1037266",
+      "name": "Sungei Buloh Wetland Reserve",
+      "lat": 1.444941,
+      "lng": 103.726578,
+      "category": "nature",
+      "description": "Nature reserve or forest, place:island",
+      "_prominence": 12,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:country": "SG",
+        "addr:housenumber": "301",
+        "addr:postcode": "718925",
+        "addr:street": "Neo Tiew Crescent",
+        "email": "info@sbwr.org.sg",
+        "fax": "+65 6793 7271",
+        "heritage": "ASEAN Heritage Park",
+        "leisure": "nature_reserve",
+        "name": "Sungei Buloh Wetland Reserve",
+        "name:ja": "\u30b9\u30f3\u30b2\u30a4\u30d6\u30ed\u30fc\u6e7f\u5730\u4fdd\u8b77\u533a",
+        "name:ms": "Paya Simpanan Sungei Buloh",
+        "name:ms-Arab": "\u06a4\u0627\u064a\u0627 \u0633\u064a\u0645\u06a4\u0646\u0646 \u0633\u0648\u06a0\u0627\u064a \u0628\u0648\u0644\u0648\u0647",
+        "name:zh": "\u53cc\u6eaa\u5e03\u6d1b\u6e7f\u5730\u4fdd\u62a4\u533a",
+        "operator": "National Parks Board",
+        "operator:short": "NParks",
+        "operator:type": "government",
+        "operator:wikidata": "Q6974762",
+        "phone": "+65 6794 1401",
+        "place": "island",
+        "type": "multipolygon",
+        "website": "https://www.sbwr.org.sg/",
+        "wikidata": "Q643216",
+        "wikipedia": "en:Sungei Buloh Wetland Reserve"
+      }
+    },
+    {
+      "id": "pulau-jong-12154-1037867",
+      "name": "Pulau Jong",
+      "lat": 1.215363,
+      "lng": 103.786699,
+      "category": "nature",
+      "description": "Nature reserve or forest, place:islet",
+      "_prominence": 11,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Pulau Jong",
+        "name:en": "Junk Island",
+        "name:ms": "Pulau Jong",
+        "name:zh": "\u70af\u5c9b",
+        "natural": "coastline",
+        "place": "islet",
+        "wikidata": "Q3520308",
+        "wikimedia_commons": "Category:Pulau Jong",
+        "wikipedia": "en:Pulau Jong"
+      }
+    },
+    {
+      "id": "pulau-merambong-13153-1036100",
+      "name": "Pulau Merambong",
+      "lat": 1.315334,
+      "lng": 103.610039,
+      "category": "nature",
+      "description": "Nature reserve or forest, place:island",
+      "_prominence": 11,
+      "_tags": {
+        "alt_name": "Pulau Merambung",
+        "gns:ufi": "-2383150",
+        "is_in": "Malaysia",
+        "landuse": "forest",
+        "name": "Pulau Merambong",
+        "name:en": "Merambong Island",
+        "name:zh": "\u7f8e\u5170\u68a6\u5c9b",
+        "natural": "coastline",
+        "place": "island",
+        "source": "Bing",
+        "wikidata": "Q10749168",
+        "wikimedia_commons": "Category:Merambong Island",
+        "wikipedia": "en:Merambong Island"
+      }
+    },
+    {
+      "id": "pulau-seletar-14436-1038615",
+      "name": "Pulau Seletar",
+      "lat": 1.443646,
+      "lng": 103.861474,
+      "category": "nature",
+      "description": "Nature reserve or forest, place:islet",
+      "_prominence": 11,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Pulau Seletar",
+        "name:en": "Seletar Island",
+        "name:zh": "\u5b9e\u91cc\u8fbe\u5c9b",
+        "natural": "coastline",
+        "place": "islet",
+        "wetland": "mangrove",
+        "wikidata": "Q24947552",
+        "wikipedia": "en:Pulau Seletar"
+      }
+    },
+    {
+      "id": "bukit-brown-municipal-cemetery-13372-1038255",
+      "name": "Bukit Brown Municipal Cemetery",
+      "lat": 1.337229,
+      "lng": 103.825494,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 10,
+      "_tags": {
+        "landuse": "cemetery",
+        "name": "Bukit Brown Municipal Cemetery",
+        "name:zh": "\u6b66\u5409\u5e03\u6717\u5e02\u653f\u516c\u5893",
+        "natural": "wood",
+        "religion": "chinese_folk",
+        "type": "multipolygon",
+        "website": "https://en.wikipedia.org/wiki/Former_cemeteries_in_Singapore#Bukit_Brown_Cemetery",
+        "wikipedia": "en:Former cemeteries in Singapore#Bukit Brown Cemetery"
+      }
+    },
+    {
+      "id": "sisters-island-marine-park-12229-1038409",
+      "name": "Sisters' Island Marine Park",
+      "lat": 1.222934,
+      "lng": 103.840872,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 10,
+      "_tags": {
+        "alt_name": "SIMP",
+        "alt_name:ms": "Taman Marin Sisters' Island",
+        "boundary": "protected_area",
+        "leisure": "nature_reserve",
+        "maritime": "yes",
+        "name": "Sisters' Island Marine Park",
+        "name:ms": "Taman Marin Pulau Subar",
+        "operator": "National Parks Board",
+        "operator:short": "NParks",
+        "operator:type": "government",
+        "operator:wikidata": "Q6974762",
+        "source": "Maritime and Port Authority of Singapore",
+        "type": "multipolygon",
+        "wikipedia": "en:Sisters' Islands Marine Park"
+      }
+    },
+    {
+      "id": "central-catchment-nature-reserve-13765-1038062",
+      "name": "Central Catchment Nature Reserve",
+      "lat": 1.376529,
+      "lng": 103.806171,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 9,
+      "_tags": {
+        "leisure": "nature_reserve",
+        "name": "Central Catchment Nature Reserve",
+        "name:ms": "Hutan Simpanan Tadahan Air Bahagian Tengah",
+        "name:zh": "\u4e2d\u592e\u96c6\u6c34\u533a\u81ea\u7136\u4fdd\u62a4\u533a",
+        "type": "multipolygon",
+        "wikimedia_commons": "Category:Central Catchment Nature Reserve",
+        "wikipedia": "en:Central Catchment Nature Reserve"
+      }
+    },
+    {
+      "id": "squirrel-monkey-forest-14031-1037912",
+      "name": "Squirrel Monkey Forest",
+      "lat": 1.403089,
+      "lng": 103.791191,
+      "category": "nature",
+      "description": "Nature reserve or forest, tourism:attraction",
+      "_prominence": 8,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Squirrel Monkey Forest",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "id": "bidadari-park-13398-1038745",
+      "name": "Bidadari Park",
+      "lat": 1.339817,
+      "lng": 103.874491,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 7,
+      "_tags": {
+        "leaf_cycle": "evergreen",
+        "leaf_type": "broadleaved",
+        "leisure": "park",
+        "name": "Bidadari Park",
+        "name:zh": "\u6bd4\u8fbe\u8fbe\u91cc\u516c\u56ed",
+        "natural": "wood",
+        "opening_hours": "24/7",
+        "operator": "National Parks Board",
+        "operator:short": "NParks",
+        "operator:type": "government",
+        "operator:wikidata": "Q6974762",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "cleansing-biotope-13654-1038357",
+      "name": "Cleansing Biotope",
+      "lat": 1.36543,
+      "lng": 103.835717,
+      "category": "nature",
+      "description": "The Cleansing Biotope is an artificially contrusted wetland that offers effective water treatment and helps maintain the water quality naturally without the use of chemicals. A spe",
+      "_prominence": 7,
+      "_tags": {
+        "description": "The Cleansing Biotope is an artificially contrusted wetland that offers effective water treatment and helps maintain the water quality naturally without the use of chemicals. A special selection of wetland plants have been chosen for their ability to cleo",
+        "name": "Cleansing Biotope",
+        "natural": "wetland",
+        "operator": "National Parks",
+        "wetland": "yes"
+      }
+    },
+    {
+      "id": "hillock-park-13420-1038731",
+      "name": "Hillock Park",
+      "lat": 1.342004,
+      "lng": 103.873101,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 7,
+      "_tags": {
+        "addr:street": "Bidadari Park Drive",
+        "leaf_cycle": "evergreen",
+        "leaf_type": "broadleaved",
+        "leisure": "park",
+        "name": "Hillock Park",
+        "natural": "wood",
+        "operator": "NPark"
+      }
+    },
+    {
+      "id": "kopi-sua-13286-1038299",
+      "name": "Kopi Sua",
+      "lat": 1.328612,
+      "lng": 103.829902,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 7,
+      "_tags": {
+        "alt_name": "Mount Pleasant Cemetery",
+        "alt_name:zh": "\u5feb\u4e50\u5c71\u575f\u573a",
+        "landuse": "cemetery",
+        "name": "Kopi Sua",
+        "name:zh": "\u5496\u5561\u5c71",
+        "natural": "wood",
+        "religion": "chinese_folk",
+        "type": "multipolygon",
+        "website": "https://bukitbrown.com/main/?p=8082"
+      }
+    },
+    {
+      "id": "lau-sua-13319-1038254",
+      "name": "Lau Sua",
+      "lat": 1.331944,
+      "lng": 103.825399,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 7,
+      "_tags": {
+        "landuse": "cemetery",
+        "name": "Lau Sua",
+        "name:zh": "\u8001\u5c71",
+        "natural": "wood",
+        "religion": "chinese_folk",
+        "type": "multipolygon",
+        "website": "https://bukitbrown.com/main/?p=8082"
+      }
+    },
+    {
+      "id": "seh-ong-cemetery-13330-1038184",
+      "name": "Seh Ong Cemetery",
+      "lat": 1.332994,
+      "lng": 103.8184,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 7,
+      "_tags": {
+        "alt_name:zh": "\u738b\u6c0f\u5bb6\u65cf\u516c\u575f",
+        "landuse": "cemetery",
+        "name": "Seh Ong Cemetery",
+        "name:ms": "Perkuburan Seh Ong",
+        "name:zh": "\u59d3\u738b\u5c71",
+        "natural": "wood",
+        "religion": "chinese_folk",
+        "type": "multipolygon",
+        "website": "https://bukitbrown.com/main/?p=8082"
+      }
+    },
+    {
+      "id": "bukit-batok-hillside-park-13590-1037453",
+      "name": "Bukit Batok Hillside Park",
+      "lat": 1.358979,
+      "lng": 103.745318,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "leisure": "park",
+        "name": "Bukit Batok Hillside Park",
+        "name:zh": "\u6b66\u5409\u5df4\u7763\u5c71\u5761\u516c\u56ed"
+      }
+    },
+    {
+      "id": "casuarina-exploratory-14172-1039159",
+      "name": "Casuarina Exploratory",
+      "lat": 1.417203,
+      "lng": 103.915893,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Casuarina Exploratory",
+        "name:zh": "\u6728\u9ebb\u9ec4\u63a2\u7d22\u533a",
+        "natural": "wood"
+      }
+    },
+    {
+      "id": "cell-1-12070-1037656",
+      "name": "Cell 1",
+      "lat": 1.20704,
+      "lng": 103.765598,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Cell 1",
+        "natural": "scrub"
+      }
+    },
+    {
+      "id": "cell-6-12082-1037712",
+      "name": "Cell 6",
+      "lat": 1.208242,
+      "lng": 103.771234,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Cell 6",
+        "natural": "scrub"
+      }
+    },
+    {
+      "id": "chek-jawa-wetlands-14114-1039920",
+      "name": "Chek Jawa Wetlands",
+      "lat": 1.41138,
+      "lng": 103.991958,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Chek Jawa Wetlands",
+        "name:zh": "\u4ec4\u722a\u54c7\u6e7f\u5730",
+        "natural": "wetland",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "clementi-forest-13270-1037789",
+      "name": "Clementi Forest",
+      "lat": 1.327012,
+      "lng": 103.778926,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Clementi Forest",
+        "name:ms": "Hutan Clementi",
+        "name:zh": "\u91d1\u6587\u6cf0\u68ee\u6797",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "coastal-forest-14085-1039912",
+      "name": "Coastal Forest",
+      "lat": 1.408506,
+      "lng": 103.991225,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Coastal Forest",
+        "name:zh": "\u6ee8\u6d77\u6811\u6797",
+        "natural": "wood"
+      }
+    },
+    {
+      "id": "dover-forest-west-13151-1037749",
+      "name": "Dover Forest West",
+      "lat": 1.315059,
+      "lng": 103.774895,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Dover Forest West",
+        "name:ms": "Hutan Dover Barat",
+        "name:zh": "\u675c\u4f5b\u897f\u68ee\u6797"
+      }
+    },
+    {
+      "id": "dragonfly-island-12816-1038623",
+      "name": "Dragonfly Island",
+      "lat": 1.281554,
+      "lng": 103.862267,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "leaf_type": "broadleaved",
+        "name": "Dragonfly Island",
+        "name:zh": "\u873b\u8713\u5c9b"
+      }
+    },
+    {
+      "id": "east-coast-park-zone-h-13156-1039695",
+      "name": "East Coast Park (Zone H)",
+      "lat": 1.315594,
+      "lng": 103.969459,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "leisure": "park",
+        "name": "East Coast Park (Zone H)",
+        "name:ms": "Taman East Coast (Zon H)",
+        "name:zh": "\u4e1c\u6d77\u5cb8\u516c\u56edH\u533a",
+        "natural": "wood"
+      }
+    },
+    {
+      "id": "floating-wetlands-14096-1038957",
+      "name": "Floating Wetlands",
+      "lat": 1.409572,
+      "lng": 103.895734,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Floating Wetlands",
+        "natural": "wetland",
+        "salt": "no",
+        "tidal": "no",
+        "type": "multipolygon",
+        "wetland": "reedbed"
+      }
+    },
+    {
+      "id": "floating-wetlands-14082-1039030",
+      "name": "Floating Wetlands",
+      "lat": 1.408229,
+      "lng": 103.90304,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Floating Wetlands",
+        "natural": "wetland",
+        "salt": "no",
+        "tidal": "no",
+        "type": "multipolygon",
+        "wetland": "reedbed"
+      }
+    },
+    {
+      "id": "fragile-forest-12790-1038634",
+      "name": "Fragile Forest",
+      "lat": 1.279026,
+      "lng": 103.863448,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Fragile Forest",
+        "name:en": "Fragile Forest",
+        "name:zh": "\u8106\u5f31\u68ee\u6797"
+      }
+    },
+    {
+      "id": "hindhede-nature-park-13502-1037760",
+      "name": "Hindhede Nature Park",
+      "lat": 1.350156,
+      "lng": 103.77604,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "leisure": "nature_reserve",
+        "name": "Hindhede Nature Park",
+        "name:ms": "Taman Alam Semula Jadi Hindhede",
+        "name:zh": "\u6d77\u5e0c\u5fb7\u81ea\u7136\u516c\u56ed",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "hutan-rizab-kemudi-13996-1036412",
+      "name": "Hutan Rizab Kemudi",
+      "lat": 1.399646,
+      "lng": 103.641192,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Hutan Rizab Kemudi",
+        "name:en": "Sungai Kemudi Forest Reserve"
+      }
+    },
+    {
+      "id": "hutan-simpan-sungai-bahan-14129-1036436",
+      "name": "Hutan Simpan Sungai Bahan",
+      "lat": 1.412885,
+      "lng": 103.643571,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Hutan Simpan Sungai Bahan",
+        "name:en": "Sungai Bahan Forest Reserve"
+      }
+    },
+    {
+      "id": "kampong-teban-forest-13808-1039109",
+      "name": "Kampong Teban Forest",
+      "lat": 1.380759,
+      "lng": 103.910905,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Kampong Teban Forest",
+        "name:ms": "Hutan Kampong Teban",
+        "name:zh": "\u7518\u699c\u5fb7\u66fc\u68ee\u6797"
+      }
+    },
+    {
+      "id": "khatib-bongsu-mangroves-14360-1038533",
+      "name": "Khatib Bongsu Mangroves",
+      "lat": 1.435982,
+      "lng": 103.853292,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Khatib Bongsu Mangroves",
+        "name:zh": "\u5361\u8fea\u8499\u82cf\u7ea2\u6811\u6797",
+        "natural": "wetland",
+        "type": "multipolygon",
+        "wetland": "mangrove"
+      }
+    },
+    {
+      "id": "kuala-loyang-old-tampines-road-forest-13655-1039694",
+      "name": "Kuala Loyang (Old Tampines Road) Forest",
+      "lat": 1.36548,
+      "lng": 103.969419,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Kuala Loyang (Old Tampines Road) Forest",
+        "name:ms": "Hutan Kuala Loyang (Old Tampines Road)",
+        "name:zh": "\u74dc\u62c9\u6d1b\u967d\u6811\u6797"
+      }
+    },
+    {
+      "id": "lily-pond-13044-1037779",
+      "name": "Lily Pond",
+      "lat": 1.304389,
+      "lng": 103.777939,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "addr:postcode": "139664",
+        "name": "Lily Pond",
+        "natural": "wetland",
+        "wetland": "pond"
+      }
+    },
+    {
+      "id": "lorong-banir-forest-13986-1038157",
+      "name": "Lorong Banir Forest",
+      "lat": 1.398575,
+      "lng": 103.81566,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Lorong Banir Forest",
+        "name:ms": "Hutan Lorong Banir"
+      }
+    },
+    {
+      "id": "lorong-halus-13956-1039282",
+      "name": "Lorong Halus",
+      "lat": 1.395578,
+      "lng": 103.92823,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Lorong Halus",
+        "name:zh": "\u7f57\u5f04\u54c8\u9c81\u58eb",
+        "natural": "wood"
+      }
+    },
+    {
+      "id": "lorong-halus-13890-1039227",
+      "name": "Lorong Halus",
+      "lat": 1.388959,
+      "lng": 103.922678,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Lorong Halus",
+        "name:zh": "\u7f57\u5f04\u54c8\u9c81\u58eb",
+        "natural": "wood",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "maju-forest-13264-1037717",
+      "name": "Maju Forest",
+      "lat": 1.326383,
+      "lng": 103.771669,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Maju Forest",
+        "name:ms": "Hutan Maju",
+        "name:zh": "\u9a6c\u88d5\u68ee\u6797",
+        "not:name:zh": "\u9a6c\u88d5\u68ee\u6797"
+      }
+    },
+    {
+      "id": "mandai-restricted-area-14182-1037849",
+      "name": "Mandai Restricted Area",
+      "lat": 1.418194,
+      "lng": 103.784876,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "access": "no",
+        "landuse": "forest",
+        "name": "Mandai Restricted Area",
+        "name:ms": "Kawasan Larangan Mandai",
+        "name:zh": "\u4e07\u793c\u7981\u533a",
+        "name:zh-Hant": "\u842c\u79ae\u7981\u5340",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "miniature-of-indonesia-11617-1040413",
+      "name": "Miniature of Indonesia",
+      "lat": 1.161697,
+      "lng": 104.04127,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Miniature of Indonesia",
+        "natural": "wood"
+      }
+    },
+    {
+      "id": "nus-hill-12982-1037738",
+      "name": "NUS Hill",
+      "lat": 1.298217,
+      "lng": 103.773812,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "NUS Hill"
+      }
+    },
+    {
+      "id": "nus-hill-12987-1037756",
+      "name": "NUS Hill",
+      "lat": 1.298685,
+      "lng": 103.775575,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "NUS Hill"
+      }
+    },
+    {
+      "id": "nus-hill-12955-1037769",
+      "name": "NUS Hill",
+      "lat": 1.29554,
+      "lng": 103.776924,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "NUS Hill",
+        "name:zh": "\u56fd\u5927\u5c71",
+        "note:name:zh": "fixme",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "nibong-island-12836-1038629",
+      "name": "Nibong Island",
+      "lat": 1.283566,
+      "lng": 103.862878,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "alt_name:zh": "\u6ce5\u7ea2\u5c9b",
+        "image": "https://images.mapillary.com/GJ-0VM772HgnsCe2SMGeiQ/thumb-2048.jpg",
+        "landuse": "forest",
+        "leaf_type": "broadleaved",
+        "mapillary": "910999896345297",
+        "name": "Nibong Island",
+        "name:ms": "Pulau Nibong",
+        "name:zh": "\u5c3c\u8499\u5c9b"
+      }
+    },
+    {
+      "id": "old-nee-soon-firing-range-13899-1038160",
+      "name": "Old Nee Soon Firing Range",
+      "lat": 1.389852,
+      "lng": 103.816002,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Old Nee Soon Firing Range",
+        "natural": "scrub"
+      }
+    },
+    {
+      "id": "pulau-anaksambu-11704-1038909",
+      "name": "Pulau Anaksambu",
+      "lat": 1.170408,
+      "lng": 103.890887,
+      "category": "nature",
+      "description": "Nature reserve or forest, place:islet",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Pulau Anaksambu",
+        "name:en": "Anak Sambu Island",
+        "name:ms": "Pulau Anak Sambu",
+        "name:ms-Arab": "\u06a4\u0648\u0644\u0627\u0648 \u0627\u0646\u0642 \u0633\u0645\u0628\u0648",
+        "natural": "coastline",
+        "place": "islet"
+      }
+    },
+    {
+      "id": "pulau-nenas-14276-1039773",
+      "name": "Pulau Nenas",
+      "lat": 1.427613,
+      "lng": 103.977307,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "gns:ufi": "-2384268",
+        "landuse": "forest",
+        "name": "Pulau Nenas",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "pulau-subar-11454-1038308",
+      "name": "Pulau Subar",
+      "lat": 1.145403,
+      "lng": 103.830756,
+      "category": "nature",
+      "description": "Nature reserve or forest, place:islet",
+      "_prominence": 6,
+      "_tags": {
+        "gns:dsg": "ISL",
+        "landuse": "forest",
+        "name": "Pulau Subar",
+        "natural": "coastline",
+        "note": "GNS database update - Sept 20, 2010",
+        "place": "islet",
+        "source": "NGA-GNS"
+      }
+    },
+    {
+      "id": "quarry-wetland-13446-1037817",
+      "name": "Quarry Wetland",
+      "lat": 1.344595,
+      "lng": 103.781737,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "fixme": "shape estimated",
+        "name": "Quarry Wetland",
+        "natural": "wetland",
+        "old_name": "Sin Seng Quarry"
+      }
+    },
+    {
+      "id": "rain-forest-13130-1038162",
+      "name": "Rain Forest",
+      "lat": 1.313006,
+      "lng": 103.816207,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Rain Forest",
+        "name:zh": "\u96e8\u6797",
+        "natural": "wood",
+        "opening_hours": "07:00-19:00"
+      }
+    },
+    {
+      "id": "rain-tree-island-13386-1038735",
+      "name": "Rain Tree Island",
+      "lat": 1.338622,
+      "lng": 103.873463,
+      "category": "nature",
+      "description": "Nature reserve or forest, place:islet",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "leaf_cycle": "evergreen",
+        "leaf_type": "broadleaved",
+        "name": "Rain Tree Island",
+        "name:zh": "\u96e8\u6811\u5c0f\u5c9b",
+        "place": "islet"
+      }
+    },
+    {
+      "id": "rizab-hutan-sungai-pendas-13876-1036221",
+      "name": "Rizab Hutan Sungai Pendas",
+      "lat": 1.387587,
+      "lng": 103.622119,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Rizab Hutan Sungai Pendas",
+        "name:en": "Sungai Pendas Forest Reserve (Sunway Iskandar)",
+        "name:ms": "Rizab Hutan Sungai Pendas",
+        "natural": "wetland",
+        "type": "multipolygon",
+        "wetland": "mangrove"
+      }
+    },
+    {
+      "id": "safti-live-if-13869-1036746",
+      "name": "SAFTI Live IF",
+      "lat": 1.386889,
+      "lng": 103.674554,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "SAFTI Live IF",
+        "natural": "wood",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "semakau-landfill-12021-1037723",
+      "name": "Semakau Landfill",
+      "lat": 1.202127,
+      "lng": 103.772275,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "name": "Semakau Landfill",
+        "name:zh": "\u5b9e\u9a6c\u9ad8\u586b\u57cb\u573a",
+        "natural": "scrub"
+      }
+    },
+    {
+      "id": "siloso-beach-island-12545-1038115",
+      "name": "Siloso Beach Island",
+      "lat": 1.254474,
+      "lng": 103.811549,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "image": "https://images.mapillary.com/gf3owD2Fxd8pZP3kUOOQow/thumb-2048.jpg",
+        "landuse": "forest",
+        "mapillary": "2572620942883404",
+        "name": "Siloso Beach Island",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "siloso-east-island-12523-1038145",
+      "name": "Siloso East Island",
+      "lat": 1.252283,
+      "lng": 103.814534,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "leaf_type": "broadleaved",
+        "name": "Siloso East Island",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "sireh-park-14684-1036380",
+      "name": "Sireh Park",
+      "lat": 1.468365,
+      "lng": 103.637973,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Sireh Park",
+        "source": "https://www.mapillary.com/app/?pKey=yFUy6Eay036ip1yIjOCjJk&focus=photo"
+      }
+    },
+    {
+      "id": "sungei-blukar-forest-13869-1039187",
+      "name": "Sungei Blukar Forest",
+      "lat": 1.386917,
+      "lng": 103.918652,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Sungei Blukar Forest",
+        "name:ms": "Hutan Sungei Blukar",
+        "type": "multipolygon"
+      }
+    },
+    {
+      "id": "taman-rekreasi-bakau-tanjung-langsat-14411-1039937",
+      "name": "Taman Rekreasi Bakau Tanjung Langsat",
+      "lat": 1.441092,
+      "lng": 103.993668,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "protected_area",
+        "leisure": "nature_reserve",
+        "name": "Taman Rekreasi Bakau Tanjung Langsat",
+        "natural": "wetland",
+        "source:name": "https://kartaview.org/details/6591049/0/track-info",
+        "wetland": "mangrove",
+        "wikimedia_commons": "File:Tanjung Langsat Mangrove Recreational Park.jpg"
+      }
+    },
+    {
+      "id": "toa-payoh-jungle-13355-1038391",
+      "name": "Toa Payoh Jungle",
+      "lat": 1.335503,
+      "lng": 103.839144,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Toa Payoh Jungle",
+        "name:zh": "\u5927\u5df4\u7a91\u68ee\u6797"
+      }
+    },
+    {
+      "id": "toh-tuck-forest-13400-1037638",
+      "name": "Toh Tuck Forest",
+      "lat": 1.339951,
+      "lng": 103.763829,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "landuse": "forest",
+        "name": "Toh Tuck Forest",
+        "name:ms": "Hutan Toh Tuck",
+        "name:zh": "\u9053\u5fb7\u68ee\u6797",
+        "source": "Bing"
+      }
+    },
+    {
+      "id": "tuas-checkpoint-13485-1036361",
+      "name": "Tuas Checkpoint",
+      "lat": 1.348524,
+      "lng": 103.636055,
+      "category": "nature",
+      "description": "Nature reserve or forest",
+      "_prominence": 6,
+      "_tags": {
+        "area": "yes",
+        "barrier": "border_control",
+        "boundary": "protected_area",
+        "name": "Tuas Checkpoint",
+        "name:ms": "Pusat Pemeriksaan Tuas"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1454 @@
+{
+  "category": "viewpoints",
+  "fetched_at": "2026-04-26T03:36:33.460988+00:00",
+  "bbox": "1.13,103.6,1.48,104.05",
+  "limit": 120,
+  "clauses": [
+    "nwr[\"tourism\"=\"viewpoint\"]({bbox});",
+    "nwr[\"man_made\"=\"observation_tower\"][\"name\"]({bbox});",
+    "nwr[\"man_made\"=\"tower\"][\"name\"][\"tower:type\"~\"observation|lookout\"]({bbox});",
+    "nwr[\"natural\"=\"peak\"][\"name\"]({bbox});",
+    "nwr[\"natural\"=\"hill\"][\"name\"]({bbox});"
+  ],
+  "raw_total": 185,
+  "unique_total": 95,
+  "endpoints_used": [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter"
+  ],
+  "clause_errors": [],
+  "places": [
+    {
+      "id": "dragon-s-teeth-gate-viewpoint-12600-1038074",
+      "name": "Dragon's Teeth Gate Viewpoint",
+      "lat": 1.260002,
+      "lng": 103.807375,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 12,
+      "_tags": {
+        "name": "Dragon's Teeth Gate Viewpoint",
+        "name:zh": "\u9f99\u7259\u95e8\u89c2\u666f\u70b9",
+        "tourism": "viewpoint",
+        "wikidata": "Q573956",
+        "wikipedia": "en:Long Ya Men"
+      }
+    },
+    {
+      "id": "bukit-timah-hill-13547-1037764",
+      "name": "Bukit Timah Hill",
+      "lat": 1.35469,
+      "lng": 103.776372,
+      "category": "viewpoints",
+      "description": "Highest point of Singapore",
+      "_prominence": 10,
+      "_tags": {
+        "description": "Highest point of Singapore",
+        "ele": "163.63",
+        "importance": "national",
+        "name": "Bukit Timah Hill",
+        "name:ms": "Bukit Timah",
+        "name:th": "\u0e40\u0e19\u0e34\u0e19\u0e40\u0e02\u0e32\u0e1a\u0e39\u0e01\u0e34\u0e15\u0e15\u0e35\u0e21\u0e30\u0e2e\u0e4c",
+        "name:uk": "\u0411\u0443\u043a\u0456\u0442 \u0422\u0456\u043c\u0430",
+        "name:zh": "\u6b66\u5409\u77e5\u9a6c\u5c71",
+        "natural": "peak",
+        "prominence": "165",
+        "wikidata": "Q22970788",
+        "wikipedia": "en:Bukit Timah"
+      }
+    },
+    {
+      "id": "pearl-s-hill-12845-1038399",
+      "name": "Pearl's Hill",
+      "lat": 1.284548,
+      "lng": 103.83994,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 10,
+      "_tags": {
+        "ele": "45",
+        "name": "Pearl's Hill",
+        "name:th": "\u0e40\u0e19\u0e37\u0e19\u0e40\u0e1e\u0e34\u0e23\u0e4c\u0e25\u0e2a\u0e4c\u0e2e\u0e34\u0e25\u0e25\u0e4c",
+        "name:zh": "\u73cd\u73e0\u5c71",
+        "natural": "peak",
+        "wikidata": "Q28419195",
+        "wikipedia": "en: Pearl's Hill"
+      }
+    },
+    {
+      "id": "pantai-stulang-14650-1037765",
+      "name": "Pantai Stulang",
+      "lat": 1.465002,
+      "lng": 103.776471,
+      "category": "viewpoints",
+      "description": "view over Singapore",
+      "_prominence": 9,
+      "_tags": {
+        "description": "view over Singapore",
+        "name": "Pantai Stulang",
+        "name:en": "Stulang beach",
+        "name:zh": "\u58eb\u90fd\u5170\u6d77\u6ee9",
+        "tourism": "viewpoint",
+        "wikidata": "Q104217147",
+        "wikimedia_commons": "Category:Stulang Beach"
+      }
+    },
+    {
+      "id": "1-altitude-viewing-gallery-12847-1038510",
+      "name": "1-Altitude Viewing Gallery",
+      "lat": 1.284747,
+      "lng": 103.850993,
+      "category": "viewpoints",
+      "description": "The highest viewing gallery in Singapore",
+      "_prominence": 8,
+      "_tags": {
+        "addr:city": "Singapore",
+        "addr:housenumber": "1",
+        "addr:postcode": "048616",
+        "addr:street": "Raffles Place",
+        "check_date": "2017-07-25",
+        "contact:facebook": "https://www.facebook.com/1AltitudeUVG",
+        "description": "The highest viewing gallery in Singapore",
+        "ele": "282",
+        "email": "info@1-altitude.com",
+        "name": "1-Altitude Viewing Gallery",
+        "opening_hours": "Mo-Su 08:30-17:30",
+        "phone": "+65 6438 0410",
+        "tourism": "viewpoint",
+        "website": "https://www.1-altitude.com/viewing-gallery/"
+      }
+    },
+    {
+      "id": "observation-tower-13781-1037784",
+      "name": "Observation Tower",
+      "lat": 1.378095,
+      "lng": 103.778368,
+      "category": "viewpoints",
+      "description": "Spiral stairs",
+      "_prominence": 8,
+      "_tags": {
+        "access": "yes",
+        "communication:radio": "yes",
+        "description": "Spiral stairs",
+        "est_height": "20",
+        "fee": "no",
+        "man_made": "tower",
+        "material": "steel",
+        "name": "Observation Tower",
+        "name:zh": "\u7b56\u58eb\u7eb3\u81ea\u7136\u516c\u56ed\u77ad\u671b\u5854",
+        "opening_hours": "07:00-19:00",
+        "tourism": "viewpoint",
+        "tower:type": "observation",
+        "website": "https://www.nparks.gov.sg/"
+      }
+    },
+    {
+      "id": "skyhelix-sentosa-12550-1038176",
+      "name": "SkyHelix Sentosa",
+      "lat": 1.254957,
+      "lng": 103.817612,
+      "category": "viewpoints",
+      "description": "An open-air panoramic ride that replaced the Tiger Sky Tower. Brings visitors to a height of 79m above sea level. Opened on 15 December 2021",
+      "_prominence": 8,
+      "_tags": {
+        "building": "yes",
+        "description": "An open-air panoramic ride that replaced the Tiger Sky Tower. Brings visitors to a height of 79m above sea level. Opened on 15 December 2021",
+        "height": "35",
+        "man_made": "tower",
+        "name": "SkyHelix Sentosa",
+        "name:zh": "\u5723\u6dd8\u6c99\"\u5929\u7a7a\u559c\u7acb\"",
+        "opening_hours": "10:00-21:30",
+        "tourism": "attraction",
+        "tower:construction": "lattice",
+        "tower:type": "observation",
+        "website": "https://www.sentosa.com.sg/en/things-to-do/attractions/skyhelix-sentosa/"
+      }
+    },
+    {
+      "id": "the-pinnacle-duxton-12756-1038413",
+      "name": "The Pinnacle@Duxton",
+      "lat": 1.275581,
+      "lng": 103.841319,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 8,
+      "_tags": {
+        "charge": "6 SGD",
+        "fee": "yes",
+        "level": "50",
+        "name": "The Pinnacle@Duxton",
+        "note": "For visitors without the CEPAS card, please contact the staff from the Managing Agent\u2019s office for further assistance.",
+        "opening_hours": "09:00-21:00",
+        "phone": "+65 8683 7760",
+        "tourism": "viewpoint",
+        "website": "http://www.pinnacleduxton.com.sg/Public.html"
+      }
+    },
+    {
+      "id": "aerie-14465-1037258",
+      "name": "Aerie",
+      "lat": 1.44646,
+      "lng": 103.725779,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "height": "18",
+        "man_made": "tower",
+        "name": "Aerie",
+        "tourism": "viewpoint",
+        "tower:type": "observation"
+      }
+    },
+    {
+      "id": "amber-tower-12979-1039058",
+      "name": "Amber Tower",
+      "lat": 1.29786,
+      "lng": 103.905789,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:attraction",
+      "_prominence": 7,
+      "_tags": {
+        "building": "yes",
+        "image": "https://images.mapillary.com/ODQHTqbY5XiZ9ZOkbAJmdQ/thumb-2048.jpg",
+        "man_made": "tower",
+        "mapillary": "2916384361951303",
+        "name": "Amber Tower",
+        "tourism": "attraction",
+        "tower:type": "observation"
+      }
+    },
+    {
+      "id": "bukit-tanjung-kupang-13765-1036081",
+      "name": "Bukit Tanjung Kupang",
+      "lat": 1.376509,
+      "lng": 103.608114,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 7,
+      "_tags": {
+        "alt_name": "Bukit Tanjong Kupang",
+        "gns:ufi": "-2396459",
+        "name": "Bukit Tanjung Kupang",
+        "name:en": "Tanjung Kupang Mountain",
+        "name:ms": "Bukit Tanjung Kupang",
+        "natural": "peak",
+        "source": "USNGA",
+        "wikidata": "Q31262023"
+      }
+    },
+    {
+      "id": "capitaspring-sky-garden-12840-1038500",
+      "name": "CapitaSpring Sky Garden",
+      "lat": 1.283972,
+      "lng": 103.850029,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "level": "50",
+        "name": "CapitaSpring Sky Garden",
+        "opening_hours": "Mo-Fr 08:30-10:30,14:30-18:00",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "colugo-deck-13448-1037821",
+      "name": "Colugo Deck",
+      "lat": 1.344835,
+      "lng": 103.782085,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "direction": "180-270",
+        "name": "Colugo Deck",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "damselfly-s-wing-14010-1037940",
+      "name": "Damselfly's Wing",
+      "lat": 1.400992,
+      "lng": 103.794038,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Damselfly's Wing",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "eagle-s-perch-14038-1037950",
+      "name": "Eagle's Perch",
+      "lat": 1.403765,
+      "lng": 103.795037,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Eagle's Perch",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "faber-point-12736-1038177",
+      "name": "Faber Point",
+      "lat": 1.273592,
+      "lng": 103.817669,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:attraction",
+      "_prominence": 7,
+      "_tags": {
+        "area": "yes",
+        "ele": "106",
+        "fixme": "outline",
+        "fixme:zh": "-",
+        "highway": "pedestrian",
+        "name": "Faber Point",
+        "name:zh": "\u82b1\u67cf\u574a",
+        "natural": "peak",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "id": "hsbc-treetop-walk-13610-1038114",
+      "name": "HSBC TreeTop Walk",
+      "lat": 1.361047,
+      "lng": 103.811396,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "HSBC TreeTop Walk",
+        "name:zh": "\u6811\u68a2\u540a\u6865",
+        "opening_hours": "Tu-Fr 09:00-17:00; Sa, Su 08:30-17:00; PH 08:30-17:00",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "iora-s-nest-13998-1037918",
+      "name": "Iora's Nest",
+      "lat": 1.399807,
+      "lng": 103.791806,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Iora's Nest",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "jejawi-tower-14096-1039900",
+      "name": "Jejawi Tower",
+      "lat": 1.409561,
+      "lng": 103.989954,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Jejawi Tower",
+        "name:en": "Jejawi Tower",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "jelutong-tower-13514-1038064",
+      "name": "Jelutong Tower",
+      "lat": 1.351362,
+      "lng": 103.806394,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "access": "yes",
+        "fee": "no",
+        "man_made": "tower",
+        "name": "Jelutong Tower",
+        "name:zh": "\u65e5\u843d\u6d1e\u77ad\u671b\u53f0",
+        "tourism": "viewpoint",
+        "tower:type": "observation",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "id": "jurong-hill-tower-13174-1037079",
+      "name": "Jurong Hill Tower",
+      "lat": 1.317422,
+      "lng": 103.707856,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "building": "yes",
+        "name": "Jurong Hill Tower",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "karst-lookout-14098-1037800",
+      "name": "Karst Lookout",
+      "lat": 1.409798,
+      "lng": 103.779951,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Karst Lookout",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "kingfisher-s-cove-14058-1037911",
+      "name": "Kingfisher's cove",
+      "lat": 1.405751,
+      "lng": 103.791144,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Kingfisher's cove",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "legoland-malaysia-signboard-14246-1036305",
+      "name": "Legoland Malaysia Signboard",
+      "lat": 1.424604,
+      "lng": 103.630479,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Legoland Malaysia Signboard",
+        "name:zh": "\u9a6c\u6765\u897f\u4e9a\u4e50\u9ad8\u4e50\u56ed\u544a\u793a\u724c",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "light-show-viewing-point-12841-1038584",
+      "name": "Light Show Viewing Point",
+      "lat": 1.284084,
+      "lng": 103.858438,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "fee": "no",
+        "name": "Light Show Viewing Point",
+        "tourism": "viewpoint",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "id": "lookout-loop-12542-1038190",
+      "name": "Lookout Loop",
+      "lat": 1.254166,
+      "lng": 103.818975,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Lookout Loop",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "mmhe-malaysia-marine-heavy-engineering-14551-1038800",
+      "name": "MMHE-Malaysia Marine Heavy Engineering",
+      "lat": 1.455138,
+      "lng": 103.880012,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "MMHE-Malaysia Marine Heavy Engineering",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "marina-bay-laser-show-viewpoint-12844-1038591",
+      "name": "Marina Bay Laser show viewpoint",
+      "lat": 1.284377,
+      "lng": 103.859099,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Marina Bay Laser show viewpoint",
+        "tourism": "viewpoint",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "marina-bay-view-12847-1038540",
+      "name": "Marina Bay View",
+      "lat": 1.284673,
+      "lng": 103.854048,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Marina Bay View",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "monsoon-point-break-13164-1039762",
+      "name": "Monsoon Point Break",
+      "lat": 1.316404,
+      "lng": 103.97616,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Monsoon Point Break",
+        "name:en": "Monsoon Point Break",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "mount-serapong-12501-1038331",
+      "name": "Mount Serapong",
+      "lat": 1.250095,
+      "lng": 103.833133,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 7,
+      "_tags": {
+        "alt_name": "Mount Serapong Hill;Serapong HIll",
+        "name": "Mount Serapong",
+        "name:zh": "\u5b9e\u62c9\u84ec\u5c71",
+        "natural": "peak",
+        "wikidata": "Q31266124"
+      }
+    },
+    {
+      "id": "puaka-hill-14080-1039594",
+      "name": "Puaka Hill",
+      "lat": 1.408035,
+      "lng": 103.959436,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Puaka Hill",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "raptor-tower-14166-1037285",
+      "name": "Raptor Tower",
+      "lat": 1.416598,
+      "lng": 103.728495,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "man_made": "tower",
+        "material": "steel",
+        "name": "Raptor Tower",
+        "tourism": "viewpoint",
+        "tower:type": "observation"
+      }
+    },
+    {
+      "id": "roof-garden-12758-1038496",
+      "name": "Roof Garden",
+      "lat": 1.275821,
+      "lng": 103.849582,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Roof Garden",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "roof-terrace-12892-1038560",
+      "name": "Roof Terrace",
+      "lat": 1.289219,
+      "lng": 103.856032,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Roof Terrace",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "route-2-closed-2019-14464-1037252",
+      "name": "Route 2 - closed 2019",
+      "lat": 1.446384,
+      "lng": 103.725231,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Route 2 - closed 2019",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "route-2-closed-2019-14453-1037242",
+      "name": "Route 2 - closed 2019",
+      "lat": 1.445325,
+      "lng": 103.724249,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Route 2 - closed 2019",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "skypark-observation-deck-12849-1038612",
+      "name": "SkyPark Observation Deck",
+      "lat": 1.284918,
+      "lng": 103.861157,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "level": "57",
+        "name": "SkyPark Observation Deck",
+        "tourism": "viewpoint",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "id": "skyline-view-12805-1038709",
+      "name": "Skyline View",
+      "lat": 1.280506,
+      "lng": 103.870932,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Skyline View",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "skyville-dawson-12958-1038100",
+      "name": "Skyville@Dawson",
+      "lat": 1.295806,
+      "lng": 103.809992,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Skyville@Dawson",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "southern-ridges-12556-1038177",
+      "name": "Southern Ridges",
+      "lat": 1.255571,
+      "lng": 103.81774,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Southern Ridges",
+        "name:zh": "\u5357\u90e8\u5c71\u810a",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "southernmost-point-of-continental-asia-12479-1038214",
+      "name": "Southernmost Point of Continental Asia",
+      "lat": 1.247947,
+      "lng": 103.821412,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "image": "https://images.mapillary.com/C9y1xvMhTMHTecBc0fljEA/thumb-2048.jpg",
+        "mapillary": "506622380531738",
+        "name": "Southernmost Point of Continental Asia",
+        "name:en": "Southernmost Point of Continental Asia",
+        "name:zh": "\u4e9a\u6d32\u5927\u9646\u6700\u5357\u7aef",
+        "tourism": "viewpoint",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "id": "supertree-observatory-12819-1038639",
+      "name": "Supertree Observatory",
+      "lat": 1.281942,
+      "lng": 103.863934,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "direction": "0-360",
+        "lit": "yes",
+        "name": "Supertree Observatory",
+        "name:zh": "\u64ce\u5929\u6811\u89c2\u666f\u53f0",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "tangga-1000-taman-habibie-11450-1039475",
+      "name": "Tangga 1000 Taman Habibie",
+      "lat": 1.145039,
+      "lng": 103.947508,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Tangga 1000 Taman Habibie",
+        "note": "treehouse",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "vantage-point-to-view-supertree-show-12816-1038647",
+      "name": "Vantage Point to view Supertree show",
+      "lat": 1.281582,
+      "lng": 103.864662,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Vantage Point to view Supertree show",
+        "name:zh": "\u64ce\u5929\u5267\u89c2\u666f\u70b9",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "viewpoint-eastward-13131-1039586",
+      "name": "Viewpoint (eastward)",
+      "lat": 1.313055,
+      "lng": 103.958617,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Viewpoint (eastward)",
+        "name:zh": "\u4e1c\u89c2\u666f\u53f0",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "viewpoint-eastward-13054-1039425",
+      "name": "Viewpoint (eastward)",
+      "lat": 1.305357,
+      "lng": 103.942476,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "direction": "70",
+        "name": "Viewpoint (eastward)",
+        "name:zh": "\u4e1c\u89c2\u666f\u53f0",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "viewpoint-eastward-13140-1039639",
+      "name": "Viewpoint (eastward)",
+      "lat": 1.313964,
+      "lng": 103.963906,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Viewpoint (eastward)",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "viewpoint-westward-13052-1039420",
+      "name": "Viewpoint (westward)",
+      "lat": 1.305179,
+      "lng": 103.942001,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "direction": "250",
+        "name": "Viewpoint (westward)",
+        "name:zh": "\u897f\u89c2\u666f\u53f0",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "viewpoint-westward-13138-1039635",
+      "name": "Viewpoint (westward)",
+      "lat": 1.313774,
+      "lng": 103.963472,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "Viewpoint (westward)",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "visitors-intercom-13545-1039889",
+      "name": "Visitors Intercom",
+      "lat": 1.354478,
+      "lng": 103.988864,
+      "category": "viewpoints",
+      "description": "The Intercom booth is only available in Terminal 2. It allows passengers inside the departure transit area to communicate with the person at the public area. Transit area: After Gr",
+      "_prominence": 7,
+      "_tags": {
+        "description": "The Intercom booth is only available in Terminal 2. It allows passengers inside the departure transit area to communicate with the person at the public area. Transit area: After Green Market. Public area: Behind Crystal Jade Restaurant. Open 24 hours.",
+        "level": "3",
+        "name": "Visitors Intercom",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "woodlands-jetty-14548-1037783",
+      "name": "Woodlands Jetty",
+      "lat": 1.454791,
+      "lng": 103.778328,
+      "category": "viewpoints",
+      "description": "Only 500 to Johor Bahru and around 300 to Malaysia",
+      "_prominence": 7,
+      "_tags": {
+        "description": "Only 500 to Johor Bahru and around 300 to Malaysia",
+        "name": "Woodlands Jetty",
+        "name:es": "Muelle de Woodlands",
+        "name:fr": "Jet\u00e9e de Woodlands",
+        "name:ms": "Jeti Woodlands",
+        "name:pl": "Molo Woodlands",
+        "name:pt": "Molhe de Woodlands",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "blue-birds-12829-1037868",
+      "name": "blue birds",
+      "lat": 1.282944,
+      "lng": 103.786842,
+      "category": "viewpoints",
+      "description": "nothing physical (benches etc.) there, but there're often blue & other nonstandard birds in the evening by the canal",
+      "_prominence": 7,
+      "_tags": {
+        "description": "nothing physical (benches etc.) there, but there're often blue & other nonstandard birds in the evening by the canal",
+        "name": "blue birds",
+        "name:zh": "\u84dd\u9e1f",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "rumah-datin-sarah-14696-1037460",
+      "name": "rumah datin sarah",
+      "lat": 1.469629,
+      "lng": 103.745972,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "rumah datin sarah",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "rumah-pekerja-hortpark-13082-1037619",
+      "name": "rumah pekerja hortpark",
+      "lat": 1.308246,
+      "lng": 103.761885,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "rumah pekerja hortpark",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "sambawang-14626-1038370",
+      "name": "sambawang",
+      "lat": 1.462608,
+      "lng": 103.83703,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, tourism:viewpoint",
+      "_prominence": 7,
+      "_tags": {
+        "name": "sambawang",
+        "tourism": "viewpoint"
+      }
+    },
+    {
+      "id": "ann-siang-hill-12808-1038464",
+      "name": "Ann Siang Hill",
+      "lat": 1.280777,
+      "lng": 103.84643,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "name": "Ann Siang Hill",
+        "natural": "hill",
+        "old_name": "Scotts Hill"
+      }
+    },
+    {
+      "id": "bajau-hill-13522-1036601",
+      "name": "Bajau Hill",
+      "lat": 1.352249,
+      "lng": 103.660086,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "64",
+        "name": "Bajau Hill",
+        "name:zh": "\u5df4\u7476\u5c71",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "botak-hill-14033-1040453",
+      "name": "Botak Hill",
+      "lat": 1.403296,
+      "lng": 104.045329,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "41",
+        "name": "Botak Hill",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "bukit-brown-13371-1038263",
+      "name": "Bukit Brown",
+      "lat": 1.337128,
+      "lng": 103.826341,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "46",
+        "name": "Bukit Brown",
+        "name:zh": "\u6b66\u5409\u5e03\u6717",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "bukit-g-253-14367-1036218",
+      "name": "Bukit G 253",
+      "lat": 1.436716,
+      "lng": 103.621823,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "gns:ufi": "11174375",
+        "name": "Bukit G 253",
+        "natural": "peak",
+        "source": "USNGA"
+      }
+    },
+    {
+      "id": "bukit-kallang-13614-1038094",
+      "name": "Bukit Kallang",
+      "lat": 1.361352,
+      "lng": 103.809444,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "100",
+        "name": "Bukit Kallang",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "bukit-kelapa-tujoh-pokok-11672-1037370",
+      "name": "Bukit Kelapa Tujoh Pokok",
+      "lat": 1.167156,
+      "lng": 103.736955,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "name": "Bukit Kelapa Tujoh Pokok",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "bukit-pak-bekang-11734-1037406",
+      "name": "Bukit Pak Bekang",
+      "lat": 1.173363,
+      "lng": 103.7406,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "name": "Bukit Pak Bekang",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "bukit-perepat-14370-1036531",
+      "name": "Bukit Perepat",
+      "lat": 1.436969,
+      "lng": 103.653104,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "gns:ufi": "-2387353",
+        "name": "Bukit Perepat",
+        "natural": "hill",
+        "source": "USNGA"
+      }
+    },
+    {
+      "id": "bukit-prigi-kling-11693-1037385",
+      "name": "Bukit Prigi Kling",
+      "lat": 1.169297,
+      "lng": 103.738475,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "name": "Bukit Prigi Kling",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "bukit-tajam-14444-1036872",
+      "name": "Bukit Tajam",
+      "lat": 1.444433,
+      "lng": 103.68722,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "44.1",
+        "gns:ufi": "-2395875",
+        "name": "Bukit Tajam",
+        "natural": "peak",
+        "source": "USNGA"
+      }
+    },
+    {
+      "id": "bukit-tinggi-13470-1037927",
+      "name": "Bukit Tinggi",
+      "lat": 1.34695,
+      "lng": 103.792697,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "name": "Bukit Tinggi",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "choa-chu-kang-hill-13555-1036805",
+      "name": "Choa Chu Kang Hill",
+      "lat": 1.355467,
+      "lng": 103.680538,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "88",
+        "name": "Choa Chu Kang Hill",
+        "name:zh": "\u8521\u539d\u6e2f\u5c71",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "elephant-hill-13423-1036602",
+      "name": "Elephant Hill",
+      "lat": 1.342301,
+      "lng": 103.6602,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "75",
+        "name": "Elephant Hill",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "fofo-hill-13354-1036640",
+      "name": "FOFO Hill",
+      "lat": 1.335401,
+      "lng": 103.663965,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "55",
+        "name": "FOFO Hill",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "fantail-pod-14414-1037369",
+      "name": "Fantail Pod",
+      "lat": 1.44143,
+      "lng": 103.736861,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook, amenity:shelter",
+      "_prominence": 5,
+      "_tags": {
+        "amenity": "shelter",
+        "man_made": "tower",
+        "name": "Fantail Pod",
+        "shelter_type": "wildlife_hide",
+        "tower:type": "observation"
+      }
+    },
+    {
+      "id": "fort-canning-12936-1038466",
+      "name": "Fort Canning",
+      "lat": 1.293576,
+      "lng": 103.846597,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "48",
+        "name": "Fort Canning",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "gangsa-hill-13787-1037795",
+      "name": "Gangsa Hill",
+      "lat": 1.378698,
+      "lng": 103.779494,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "name": "Gangsa Hill",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "granite-hill-13788-1037838",
+      "name": "Granite Hill",
+      "lat": 1.37878,
+      "lng": 103.783791,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "88",
+        "name": "Granite Hill",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "imbiah-tower-12567-1038145",
+      "name": "Imbiah Tower",
+      "lat": 1.256681,
+      "lng": 103.814469,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "building": "yes",
+        "man_made": "tower",
+        "name": "Imbiah Tower",
+        "name:zh": "\u82f1\u6bd4\u5965\u5854",
+        "tower:type": "observation"
+      }
+    },
+    {
+      "id": "jurong-hill-13174-1037079",
+      "name": "Jurong Hill",
+      "lat": 1.317435,
+      "lng": 103.707856,
+      "category": "viewpoints",
+      "description": "excluding the tower",
+      "_prominence": 5,
+      "_tags": {
+        "description": "excluding the tower",
+        "ele": "60",
+        "name": "Jurong Hill",
+        "name:th": "\u0e40\u0e19\u0e34\u0e19\u0e40\u0e02\u0e32\u0e08\u0e39\u0e23\u0e07",
+        "name:zh": "\u88d5\u5eca\u5c71",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "kent-ridge-park-12831-1037910",
+      "name": "Kent Ridge Park",
+      "lat": 1.283145,
+      "lng": 103.791012,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "61",
+        "name": "Kent Ridge Park",
+        "name:zh": "\u80af\u7279\u5c97\u516c\u56ed",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "lookout-tower-14394-1037701",
+      "name": "Lookout Tower",
+      "lat": 1.439447,
+      "lng": 103.770084,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "man_made": "tower",
+        "name": "Lookout Tower",
+        "tower:type": "observation"
+      }
+    },
+    {
+      "id": "mount-faber-12736-1038176",
+      "name": "Mount Faber",
+      "lat": 1.273567,
+      "lng": 103.817645,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "106",
+        "name": "Mount Faber",
+        "name:zh": "\u82b1\u67cf\u5c71",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "mount-palmer-12732-1038470",
+      "name": "Mount Palmer",
+      "lat": 1.273222,
+      "lng": 103.847015,
+      "category": "viewpoints",
+      "description": "formerly a much more prominent, historic hill\nhttps://eresources.nlb.gov.sg/infopedia/articles/SIP_736_2005-01-24.html",
+      "_prominence": 5,
+      "_tags": {
+        "description": "formerly a much more prominent, historic hill\nhttps://eresources.nlb.gov.sg/infopedia/articles/SIP_736_2005-01-24.html",
+        "fixme": "exact location",
+        "name": "Mount Palmer",
+        "natural": "peak",
+        "note": "more of a hill"
+      }
+    },
+    {
+      "id": "p-biola-11641-1037423",
+      "name": "P. Biola",
+      "lat": 1.164125,
+      "lng": 103.742348,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "22",
+        "name": "P. Biola",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "p-salu-12169-1037066",
+      "name": "P. Salu",
+      "lat": 1.21685,
+      "lng": 103.706638,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "13",
+        "name": "P. Salu",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "peng-kang-hill-13338-1036669",
+      "name": "Peng Kang Hill",
+      "lat": 1.333845,
+      "lng": 103.666851,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "61",
+        "name": "Peng Kang Hill",
+        "name:zh": "\u79c9\u6c5f\u5c71",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "puaka-hill-14081-1039595",
+      "name": "Puaka Hill",
+      "lat": 1.408147,
+      "lng": 103.959484,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "74",
+        "name": "Puaka Hill",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "pulau-subar-darat-12160-1038326",
+      "name": "Pulau Subar Darat",
+      "lat": 1.216012,
+      "lng": 103.832632,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "25",
+        "name": "Pulau Subar Darat",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "pulau-subar-laut-12139-1038344",
+      "name": "Pulau Subar Laut",
+      "lat": 1.213896,
+      "lng": 103.834411,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "22",
+        "name": "Pulau Subar Laut",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "puncak-zone-3-14647-1036326",
+      "name": "Puncak Zone 3",
+      "lat": 1.464723,
+      "lng": 103.632642,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "name": "Puncak Zone 3",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "rambutan-hill-13385-1036746",
+      "name": "Rambutan Hill",
+      "lat": 1.338463,
+      "lng": 103.674572,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "56",
+        "name": "Rambutan Hill",
+        "name:th": "\u0e40\u0e19\u0e34\u0e19\u0e40\u0e02\u0e32\u0e40\u0e07\u0e32\u0e30",
+        "name:zh": "\u7ea2\u6bdb\u4e39\u5c71",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "recycle-hill-13598-1038482",
+      "name": "Recycle Hill",
+      "lat": 1.359809,
+      "lng": 103.848168,
+      "category": "viewpoints",
+      "description": "The concrete canal at Bishan - Ang Mo Kio Park was once a vital part of the neighborhood's drainage system and allowed water to flow to a meandering river, the concrete was cut int",
+      "_prominence": 5,
+      "_tags": {
+        "description": "The concrete canal at Bishan - Ang Mo Kio Park was once a vital part of the neighborhood's drainage system and allowed water to flow to a meandering river, the concrete was cut into slabs and stacked to form Recycle Hill.\n\n\u00a0\n\nThis was a deliberate effort",
+        "name": "Recycle Hill",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "sarimbun-14100-1036815",
+      "name": "Sarimbun",
+      "lat": 1.409972,
+      "lng": 103.681522,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "84.5",
+        "name": "Sarimbun",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "tanjong-tajam-hill-14222-1039290",
+      "name": "Tanjong Tajam Hill",
+      "lat": 1.422168,
+      "lng": 103.929025,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "56",
+        "name": "Tanjong Tajam Hill",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "telok-blangah-hill-12789-1038104",
+      "name": "Telok Blangah Hill",
+      "lat": 1.278884,
+      "lng": 103.810449,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "94",
+        "name": "Telok Blangah Hill",
+        "name:zh": "\u76f4\u843d\u5e03\u5170\u96c5\u5c71",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "marina-hill-12888-1037864",
+      "name": "~Marina Hill",
+      "lat": 1.288787,
+      "lng": 103.786362,
+      "category": "viewpoints",
+      "description": "Viewpoint or scenic overlook",
+      "_prominence": 5,
+      "_tags": {
+        "ele": "50",
+        "fixme:name:zh": "-",
+        "name": "~Marina Hill",
+        "name:zh": "\u6ee8\u6d77\u5c71",
+        "natural": "peak"
+      }
+    },
+    {
+      "id": "nus-hill-12960-1037765",
+      "name": "~NUS Hill",
+      "lat": 1.296048,
+      "lng": 103.776539,
+      "category": "viewpoints",
+      "description": "conflicting sources from google results and elevationi maps https://moe-edugis.maps.arcgis.com/apps/View/index.html?appid=1854e92f5a334bbd98c0071e680522dc",
+      "_prominence": 5,
+      "_tags": {
+        "description": "conflicting sources from google results and elevationi maps https://moe-edugis.maps.arcgis.com/apps/View/index.html?appid=1854e92f5a334bbd98c0071e680522dc",
+        "ele": "~60",
+        "name": "~NUS Hill",
+        "name:zh": "~\u56fd\u5927\u5c71",
+        "natural": "peak"
+      }
+    }
+  ]
+}
